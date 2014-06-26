@@ -1,0 +1,2 @@
+include bastisbtp_test.py README
+recursive-include bastisptb/resource *
