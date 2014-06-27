@@ -5,8 +5,8 @@ Script to invoke scanning on a twain-compatible printer and to convert
 printed pages to a PDF
 """
 
-from bastisptb import b_threading, b_strings, b_iotools, b_scan
-from re import sub
+from bptbx import b_strings
+import b_scan
 from os import path, remove, pardir
 import argparse
 import Tkinter, tkMessageBox, tkFileDialog
@@ -67,7 +67,7 @@ while True:
     else:
         break
 
-b_iotools.convert_images_to_a4_pdf(images, target_filename)
+b_scan.convert_images_to_a4_pdf(images, target_filename)
 
 if args.keeptemp == 'False':
     for temp_file in images:
