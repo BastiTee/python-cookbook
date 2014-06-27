@@ -9,7 +9,7 @@ import os
 import math
 import argparse
 
-from b_iotools import (findfiles, write_list_to_file,
+from bptbx.b_iotools import (findfiles, write_list_to_file,
 read_file_to_list, zip_dir_recursively, basename)
 
 #############################################################################

@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 # from matplotlib import plot, draw, show
 from matplotlib.dates import AutoDateLocator, DateFormatter
 
-def print_dataset (x_axis_dataset, y_axis_datasets, y_axis_datalabels, x_axis_isdatetime=False,
+def print_dataset (x_axis_dataset, y_axis_datasets, y_axis_datalabels, 
+                    x_axis_isdatetime=False,
                     title='Title', x_label='X-Label', y_label='Y-Label',
                     fontsize=8, fontweight='bold',
                     dateformat='%d.%m.%Y\n%H:%M', block=True):
@@ -15,13 +16,15 @@ def print_dataset (x_axis_dataset, y_axis_datasets, y_axis_datalabels, x_axis_is
               
     for y_axis_dataset in y_axis_datasets:
         if len(x_axis_dataset) != len (y_axis_dataset):
-            raise ValueError('Lists for X- and Y-axis with non-identical length!')
+            raise ValueError(
+                'Lists for X- and Y-axis with non-identical length!')
     
     plt.figure()
     plt.subplot(111)
     
     for i, y_axis_dataset in enumerate(y_axis_datasets):
-        plt.plot(x_axis_dataset, y_axis_dataset, '-', label=y_axis_datalabels[i])
+        plt.plot(x_axis_dataset, y_axis_dataset, '-', 
+                 label=y_axis_datalabels[i])
 
     
     plt.grid(True)

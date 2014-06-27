@@ -5,9 +5,9 @@ Script for visualizing a special ping log file and for exampling the usage
 of the visual package in conjunction with the math package
 """
 
-from bastisptb import b_strings
-from bastisptb import b_visual
-from bastisptb import b_math
+from bptbx import b_strings
+from bptbx import b_visual
+from bptbx import b_math
 
 print '== Initializing script'
 

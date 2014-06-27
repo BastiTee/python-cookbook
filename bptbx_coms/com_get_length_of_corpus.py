@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
-from bastisptb import b_iotools
-from bastisptb import b_ffmpeg
+from bptbx import b_iotools
+from bptbx import b_ffmpeg
 import argparse
 
 FFMPEG_PATH = 'ffmpeg'

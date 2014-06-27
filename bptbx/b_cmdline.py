@@ -3,7 +3,8 @@ r"""This module contains command line call tools."""
 import subprocess
 import os
 
-def runcommand (command, suppress_stdout=False, suppress_stderr=False, useshell=True):
+def runcommand (command, suppress_stdout=False, suppress_stderr=False,
+                useshell=True):
     """Run a command on the command line"""
     
     log_stdout = []

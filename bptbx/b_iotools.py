@@ -75,7 +75,8 @@ def md5sum (filename):
     
     md5 = hashlib.md5()
     with open(filename, 'rb') as input_file_handle: 
-        for chunk in iter(lambda: input_file_handle.read(128 * md5.block_size), b''): 
+        for chunk in iter(lambda: input_file_handle.read(
+                        128 * md5.block_size), b''): 
             md5.update(chunk)
     return md5.hexdigest()
 

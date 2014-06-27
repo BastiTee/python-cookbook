@@ -14,7 +14,7 @@ EOF//Nonewline
 Script will obtain layout from file first, test if layout in folders matches
 layout in text file and then applies filenames to files.
 """
-from bastisptb import b_iotools
+from bptbx import b_iotools
 from os import path, rename
 
 basefolder = 'c:/basefolder'

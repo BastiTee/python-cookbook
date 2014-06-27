@@ -4,8 +4,8 @@ available information from the given filename, looking up metadata in
 the web, creating a new filen name and finally renaming that file. 
 """
 
-from bastisptb import b_iotools
-from bastisptb import b_web
+from bptbx import b_iotools
+from bptbx import b_web
 
 import re
 import os

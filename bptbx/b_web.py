@@ -5,7 +5,8 @@ from re import sub
 from os import path, makedirs
 from ftputil import FTPHost
 
-DEFAULT_USER_AGENT = 'Mozilla/5.0 (X11; U; Linux i686) Gecko/20071127 Firefox/2.0.0.11'
+DEFAULT_USER_AGENT = ('Mozilla/5.0 (X11; U; Linux i686) Gecko/20071127' +
+                      ' Firefox/2.0.0.11')
 DEFAULT_ACCEPT = 'text/html'
 
 def download_webpage_to_list (webpage_url, *header_tupels):
@@ -41,14 +42,16 @@ def download_file (file_url, target_filepath):
     output.write(remote_file.read())
     output.close()
     
-def recursively_download_ftp (host, username, password, ftp_root_path, local_dest_dir):
+def recursively_download_ftp (host, username, password, ftp_root_path, 
+                              local_dest_dir):
     
     # Data preparation
     ftp_root_path = sub ('\\\\', '/', ftp_root_path)
     ftp_root_path = sub ('^[/]*', '/', ftp_root_path)
     ftp_root_path = sub('/$', '', ftp_root_path)
     
-    print 'Recursively downloading from ftp://{0}:{1}@{2}{3} to {4}'.format(username, password, host, ftp_root_path, local_dest_dir)
+    print 'Recursively downloading from ftp://{0}:{1}@{2}{3} to {4}'.format(
+                username, password, host, ftp_root_path, local_dest_dir)
     
     
     host = FTPHost(host, username, password)
@@ -59,7 +62,8 @@ def recursively_download_ftp (host, username, password, ftp_root_path, local_des
         short_folder_path = sub('^' + ftp_root_path, '', folder_path)
         local_folder_path = local_dest_dir
         if short_folder_path:
-            local_folder_path = path.join(local_dest_dir, sub('^/', '', short_folder_path))
+            local_folder_path = path.join(local_dest_dir, sub('^/', '', 
+                                                        short_folder_path))
             if not path.exists(local_folder_path):
                 makedirs(local_folder_path)
         print 'LOCAL DIR\t', local_folder_path
