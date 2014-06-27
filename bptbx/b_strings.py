@@ -54,13 +54,13 @@ def timestamp2epoch (timestamp, formatstring='%Y-%m-%d %H:%M:%S.%f'):
              float(datetimeobj.microsecond) / 1000000)
     return epoch 
 
-def concat_list_to_string (list, separator=''):
-    """Concatenates a list of elements to a string with the given separator.
-       All objects within the list will be parsed as String"""
-    if list == None:
+def concat_list_to_string (input_list, separator=''):
+    """Concatenates a input_list of elements to a string with the given separator.
+       All objects within the input_list will be parsed as String"""
+    if input_list == None:
         return ''
     returnstring = ''
-    for element in list:
+    for element in input_list:
         returnstring = returnstring + str(element) + separator  
     return sub(separator + '$', '', returnstring)
 

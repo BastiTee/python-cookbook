@@ -59,15 +59,15 @@ class Dataset:
             return False
         return True
 
-def filter_already_converted_filenames (list):
+def filter_already_converted_filenames (my_list):
     
     filtered_list = []
-    for file in list:
-        bname = b_iotools.basename(file)
+    for my_file in my_list:
+        bname = b_iotools.basename(my_file)
         if re.match('.*(' + CLEAN_PATTERN + ').*', bname, re.IGNORECASE):
             print bname
-            print '\tContains strings typical for not converted file'
-            filtered_list.append(file)
+            print '\tContains strings typical for not converted my_file'
+            filtered_list.append(my_file)
             continue
         
     return filtered_list

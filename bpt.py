@@ -5,8 +5,10 @@ Script to operate bastis python toolbox from the command line
 """
 
 import bptbx_coms
-from bptbx.b_iotools import findfiles, basename
+import bptbx
+from bptbx.b_iotools import findfiles, basename, read_file_to_list
 from bptbx.b_cmdline import runcommand
+from re import sub
 import inspect
 import os
 
@@ -14,19 +16,12 @@ tools = {}
 COM_EXIT = 'x'
 COM_PRINT_MENU = 'm'
 
-def print_awesome_header (working_path):
+def print_awesome_header (working_path, header_file):
     print 'Working path = {0}'.format(working_path)
-    print '   _________         _________'
-    print '  /         \       /         \   BASTI\'s'
-    print ' /  /~~~~~\  \     /  /~~~~~\  \  PYTHON TOOLBOX'
-    print ' |  |     |  |     |  |     |  |'
-    print ' |  |     |  |     |  |     |  |'
-    print ' |  |     |  |     |  |     |  |         /'
-    print ' |  |     |  |     |  |     |  |       //'
-    print '(o  o)    \  \_____/  /     \  \_____/ /'
-    print ' \__/      \         /       \        /'
-    print '  |         ~~~~~~~~~         ~~~~~~~~'
-    print '  ^'
+    
+    headerlines = read_file_to_list(header_file, False)
+    for headerline in headerlines:
+        print sub('\n', '', headerline)
 
 def print_menu ():
     print
@@ -50,17 +45,20 @@ def check_if_valid_command(command):
             # Handle error on unknown key
             return False, command
     
-
 def start ():
     # Setup menu
-    working_file = inspect.getsourcefile(bptbx_coms)
-    working_path = os.path.abspath(working_file)
-    print_awesome_header(working_path)
-    toolbox_content = findfiles(os.path.dirname(working_path), '.*\\.py$')
+    com_working_file = inspect.getsourcefile(bptbx_coms)
+    com_working_path = os.path.abspath(com_working_file)
+    core_working_file = inspect.getsourcefile(bptbx)
+    core_working_path = os.path.abspath(core_working_file)
+    
+    print_awesome_header(com_working_path, os.path.join(
+                        os.path.dirname(core_working_path), 'b_header.txt'))
+    toolbox_content = findfiles(os.path.dirname(com_working_path), '.*\\.py$')
     com_num = 0
     for script in toolbox_content:
         if (not '__init__' in script and not 
-            basename(working_file) in script):
+            basename(com_working_file) in script):
             tools[com_num] = script
             com_num = com_num + 1
     # Print menu

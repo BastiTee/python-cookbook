@@ -8,7 +8,6 @@ def runcommand (command, suppress_stdout=False, suppress_stderr=False,
     """Run a command on the command line"""
     
     log_stdout = []
-    log_stderr = []
     handle = subprocess.Popen(command, shell=useshell, stdout=subprocess.PIPE,
                               stderr=subprocess.STDOUT)
         

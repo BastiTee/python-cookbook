@@ -168,13 +168,14 @@ def file_exists (path):
     except IOError:
         return False
             
-def read_file_to_list (filepath):
+def read_file_to_list (filepath, strip=True):
     """Reads a file and writes content to a list"""
     
     content = []
     ofile = open (filepath)
     for line in ofile:
-        line = line.strip()
+        if strip == True:
+            line = line.strip()
         content.append(line)
     ofile.close()
     return content   
@@ -187,39 +188,39 @@ def write_list_to_file (content, filepath):
         ofile.write(str(line) + '\n')
     ofile.close()
 
-def zip_dir_recursively (dir, zip_file):
-    """Zip compresses a directory recursively"""
+def zip_dir_recursively (base_dir, zip_file):
+    """Zip compresses a base_dir recursively"""
     
-    zip = zipfile.ZipFile(zip_file, 'w', compression=zipfile.ZIP_DEFLATED)
-    root_len = len(os.path.abspath(dir))
-    for root, dirs, files in os.walk(dir):
+    zip_file = zipfile.ZipFile(zip_file, 'w', compression=zipfile.ZIP_DEFLATED)
+    root_len = len(os.path.abspath(base_dir))
+    for root, _, files in os.walk(base_dir):
         archive_root = os.path.abspath(root)[root_len:]
         for f in files:
             fullpath = os.path.join(root, f)
             archive_name = os.path.join(archive_root, f)
-            zip.write(fullpath, archive_name, zipfile.ZIP_DEFLATED)
-    zip.close()
+            zip_file.write(fullpath, archive_name, zipfile.ZIP_DEFLATED)
+    zip_file.close()
     return zip_file
 
-def read_config_section_to_keyval_list (file, section=None):
-    """Takes a configuration file and returns a list of options for the given
-    or the first section found"""
+def read_config_section_to_keyval_list (config_file, section=None):
+    """Takes a configuration config_file and returns a list 
+    of options for the given or the first section found"""
     
     items = []
-    if not file_exists(file):
-        print 'Configuration file {0} does not exist'.format(file)
+    if not file_exists(config_file):
+        print 'Config file {0} does not exist'.format(config_file)
         return items
      
     Config = ConfigParser.ConfigParser()
     try:
-        Config.read(file)
+        Config.read(config_file)
     except ConfigParser.MissingSectionHeaderError:
-        print 'Configuration file {0} has no sections'.format(file)
+        print 'Config file {0} has no sections'.format(config_file)
         return items
     
     if section is None:
         section = Config.sections()[0]
     
-    print 'For config file {0} using section {1}'.format(file, section)
+    print 'For config file {0} using section {1}'.format(config_file, section)
     items = Config.items(section)
     return items
