@@ -1,7 +1,6 @@
 r"""This module contains functions for visualizing data."""
 
 import matplotlib.pyplot as plt
-# from matplotlib import plot, draw, show
 from matplotlib.dates import AutoDateLocator, DateFormatter
 
 def print_dataset (x_axis_dataset, y_axis_datasets, y_axis_datalabels, 
