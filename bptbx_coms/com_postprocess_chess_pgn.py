@@ -9,20 +9,31 @@ import os
 import math
 import argparse
 
-from bptbx.b_iotools import (findfiles, write_list_to_file,
-read_file_to_list, zip_dir_recursively, basename)
+from bptbx import b_iotools
+
+# from bptbx.b_iotools import (findfiles, write_list_to_file,
+# read_file_to_list, zip_dir_recursively, basename, read_config_section_to_keyval_list)
 
 #############################################################################
 
 USER_FOLDER = os.getcwd()
+SE_PATTERNS = []
+
 parser = argparse.ArgumentParser(description='Postprocess PGN chess games.')
 parser.add_argument('-i', metavar='<ROOT-FOLDER>',
                     help='Root folder path (default: current location')
+parser.add_argument('-p', metavar='<PATTERN-FILE>',
+                    help='Search & replace pattern file.')
 args = parser.parse_args()
 
 if not args.i == None:
     USER_FOLDER = args.i
+if not args.p == None:
+    SE_PATTERNS = b_iotools.read_config_section_to_keyval_list(args.p)
+else:
+    print 'No pattern search & replace file detected.'
     
+print 'Applying {0} search & replace patterns'.format(len(SE_PATTERNS))
 FULL_PLAYBOOK_NAME = 'full-playbook'
 STATS_NAME = 'full-stats'
 STATS_PATH = os.path.join(USER_FOLDER, STATS_NAME) + '.txt'
@@ -40,21 +51,16 @@ def strip_formatting (string):
     return string.strip()
                 
 def apply_fixes (line):
-    line = re.sub('Playing on Chess Time', '***REMOVED***', line, re.IGNORECASE)
-    line = re.sub('***REMOVED***', '***REMOVED***', line, re.IGNORECASE)
-    line = re.sub('***REMOVED***', '***REMOVED***', line, re.IGNORECASE)
-    line = re.sub('***REMOVED***', '***REMOVED***', line, re.IGNORECASE)
-    line = re.sub('***REMOVED***', '***REMOVED***', line, re.IGNORECASE)
-    line = re.sub('***REMOVED***', '***REMOVED***', line, re.IGNORECASE)
-    line = re.sub('***REMOVED***', '***REMOVED***', line, re.IGNORECASE)
-    line = re.sub('***REMOVED***', '***REMOVED***', line, re.IGNORECASE)
-    line = re.sub('***REMOVED***', '***REMOVED***', line, re.IGNORECASE)
-    line = re.sub('***REMOVED***', '***REMOVED***', line, re.IGNORECASE)
+    
+    if SE_PATTERNS is None:
+        return line
+    for SE_PATTERN in SE_PATTERNS:
+        line = re.sub(SE_PATTERN[0], SE_PATTERN[1], line, re.IGNORECASE)
     return line
 
 def apply_filename_pattern ():
     
-    ifiles = findfiles(USER_FOLDER, '.*\\.(pgn|PGN)')
+    ifiles = b_iotools.findfiles(USER_FOLDER, '.*\\.(pgn|PGN)')
     print 'found {0} pgn files for renaming'.format(len(ifiles))
     
     used_names = []
@@ -69,7 +75,7 @@ def apply_filename_pattern ():
         
         if ((not FULL_PLAYBOOK_NAME in os.path.abspath(ifile)) and
         (not '_Analysis_' in os.path.abspath(ifile))):
-            content = read_file_to_list(ifile)
+            content = b_iotools.read_file_to_list(ifile)
             # Extract filename information
             for line in content:
                 if ('[White' in line and not 'WhiteElo' in line):
@@ -90,7 +96,8 @@ def apply_filename_pattern ():
             while True:
                 run = str(iterator).zfill(3)
                 iterator = iterator + 1
-                trg_filename = '{0}_{1}-{2}_{3}_#{4}'.format(date, white, black, res, run)    
+                trg_filename = '{0}_{1}-{2}_{3}_#{4}'.format(date,
+                                      white, black, res, run)    
                 if not trg_filename in used_names:
                     used_names.append(trg_filename)
                     break
@@ -103,7 +110,9 @@ def apply_filename_pattern ():
             trg_filename = os.path.join(trg_folder, trg_filename)
             
             if src_filename != trg_filename:
-                print 'Renaming: {0} --> {1}'.format(basename(src_filename), basename(trg_filename))                
+                print 'Renaming: {0} --> {1}'.format(
+                b_iotools.basename(src_filename),
+                b_iotools.basename(trg_filename))                
                 os.rename(src_filename, trg_filename)
 
 #############################################################################
@@ -235,7 +244,7 @@ def handle_result_data (GAME_DATA):
 #############################################################################
 
 print 'will use files in folder {0}'.format(USER_FOLDER)
-ifiles = findfiles(USER_FOLDER, '.*\\.(pgn|PGN)')
+ifiles = b_iotools.findfiles(USER_FOLDER, '.*\\.(pgn|PGN)')
 print 'found {0} pgn files'.format(len(ifiles))
 iterator = 1
 full_data = {}
@@ -245,7 +254,7 @@ i = 0
 for ifile in ifiles:
     if (not FULL_PLAYBOOK_NAME in os.path.abspath(ifile) and 
         not '_Analysis_' in os.path.abspath(ifile)):
-        content = read_file_to_list(ifile)
+        content = b_iotools.read_file_to_list(ifile)
         fixed_content = []
         for line in content:
             if 'Date' in line:
@@ -254,7 +263,7 @@ for ifile in ifiles:
             fixed_line = apply_fixes(line)
             fixed_content.append(fixed_line)
         full_data[date] = fixed_content
-        write_list_to_file(fixed_content, ifile)
+        b_iotools.write_list_to_file(fixed_content, ifile)
         i = i + 1
     else:
         print 'ignored file {0}'.format(ifile)
@@ -277,7 +286,7 @@ for key in sorted(full_data.iterkeys(), None, None, True):
     for line in full_data[key]:
         full_playbook.append(line)
     full_playbook.append('')
-write_list_to_file(full_playbook, FULL_PLAYBOOK_PATH)
+b_iotools.write_list_to_file(full_playbook, FULL_PLAYBOOK_PATH)
 
 print 'creating stats'
 for line in full_playbook_reverse:
@@ -325,13 +334,13 @@ stat_content.append('\nELO-Ratings:')
 for key in elo_numbers:
     stat_content.append('{0}\t{1}'.format(elo_numbers[key], key))
 
-write_list_to_file(stat_content, STATS_PATH)
+b_iotools.write_list_to_file(stat_content, STATS_PATH)
 
 apply_filename_pattern ()
 
 print 'zipping folder for backup'
-zip_dir_recursively(USER_FOLDER, os.path.join(os.path.join(USER_FOLDER, '..'),
-                    ZIP_NAME))
+b_iotools.zip_dir_recursively(USER_FOLDER, os.path.join(os.path.join(
+                    USER_FOLDER, '..'), ZIP_NAME))
     
     
 

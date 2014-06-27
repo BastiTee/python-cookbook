@@ -6,6 +6,7 @@ import hashlib
 import datetime
 import b_enum
 import zipfile
+import ConfigParser
 
 def appendzeros (directory, filetype):
     """Appends leading zeros to all files or directories in given 
@@ -199,3 +200,26 @@ def zip_dir_recursively (dir, zip_file):
             zip.write(fullpath, archive_name, zipfile.ZIP_DEFLATED)
     zip.close()
     return zip_file
+
+def read_config_section_to_keyval_list (file, section=None):
+    """Takes a configuration file and returns a list of options for the given
+    or the first section found"""
+    
+    items = []
+    if not file_exists(file):
+        print 'Configuration file {0} does not exist'.format(file)
+        return items
+     
+    Config = ConfigParser.ConfigParser()
+    try:
+        Config.read(file)
+    except ConfigParser.MissingSectionHeaderError:
+        print 'Configuration file {0} has no sections'.format(file)
+        return items
+    
+    if section is None:
+        section = Config.sections()[0]
+    
+    print 'For config file {0} using section {1}'.format(file, section)
+    items = Config.items(section)
+    return items
