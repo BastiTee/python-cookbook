@@ -2,7 +2,7 @@ r"""This module contains math functions and data conversion methods."""
 
 avg = lambda x : sum(x) / len(x)
 
-def split_list_to_equal_buckets( list_to_reduce, desired_buckets=10 ):
+def split_list_to_equal_buckets(list_to_reduce, desired_buckets=10):
     """This method splits a given list into a list of equally sized buckets 
        containing the data in the original order"""
     
@@ -29,8 +29,8 @@ def split_list_to_equal_buckets( list_to_reduce, desired_buckets=10 ):
         subsets.append(subset)
         
     p_subset = 0
-    p_count  = 0
-    t_count  = 0
+    p_count = 0
+    t_count = 0
     iterator = iter(list_to_reduce)
     
     if f_bucketrest != 0:
@@ -51,7 +51,7 @@ def split_list_to_equal_buckets( list_to_reduce, desired_buckets=10 ):
 
     return subsets
 
-def reduce_list ( list_to_reduce, desired_elements=10, reduce_method=avg ):
+def reduce_list (list_to_reduce, desired_elements=10, reduce_method=avg):
     """Reduces a list to the given number of elements, averaging over blocks"""
     
     subsets = split_list_to_equal_buckets (list_to_reduce, desired_elements)

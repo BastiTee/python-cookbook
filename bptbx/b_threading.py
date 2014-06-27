@@ -47,11 +47,11 @@ def sleep_job ():
     """This method is used for testing and runs a random sleep 
     between 1-5 seconds"""
     
-    timespan=randrange(1, 6)
+    timespan = randrange(1, 6)
     print 'Sleeping for {0} seconds'.format(timespan)
     sleep(timespan)
 
-def run_commands_from_file_parallel ( filepath ):
+def run_commands_from_file_parallel (filepath):
     """This method reads a text file holding one command per line and runs
     these commands parallelised according to the available number of cpu's on 
     the current machine"""
@@ -62,7 +62,7 @@ def run_commands_from_file_parallel ( filepath ):
         line = line.strip()
         commands.append(line)
     print 'File {0} contains {1} commands'.format(filepath, len(commands))
-    cpus=get_cpus()
+    cpus = get_cpus()
     print 'Machine has {0} cpus'.format(cpus)
     pool = ThreadPool(cpus)
     for command in commands:

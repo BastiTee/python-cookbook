@@ -1,10 +1,4 @@
-r"""This module contains various tools for recurring I/O operations.
-
-    Necessary external modules include:
-    
-    http://www.reportlab.com/software/opensource/ PDF creator library 
-    (tested with reportlab-3.0.win32-py2.7)
-"""
+r"""This module contains various tools for recurring I/O operations."""
 
 import os
 import re
@@ -12,8 +6,6 @@ import hashlib
 import datetime
 import b_enum
 import zipfile
-from reportlab.pdfgen import canvas
-from reportlab.lib.units import inch, cm
 
 def appendzeros (directory, filetype):
     """Appends leading zeros to all files or directories in given 
@@ -135,7 +127,7 @@ def insertintofilename (filepath, insertion):
     
 def countlines (fname):
     """Counts the lines of the given file"""
-    i=-1
+    i = -1
     with open(fname) as input_file_handle:
         for i, _ in enumerate(input_file_handle):
             pass
@@ -157,15 +149,15 @@ def getuidfromfilepath (filename):
     
     return re.sub("[^a-zA-Z0-9_-]", "_", filename)
 
-def basename ( path, suffix=None):
+def basename (path, suffix=None):
     """Basic implementation of Unix basename command with optional suffix"""
     
     basename = os.path.basename(path)
     if suffix is not None:
-        basename = re.sub(suffix+'$', '', basename)
+        basename = re.sub(suffix + '$', '', basename)
     return basename
 
-def file_exists ( path ):
+def file_exists (path):
     """Tests if a file exists"""
     
     try:
@@ -174,23 +166,23 @@ def file_exists ( path ):
     except IOError:
         return False
             
-def read_file_to_list ( filepath ):
+def read_file_to_list (filepath):
     """Reads a file and writes content to a list"""
     
     content = []
-    ofile = open ( filepath )
+    ofile = open (filepath)
     for line in ofile:
         line = line.strip()
         content.append(line)
     ofile.close()
     return content   
     
-def write_list_to_file ( content, filepath ):
+def write_list_to_file (content, filepath):
     """Writes content of a list to a given file"""
     
-    ofile = open ( filepath, 'w' )
+    ofile = open (filepath, 'w')
     for line in content:
-        ofile.write(str(line)+'\n')
+        ofile.write(str(line) + '\n')
     ofile.close()
 
 def zip_dir_recursively (dir, zip_file):
@@ -206,15 +198,3 @@ def zip_dir_recursively (dir, zip_file):
             zip.write(fullpath, archive_name, zipfile.ZIP_DEFLATED)
     zip.close()
     return zip_file
-
-def convert_images_to_a4_pdf ( images, target_pdf='output.pdf' ):  
-    """Takes a list of JPG/PNG/BMP images and stores the images to 
-       an A4-format PDF with each image as one page."""
-       
-    c = canvas.Canvas(target_pdf)
-    c.setPageCompression(1)
-    for image in images:
-        c.drawImage(image, 0, 0, 21*cm, 29.7*cm)
-        c.showPage()
-    c.save()
-    

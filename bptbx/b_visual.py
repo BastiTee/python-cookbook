@@ -1,19 +1,17 @@
-r"""This module contains functions for visualizing data.
-    
-    Necessary external modules include:
-    
-    http://matplotlib.org/ Plotting library for python
-    http://www.numpy.org/ Necessary library for matplotlib
-"""
+r"""This module contains functions for visualizing data."""
 
 import matplotlib.pyplot as plt
+# from matplotlib import plot, draw, show
 from matplotlib.dates import AutoDateLocator, DateFormatter
 
-def print_dataset ( x_axis_dataset, y_axis_datasets, y_axis_datalabels, x_axis_isdatetime=False, 
+def print_dataset (x_axis_dataset, y_axis_datasets, y_axis_datalabels, x_axis_isdatetime=False,
                     title='Title', x_label='X-Label', y_label='Y-Label',
-                    fontsize=8, fontweight='bold', 
-                    dateformat='%d.%m.%Y\n%H:%M'):
+                    fontsize=8, fontweight='bold',
+                    dateformat='%d.%m.%Y\n%H:%M', block=True):
     """Prints a given dataset"""
+    
+    if len(x_axis_dataset) <= 0:
+        raise ValueError('Lists for X-axis is empty!')
               
     for y_axis_dataset in y_axis_datasets:
         if len(x_axis_dataset) != len (y_axis_dataset):
@@ -23,12 +21,13 @@ def print_dataset ( x_axis_dataset, y_axis_datasets, y_axis_datalabels, x_axis_i
     plt.subplot(111)
     
     for i, y_axis_dataset in enumerate(y_axis_datasets):
-        plt.plot(x_axis_dataset, y_axis_dataset, '-', label=y_axis_datalabels[i])    
+        plt.plot(x_axis_dataset, y_axis_dataset, '-', label=y_axis_datalabels[i])
+
     
     plt.grid(True)
     plt.xlabel(x_label, fontsize=fontsize, fontweight=fontweight)
     plt.ylabel(y_label, fontsize=fontsize, fontweight=fontweight)
-    plt.title(title, fontsize=(fontsize+2), fontweight=fontweight)
+    plt.title(title, fontsize=(fontsize + 2), fontweight=fontweight)
     plt.legend(bbox_to_anchor=(1.05, 1), loc=5, borderaxespad=0.)
     
     if x_axis_isdatetime:
@@ -38,4 +37,4 @@ def print_dataset ( x_axis_dataset, y_axis_datasets, y_axis_datalabels, x_axis_i
         plt.subplot(111).xaxis.set_major_formatter(formatter)
         
     plt.subplot(111).autoscale_view()
-    plt.show()
+    plt.show(block)

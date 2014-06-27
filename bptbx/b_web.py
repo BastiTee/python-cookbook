@@ -1,20 +1,14 @@
-r"""This module contains tools for web connectivity etc. 
-    
-    Necessary external modules include:
-    
-    http://ftputil.sschwarzer.net/trac FTP library for ftputil 
-    (tested with ftputil 3.0)
-"""
+r"""This module contains tools for web connectivity etc."""
 
 from urllib2 import build_opener, urlopen
 from re import sub
 from os import path, makedirs
 from ftputil import FTPHost
 
-DEFAULT_USER_AGENT='Mozilla/5.0 (X11; U; Linux i686) Gecko/20071127 Firefox/2.0.0.11'
-DEFAULT_ACCEPT='text/html'
+DEFAULT_USER_AGENT = 'Mozilla/5.0 (X11; U; Linux i686) Gecko/20071127 Firefox/2.0.0.11'
+DEFAULT_ACCEPT = 'text/html'
 
-def download_webpage_to_list ( webpage_url, *header_tupels ):
+def download_webpage_to_list (webpage_url, *header_tupels):
     """Downloads a webpage and writes content into a line-by-line list."""  
     
     found_ext_accept = False
@@ -40,21 +34,21 @@ def download_webpage_to_list ( webpage_url, *header_tupels ):
     input_file_handle.close()
     return webpage_url
 
-def download_file ( file_url, target_filepath):
+def download_file (file_url, target_filepath):
     """Downloads a file url to a given target filepath."""  
     remote_file = urlopen(file_url)
-    output = open(target_filepath,'wb')
+    output = open(target_filepath, 'wb')
     output.write(remote_file.read())
     output.close()
     
-def recursively_download_ftp ( host, username, password, ftp_root_path, local_dest_dir ):
+def recursively_download_ftp (host, username, password, ftp_root_path, local_dest_dir):
     
     # Data preparation
-    ftp_root_path = sub ( '\\\\', '/', ftp_root_path)
-    ftp_root_path = sub ( '^[/]*', '/', ftp_root_path)
+    ftp_root_path = sub ('\\\\', '/', ftp_root_path)
+    ftp_root_path = sub ('^[/]*', '/', ftp_root_path)
     ftp_root_path = sub('/$', '', ftp_root_path)
     
-    print 'Recursively downloading from ftp://{0}:{1}@{2}{3} to {4}'.format( username, password, host, ftp_root_path, local_dest_dir )
+    print 'Recursively downloading from ftp://{0}:{1}@{2}{3} to {4}'.format(username, password, host, ftp_root_path, local_dest_dir)
     
     
     host = FTPHost(host, username, password)
