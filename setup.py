@@ -11,5 +11,6 @@ setup(
     author_email='bastis.trash.email@gmx.de',
     url='https://github.com/BastiTee/bastis-python-toolbox',
     packages=['bptbx', 'bptbx_coms'],
+	package_data={'bptbx': ['*.txt']},
     scripts=[ 'bpt.py', 'bpt_test.py' ]
 ) 
