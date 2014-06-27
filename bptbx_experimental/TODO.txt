@@ -1,0 +1,4 @@
+com_scan_pages_and_create_pdf.py
+
+- Test on win32 if this still works
+- Decided whether to put this into bptbx or not

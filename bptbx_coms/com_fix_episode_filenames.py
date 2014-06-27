@@ -16,31 +16,31 @@ import argparse
 
 # USER PROPERTIES
 # Base folder for processing
-user_folder='D:/Download/'
-user_doit=False
+user_folder = 'D:/Download/'
+user_doit = False
 # CONSTANTS
 # Filter pattern for relevant file suffixes
-ALLOWED_SUFFIXES='(mp4|MP4|avi|AVI)'
-SUFFIX_PATTERN='.*\\.{0}'.format(ALLOWED_SUFFIXES)
+ALLOWED_SUFFIXES = '(mp4|MP4|avi|AVI)'
+SUFFIX_PATTERN = '.*\\.{0}'.format(ALLOWED_SUFFIXES)
 # Pattern to clean out file names
-CLEAN_PATTERN='(EVOLVE)|(HDTV)|(LOL)|(VTV)|(KILLERS)|(REPACK)|(2HD)|(x264)'
-EPISODE_PATTERN='[Ss]?[0-9]{1,2}[EeXx][0-9]{1,2}'
-COUNT_PATTERN='[\d]{1,2}'
-TVRAGE_SEARCH='http://services.tvrage.com/feeds/search.php?show={0}'
-TVRAGE_LOOKUP='http://services.tvrage.com/feeds/episode_list.php?sid={0}'
-FILENAME_PATTERN='{0}_S{1}E{2}-{3}.{4}'
-FILENAME_CONVERTED_PATTERN=''
+CLEAN_PATTERN = '(EVOLVE)|(HDTV)|(LOL)|(VTV)|(KILLERS)|(REPACK)|(2HD)|(x264)'
+EPISODE_PATTERN = '[Ss]?[0-9]{1,2}[EeXx][0-9]{1,2}'
+COUNT_PATTERN = '[\d]{1,2}'
+TVRAGE_SEARCH = 'http://services.tvrage.com/feeds/search.php?show={0}'
+TVRAGE_LOOKUP = 'http://services.tvrage.com/feeds/episode_list.php?sid={0}'
+FILENAME_PATTERN = '{0}_S{1}E{2}-{3}.{4}'
+FILENAME_CONVERTED_PATTERN = ''
 
 #############################################################################
 
 # DATASET HELPER CLASS
 class Dataset:
-    filename=''
-    series=''
-    season=''
-    episode=''
-    new_fname=''
-    title=''
+    filename = ''
+    series = ''
+    season = ''
+    episode = ''
+    new_fname = ''
+    title = ''
     
     def __init__(self, filename, series=None, season=None, episode=None):
         self.filename = filename
@@ -59,15 +59,15 @@ class Dataset:
             return False
         return True
 
-def filter_already_converted_filenames ( list ):
+def filter_already_converted_filenames (list):
     
     filtered_list = []
     for file in list:
         bname = b_iotools.basename(file)
-        if re.match('.*('+CLEAN_PATTERN+').*', bname, re.IGNORECASE):
+        if re.match('.*(' + CLEAN_PATTERN + ').*', bname, re.IGNORECASE):
             print bname
             print '\tContains strings typical for not converted file'
-            filtered_list.append( file )
+            filtered_list.append(file)
             continue
         
     return filtered_list
@@ -97,7 +97,7 @@ print '\tfound {0} files to work with'.format(len(ifiles))
 
 print 'step {0}:\tfilter already converted files'.format(step)
 step = step + 1
-ifiles = filter_already_converted_filenames ( ifiles )
+ifiles = filter_already_converted_filenames (ifiles)
 print '\tfound {0} files to work with'.format(len(ifiles))
 
 print 'step {0}: extracting info from file names'.format(step)
@@ -122,7 +122,7 @@ for ifile in ifiles:
         if len(se_ep_list) == 2:
             season = re.sub('^0+', '', se_ep_list[0])
             episode = re.sub('^0+', '', se_ep_list[1])
-            series = re.sub(season_episode+'.*$', '', bn_clean)
+            series = re.sub(season_episode + '.*$', '', bn_clean)
             series = re.sub('_', ' ', series)
             series = re.sub('[^\w]', ' ', series).strip().lower()
             if series not in serieslist:
@@ -144,11 +144,11 @@ step = step + 1
 serieswikis = {}
 for series in serieslist:
     wikisite = None
-    url=TVRAGE_SEARCH.format(series)
-    url=re.sub(' ', '+', url)
+    url = TVRAGE_SEARCH.format(series)
+    url = re.sub(' ', '+', url)
     content = b_web.download_webpage_to_list(url)
     for line in content:
-        line=line.strip()
+        line = line.strip()
         if 'showid' in line:
             line = re.sub('<[^>]+>', '', line)
             wikisite = TVRAGE_LOOKUP.format(line)
@@ -172,11 +172,11 @@ for dataset in datasets:
     correct_season = False
     for ref_line in ref_lines:
         ref_line = ref_line.strip()
-        match = re.match('.*<Season no=\"[0]*'+dataset.season+'\">.*', ref_line)
+        match = re.match('.*<Season no=\"[0]*' + dataset.season + '\">.*', ref_line)
         if not match == None:
             correct_season = True
         if correct_season == True:
-            if not re.match('.*<seasonnum>[0]*'+dataset.episode+'</seasonnum>.*', ref_line) == None:
+            if not re.match('.*<seasonnum>[0]*' + dataset.episode + '</seasonnum>.*', ref_line) == None:
                 title = re.sub ('.*<title>', '', ref_line)
                 title = re.sub ('<\/title>.*', '', title)
                 dataset.title = title
@@ -194,7 +194,7 @@ for dataset in datasets:
     se = str(dataset.season).zfill(2)
     ep = str(dataset.episode).zfill(2)
     suff = re.sub('.*\\.', '', dataset.filename)
-    filename = stitle+'_S'+se+'E'+ep+'-'+etitle+'.'+suff
+    filename = stitle + '_S' + se + 'E' + ep + '-' + etitle + '.' + suff
     filename = re.sub(' ', '_', filename)
     filename = re.sub('[/\\\]', '_', filename)
     filename = re.sub('[?]', '', filename)
@@ -205,8 +205,8 @@ print 'step {0}: applying filenames:'.format(step)
 step = step + 1
 for dataset in datasets:
     print ''
-    print 'From: '+ dataset.filename
-    print 'To:   '+ dataset.new_fname
+    print 'From: ' + dataset.filename
+    print 'To:   ' + dataset.new_fname
     if dataset.new_fname is "":
         print 'New filename not obtained. Nothing to do.'
     else:

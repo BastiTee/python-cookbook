@@ -4,9 +4,9 @@ from bastisptb import b_iotools
 from bastisptb import b_ffmpeg
 import argparse
 
-FFMPEG_PATH='ffmpeg'
-CONTENT_PATH='.'
-FILENAME_PATTERN='.*'
+FFMPEG_PATH = 'ffmpeg'
+CONTENT_PATH = '.'
+FILENAME_PATTERN = '.*'
 
 parser = argparse.ArgumentParser(description='Estimate size of an media folder.')
 parser.add_argument('-f', metavar='<FFMPEG-BIN>', help='Path to FFMPEG binary (default: ./ffmpeg)')
@@ -40,9 +40,9 @@ for mediafile in mediafiles:
      
 print 'tot-num {0}'.format(len(total_time))
 print 'tot-time {0} {1}'.format(b_ffmpeg.convert_milliseconds_to_ffmpeg_timestamp(sum(total_time)), sum(total_time))
-print 'avg-time {0} {1}'.format(b_ffmpeg.convert_milliseconds_to_ffmpeg_timestamp(sum(total_time)/len(total_time)),sum(total_time)/len(total_time))
+print 'avg-time {0} {1}'.format(b_ffmpeg.convert_milliseconds_to_ffmpeg_timestamp(sum(total_time) / len(total_time)), sum(total_time) / len(total_time))
 print 'min-time {0} {1}'.format(b_ffmpeg.convert_milliseconds_to_ffmpeg_timestamp(min(total_time)), min(total_time))
 print 'max-time {0} {1}'.format(b_ffmpeg.convert_milliseconds_to_ffmpeg_timestamp(max(total_time)), max(total_time))
-print 'size_mb@128kbs_mp3 {0}'.format(b_ffmpeg.get_mbsize_for_time_and_kbps ( sum(total_time), 128))
-print 'size_mb@1411kbs_wav {0}'.format(b_ffmpeg.get_mbsize_for_time_and_kbps ( sum(total_time), 1411))
-print 'size_mb@450kbs_mp4 {0}'.format(b_ffmpeg.get_mbsize_for_time_and_kbps ( sum(total_time), 450))
+print 'size_mb@128kbs_mp3 {0}'.format(b_ffmpeg.get_mbsize_for_time_and_kbps (sum(total_time), 128))
+print 'size_mb@1411kbs_wav {0}'.format(b_ffmpeg.get_mbsize_for_time_and_kbps (sum(total_time), 1411))
+print 'size_mb@450kbs_mp4 {0}'.format(b_ffmpeg.get_mbsize_for_time_and_kbps (sum(total_time), 450))

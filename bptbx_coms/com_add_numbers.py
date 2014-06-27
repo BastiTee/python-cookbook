@@ -1,5 +1,5 @@
 """
-A very simple test script that adds two numbers
+A very simple test script that adds two numbers. Used for testing. 
 """
 
 import argparse
@@ -21,9 +21,8 @@ if args.b == None:
     
 try:
     result = float(args.a) + float(args.b)
-    print '\n{0} + {1} = {2}'.format(args.a,args.b,result)
+    print '\n{0} + {1} = {2}'.format(args.a, args.b, result)
 except ValueError:
     print 'You need to input numerical arguments!'
     parser.print_help()
     exit()
-

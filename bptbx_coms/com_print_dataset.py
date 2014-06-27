@@ -11,10 +11,10 @@ from bastisptb import b_math
 
 print '== Initializing script'
 
-INPUTFILE='Z:/temp/episode4-ping.log'
-MIN_TIMESTAMP=b_strings.timestamp2epoch('2013-05-30 23:00:00.0')
-MAX_TIMESTAMP=b_strings.timestamp2epoch('2013-06-07 01:00:00.0')
-RESOLUTION=10000
+INPUTFILE = 'Z:/temp/episode4-ping.log'
+MIN_TIMESTAMP = b_strings.timestamp2epoch('2013-05-30 23:00:00.0')
+MAX_TIMESTAMP = b_strings.timestamp2epoch('2013-06-07 01:00:00.0')
+RESOLUTION = 10000
 
 print 'Input file:    {0}'.format(INPUTFILE)
 print 'Earliest date: {0}'.format(b_strings.epoch2timestamp(MIN_TIMESTAMP))
@@ -43,9 +43,9 @@ with open(INPUTFILE) as input_file_handle:
 
 print 'Total values: {0}'.format(len(response_delay))
 print 'Filtered values: {0}'.format(len(response_delay_filtered))
-print 'Percent filtered: {0}'.format((float(len(response_delay_filtered)))/(float(len(response_delay)))*100)
+print 'Percent filtered: {0}'.format((float(len(response_delay_filtered))) / (float(len(response_delay))) * 100)
 all_response_delays = response_delay + response_delay_filtered
-print 'Average response: {0}'.format(sum(all_response_delays)/len(all_response_delays))
+print 'Average response: {0}'.format(sum(all_response_delays) / len(all_response_delays))
 
 print '== Scaling imported data'
         
@@ -62,10 +62,10 @@ y_datasets = []
 y_datalabels = []
 y_datasets.append(response_delay_red)
 y_datalabels.append('All requests')
-#y_datasets.append(response_delay_succ_red)
-#y_datalabels.append('Successful requests')
+# y_datasets.append(response_delay_succ_red)
+# y_datalabels.append('Successful requests')
 
-b_visual.print_dataset(timestamps, y_datasets, y_datalabels, True, 
-                       'Ping-Status Amazon-Fingerprint System', 'Zeitstempel', 
+b_visual.print_dataset(timestamps, y_datasets, y_datalabels, True,
+                       'Ping-Status Amazon-Fingerprint System', 'Zeitstempel',
                        'Antwortzeit in s', 10)
 

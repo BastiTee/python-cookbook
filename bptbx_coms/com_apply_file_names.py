@@ -17,11 +17,11 @@ layout in text file and then applies filenames to files.
 from bastisptb import b_iotools
 from os import path, rename
 
-basefolder='c:/basefolder'
-filename_txt='D:/titles.txt'
+basefolder = 'c:/basefolder'
+filename_txt = 'D:/titles.txt'
 
-general_file_prefix='prefix'
-begin_with_season=1
+general_file_prefix = 'prefix'
+begin_with_season = 1
 
 simulate = False
 
@@ -46,7 +46,7 @@ layout.append(episodes_p_season)
 # Print layout in text file
 print 'Seasons:', len(layout)
 for i, item in enumerate(layout):
-    print 'Season', (i+1), 'has', item, 'episodes'
+    print 'Season', (i + 1), 'has', item, 'episodes'
 
 # Parse folder layout
 folders = b_iotools.finddirs(basefolder)
@@ -72,9 +72,9 @@ else:
 current_files = b_iotools.findfiles(basefolder)
 
 if len(current_files) == len(filenames):
-    print 'Will rename', len(current_files),'files.'
+    print 'Will rename', len(current_files), 'files.'
 else:
-    print 'Still a mismatch in number of filenames in', filename_txt, 'and',basefolder
+    print 'Still a mismatch in number of filenames in', filename_txt, 'and', basefolder
     exit(1)
 
 currseason = 0
@@ -85,9 +85,9 @@ for i, current_file in enumerate(current_files):
     
     seasonlabel = ''
     if begin_with_season != 0:
-        seasonlabel = str(currseason+begin_with_season).zfill(2)
+        seasonlabel = str(currseason + begin_with_season).zfill(2)
     else:
-        seasonlabel = str(currseason+1).zfill(2)
+        seasonlabel = str(currseason + 1).zfill(2)
         
     
     prefix = (general_file_prefix + "_" + "S" + seasonlabel + 
@@ -97,7 +97,7 @@ for i, current_file in enumerate(current_files):
     base, ext = path.splitext(current_file)
     foldername = path.dirname(current_file)
     new_filepath = path.abspath(foldername + path.sep + prefix + filenames[i] + ext)
-    print 'Renaming #',(i+1), '\nFROM:', current_filepath, '\nTO:  ',new_filepath 
+    print 'Renaming #', (i + 1), '\nFROM:', current_filepath, '\nTO:  ', new_filepath 
     if not simulate:
         rename(current_filepath, new_filepath)    
 

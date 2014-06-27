@@ -5,7 +5,7 @@ A script to recursively download an ftp folder to a local folder.
 import argparse
 from bastisptb import b_web
 
-def print_help ( message='' ):
+def print_help (message=''):
     print message
     parser.print_help()
     exit()
@@ -25,18 +25,18 @@ FTP_ROOT_PATH = args.i
 DEST_DIR = args.o
 
 if FTP_HOST == None:
-    print_help( 'FTP_HOST unset')
+    print_help('FTP_HOST unset')
 
 if FTP_USER == None:
-    print_help( 'FTP_USER unset')
+    print_help('FTP_USER unset')
     
 if FTP_PASS == None:
-    print_help( 'FTP_PASS unset')
+    print_help('FTP_PASS unset')
     
 if FTP_ROOT_PATH == None:
-    print_help( 'FTP_ROOT_PATH unset')
+    print_help('FTP_ROOT_PATH unset')
     
 if DEST_DIR == None:
-    print_help( 'DEST_DIR unset')    
+    print_help('DEST_DIR unset')    
 
-b_web.recursively_download_ftp ( FTP_HOST, FTP_USER, FTP_PASS, FTP_ROOT_PATH, DEST_DIR )
+b_web.recursively_download_ftp (FTP_HOST, FTP_USER, FTP_PASS, FTP_ROOT_PATH, DEST_DIR)

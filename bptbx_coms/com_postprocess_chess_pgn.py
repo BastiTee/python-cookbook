@@ -9,24 +9,24 @@ import os
 import math
 import argparse
 
-from b_iotools import (findfiles, write_list_to_file, 
+from b_iotools import (findfiles, write_list_to_file,
 read_file_to_list, zip_dir_recursively, basename)
 
 #############################################################################
 
-USER_FOLDER=os.getcwd()
+USER_FOLDER = os.getcwd()
 parser = argparse.ArgumentParser(description='Postprocess PGN chess games.')
-parser.add_argument('-i', metavar='<ROOT-FOLDER>', 
+parser.add_argument('-i', metavar='<ROOT-FOLDER>',
                     help='Root folder path (default: current location')
 args = parser.parse_args()
 
 if not args.i == None:
-    USER_FOLDER=args.i
+    USER_FOLDER = args.i
     
 FULL_PLAYBOOK_NAME = 'full-playbook'
 STATS_NAME = 'full-stats'
-STATS_PATH = os.path.join(USER_FOLDER, STATS_NAME ) + '.txt'
-FULL_PLAYBOOK_PATH = os.path.join(USER_FOLDER, FULL_PLAYBOOK_NAME )+'.pgn'
+STATS_PATH = os.path.join(USER_FOLDER, STATS_NAME) + '.txt'
+FULL_PLAYBOOK_PATH = os.path.join(USER_FOLDER, FULL_PLAYBOOK_NAME) + '.pgn'
 PLAYERS = {}    
 FIRST_GAME = True
 GAME_DATA = []
@@ -34,13 +34,14 @@ ZIP_NAME = 'Spielearchiv.zip'
 
 #############################################################################
 
-def strip_formatting ( string ):
-    string= re.sub('^[^\"]+\"', '', string)
-    string= re.sub('\".*', '', string)
+def strip_formatting (string):
+    string = re.sub('^[^\"]+\"', '', string)
+    string = re.sub('\".*', '', string)
     return string.strip()
                 
-def apply_fixes ( line ):
+def apply_fixes (line):
     line = re.sub('Playing on Chess Time', '***REMOVED***', line, re.IGNORECASE)
+    line = re.sub('***REMOVED***', '***REMOVED***', line, re.IGNORECASE)
     line = re.sub('***REMOVED***', '***REMOVED***', line, re.IGNORECASE)
     line = re.sub('***REMOVED***', '***REMOVED***', line, re.IGNORECASE)
     line = re.sub('***REMOVED***', '***REMOVED***', line, re.IGNORECASE)
@@ -53,7 +54,7 @@ def apply_fixes ( line ):
 
 def apply_filename_pattern ():
     
-    ifiles = findfiles(USER_FOLDER,'.*\\.(pgn|PGN)')
+    ifiles = findfiles(USER_FOLDER, '.*\\.(pgn|PGN)')
     print 'found {0} pgn files for renaming'.format(len(ifiles))
     
     used_names = []
@@ -99,39 +100,39 @@ def apply_filename_pattern ():
             # Generate target folder name
             src_filename = os.path.abspath(ifile)
             trg_folder = os.path.abspath(os.path.join(src_filename, os.pardir))
-            trg_filename = os.path.join( trg_folder, trg_filename)
+            trg_filename = os.path.join(trg_folder, trg_filename)
             
             if src_filename != trg_filename:
-                print 'Renaming: {0} --> {1}'.format(basename( src_filename), basename(trg_filename))                
+                print 'Renaming: {0} --> {1}'.format(basename(src_filename), basename(trg_filename))                
                 os.rename(src_filename, trg_filename)
 
 #############################################################################
 
 elo_numbers = {}
 
-def get_elo_from_elo_list ( name ):
+def get_elo_from_elo_list (name):
     try:
         elo = elo_numbers[name] 
         return elo
     except KeyError:
         return 1200
 
-def set_elo_on_elo_list ( name, elo):
+def set_elo_on_elo_list (name, elo):
     elo_numbers[name] = elo
     
-def calculate_elo ( player_a, player_b, point):
+def calculate_elo (player_a, player_b, point):
     elo_a = get_elo_from_elo_list(player_a.name)
     elo_b = get_elo_from_elo_list(player_b.name)
-    rev_point = abs( point - 1 )
-    E_a = 1.0 / ( 1.0 + math.pow(10, (float(elo_b)-float(elo_a))/400) )
+    rev_point = abs(point - 1)
+    E_a = 1.0 / (1.0 + math.pow(10, (float(elo_b) - float(elo_a)) / 400))
     E_b = 1.0 - E_a
     point = float(point)
-    elo_a_new = elo_a + 10 * ( point - E_a ) 
-    elo_b_new = elo_b + 10 * ( rev_point - E_b )
+    elo_a_new = elo_a + 10 * (point - E_a) 
+    elo_b_new = elo_b + 10 * (rev_point - E_b)
     elo_a_new = int(round(elo_a_new, 0))
     elo_b_new = int(round(elo_b_new, 0))
-    set_elo_on_elo_list( player_a.name, elo_a_new)
-    set_elo_on_elo_list( player_b.name, elo_b_new)
+    set_elo_on_elo_list(player_a.name, elo_a_new)
+    set_elo_on_elo_list(player_b.name, elo_b_new)
 
 class PlayerStat:
     
@@ -156,7 +157,7 @@ class PlayerStat:
     
         
     
-    def add_point (self, point, white, opponents_name ):
+    def add_point (self, point, white, opponents_name):
 
         # Catch scoring for ties
         if (point == '1/2'):
@@ -205,7 +206,7 @@ class PlayerStat:
             pass
 
 
-def handle_result_data ( GAME_DATA ):
+def handle_result_data (GAME_DATA):
     wplayer = None
     bplayer = None
     for line in GAME_DATA:
@@ -234,9 +235,9 @@ def handle_result_data ( GAME_DATA ):
 #############################################################################
 
 print 'will use files in folder {0}'.format(USER_FOLDER)
-ifiles = findfiles(USER_FOLDER,'.*\\.(pgn|PGN)')
+ifiles = findfiles(USER_FOLDER, '.*\\.(pgn|PGN)')
 print 'found {0} pgn files'.format(len(ifiles))
-iterator=1
+iterator = 1
 full_data = {}
 date = ''
 
@@ -248,7 +249,7 @@ for ifile in ifiles:
         fixed_content = []
         for line in content:
             if 'Date' in line:
-                date= strip_formatting(line)+'_'+str(iterator).zfill(3)
+                date = strip_formatting(line) + '_' + str(iterator).zfill(3)
                 iterator += 1
             fixed_line = apply_fixes(line)
             fixed_content.append(fixed_line)
@@ -284,19 +285,19 @@ for line in full_playbook_reverse:
         if FIRST_GAME == True:
             FIRST_GAME = False
         else:
-            handle_result_data ( GAME_DATA ) 
+            handle_result_data (GAME_DATA) 
             GAME_DATA = []
     
-    if ( '[White ' in line or 
+    if ('[White ' in line or 
          '[Black ' in line or 
-         '[Result ' in line ):
+         '[Result ' in line):
         GAME_DATA.append(line)
-handle_result_data ( GAME_DATA ) 
+handle_result_data (GAME_DATA) 
 GAME_DATA = []
 
 print 'outputting stats'
 
-def add_to_output ( player, output, tab=''):    
+def add_to_output (player, output, tab=''):    
     output.append('{0}name:          {1}'.format(tab, player.name))
     output.append('{0}games_total:   {1}'.format(tab, player.games_total))
     output.append('{0}games_white:   {1}'.format(tab, player.games_white))
@@ -329,7 +330,7 @@ write_list_to_file(stat_content, STATS_PATH)
 apply_filename_pattern ()
 
 print 'zipping folder for backup'
-zip_dir_recursively(USER_FOLDER, os.path.join(os.path.join(USER_FOLDER, '..'), 
+zip_dir_recursively(USER_FOLDER, os.path.join(os.path.join(USER_FOLDER, '..'),
                     ZIP_NAME))
     
     
