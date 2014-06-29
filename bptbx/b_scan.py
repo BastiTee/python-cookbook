@@ -14,9 +14,6 @@ def convert_images_to_a4_pdf (images, target_pdf='output.pdf'):
         c.drawImage(image, 0, 0, 21 * cm, 29.7 * cm)
         c.showPage()
     c.save()
-
-images = ['d:/2014-06-28_104815.bmp' ]
-convert_images_to_a4_pdf(images, 'd:/target.pdf')
     
 def get_scanner (pickfirst=False):
     """Obtain the name of an available scanner"""
