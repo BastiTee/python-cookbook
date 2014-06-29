@@ -2,18 +2,20 @@
 
 """
 Script to invoke scanning on a twain-compatible printer and to convert 
-printed pages to a PDF
+scanned pages to a PDF. Also includes a routine to easily scan multiple 
+pages at once. 
 """
 
 from bptbx import b_strings
-import b_scan
+from bptbx import b_scan
 from os import path, remove, pardir
-import argparse
+from argparse import ArgumentParser
 import Tkinter, tkMessageBox, tkFileDialog
+
 Tkinter.Tk().withdraw()
 
 # Command line arguments
-parser = argparse.ArgumentParser(description='Scan pages and create PDF.')
+parser = ArgumentParser(description='Scan pages and create PDF.')
 parser.add_argument('-r', metavar='<Resoultion>', default=100,
                     help='Scan resoultion in DPI (> 100).')
 parser.add_argument('-c', metavar='<Contrast>', default=0,
@@ -24,8 +26,12 @@ parser.add_argument('-keeptemp', action='store_true',
 args = parser.parse_args()
 
 # Select scanner
-scanner_name = b_scan.get_scanner ()
-
+try:
+    scanner_name = b_scan.get_scanner ()
+except Exception as e:
+    print 'Scanner seems not to be connected. {0}'.format(e)
+    exit(1)
+    
 # Get target_filename for final PDF file
 default_filename = b_strings.get_current_date_for_filename() + '-DOCNAME'
 file_opt = {}

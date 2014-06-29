@@ -16,3 +16,16 @@ https://labix.org/python-dateutil
 
 pyparsing >= 2.0.2
 http://pyparsing.wikispaces.com/
+
+============ b_scan ============
+
+Only tested with win32 Python 2.7! 
+
+reportlab >= 3.0
+http://www.reportlab.com/software/opensource/
+
+pil >= 1.1.7
+http://www.pythonware.com/products/pil/
+
+twain == 1.0.5
+https://pypi.python.org/pypi/twain

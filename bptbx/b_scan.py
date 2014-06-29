@@ -1,18 +1,9 @@
-r"""This module contains methods to work with scan devices
-    
-    Necessary external modules include:
-    
-     http://www.reportlab.com/software/opensource/ PDF creator library 
-    (tested with reportlab-3.0.win32-py2.7)
-    https://pypi.python.org/pypi/twain Scanner library for twain 
-    (tested with twain-1.0.5.win32-py2.7)
-    
-""" 
+r"""This module contains methods to work with scan devices""" 
 
 import twain
 from reportlab.pdfgen import canvas
-from reportlab.lib.units import inch, cm
-
+from reportlab.lib.units import cm
+    
 def convert_images_to_a4_pdf (images, target_pdf='output.pdf'):  
     """Takes a list of JPG/PNG/BMP images and stores the images to 
        an A4-format PDF with each image as one page."""
@@ -23,6 +14,9 @@ def convert_images_to_a4_pdf (images, target_pdf='output.pdf'):
         c.drawImage(image, 0, 0, 21 * cm, 29.7 * cm)
         c.showPage()
     c.save()
+
+images = ['d:/2014-06-28_104815.bmp' ]
+convert_images_to_a4_pdf(images, 'd:/target.pdf')
     
 def get_scanner (pickfirst=False):
     """Obtain the name of an available scanner"""
@@ -60,6 +54,6 @@ def scan_image (target_file, scanner_name=None, resolution=100, contrast=0):
     # the next command actually performs the scanning 
     rv = ss.XferImageNatively()
     if rv:
-        (handle, count) = rv
+        (handle, _) = rv
         twain.DIBToBMFile(handle, target_file)
     sm.destroy() 

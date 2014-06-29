@@ -8,6 +8,28 @@ import b_enum
 import zipfile
 import ConfigParser
 
+def import_modules_with_check ( module_names ):
+    """Checks if a given set of modules exists. Returns a boolean that
+    indicates the import success and a list of failed module names"""
+    
+    success = True
+    failed_modules = []
+    for module_name in module_names:
+        try:
+            map(__import__, [module_name])
+        except ImportError:
+            success = False
+            failed_modules.append(module_name)
+    return success, failed_modules
+    
+def import_module_with_check ( module ):
+    """Checks if a given module exists. If yes, imports it. If no,
+    throws an exception and exits."""
+    
+    module_names = [ module ]
+    success, _ = import_modules_with_check( module_names ) 
+    return success
+
 def appendzeros (directory, filetype):
     """Appends leading zeros to all files or directories in given 
     directory path if theses objects have leading numbers."""  
