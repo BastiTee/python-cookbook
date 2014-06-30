@@ -150,6 +150,10 @@ if __name__ == "__main__":
         tbInfo = traceback.extract_tb(tb)
         filename, line, func, text = tbInfo[-1]
         print ('An error occurred on line ' + str(line) + ' in statement ' + text)
+        exit(1)
     except Exception as e:
         print 'Exception occured in test suite: {0}'.format(e)
-        raise
+        exit(1)
+    
+    print 'Seems everything is alright! See above log for details.'
+    exit(0)	
