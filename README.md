@@ -4,7 +4,7 @@ This project contains various python methods, modules and scripts that I use to 
 
 ## Installing
 
-Assuming that you have installed `pip` and `git` for your operating system you can install the toolbox by running::
+Assuming that you have installed `pip` and `git` for your operating system you can install the toolbox by running
 
     pip install git+git://github.com/BastiTee/bastis-python-toolbox#egg=bptbx
 
