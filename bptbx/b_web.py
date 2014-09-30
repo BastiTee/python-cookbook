@@ -55,8 +55,8 @@ def recursively_download_ftp (host, username, password, ftp_root_path,
     
     
     host = FTPHost(host, username, password)
-    recursive = host.walk(ftp_root_path, topdown=True, onerror=None) 
-    for folder_path, _, folder_files in recursive:
+    recursive_file_walk = host.walk(ftp_root_path, topdown=True, onerror=None) 
+    for folder_path, _, folder_files in recursive_file_walk:
     
         print 'REMOTE DIR\t', folder_path
         short_folder_path = sub('^' + ftp_root_path, '', folder_path)

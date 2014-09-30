@@ -8,6 +8,44 @@ import b_enum
 import zipfile
 import ConfigParser
 
+def mkdirs (directory):
+    """Create directory structure if it does not exist"""
+    
+    if not directory:
+        raise TypeError('directory not provided.')
+    
+    directory_abs = os.path.abspath(directory)
+    if not os.path.exists(directory_abs):
+        os.makedirs(directory_abs)
+
+def get_immediate_subdirectories(file_path):
+    """Return the sub-directories of a given file path, but 
+    only the first level."""
+    
+    if not file_path:
+        raise TypeError('file_path not provided.')
+    
+    directories = []
+    for name in os.listdir(file_path):    
+        if os.path.isdir(os.path.join(file_path, name)):
+            directories.append(name)
+    directories.sort()
+    return directories
+
+def get_immediate_subfiles(file_path):
+    """Return the sub-files of a given file path, but 
+    only the first level."""
+    
+    if not file_path:
+        raise TypeError('file_path not provided.')
+    
+    files = []
+    for name in os.listdir(file_path):    
+        if not os.path.isdir(os.path.join(file_path, name)):
+            files.append(name)
+    files.sort()
+    return files
+
 def import_modules_with_check ( module_names ):
     """Checks if a given set of modules exists. Returns a boolean that
     indicates the import success and a list of failed module names"""
@@ -117,7 +155,7 @@ def findfiles (path, filter_regex=None, doprint=False):
         for filename in filenames:
             path = os.path.join(dirname, filename)
             if filter_regex != None:
-                match = re.match(filter_regex, path)
+                match = re.match(filter_regex, path.lower())
                 if match != None:
                     filelist.append(path)
                     if (doprint): 
