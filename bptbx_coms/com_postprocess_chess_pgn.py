@@ -55,9 +55,7 @@ def apply_fixes (line):
     if SE_PATTERNS is None:
         return line
     for SE_PATTERN in SE_PATTERNS:
-        print line
         line = re.sub(SE_PATTERN[0], SE_PATTERN[1], line, flags=re.IGNORECASE)
-        print line
     return line
 
 def apply_filename_pattern ():
