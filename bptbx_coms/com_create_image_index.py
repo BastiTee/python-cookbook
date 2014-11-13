@@ -11,13 +11,14 @@ from threading import Lock
 import argparse
 
 from bptbx import b_iotools, b_pil, b_threading
+import shutil
 
 #############################################################################
 
 FILE_PATTERN = re.compile('^.*\\.(jpg|jpeg|gif|png){1}$')
 INDEX_IMAGE_LONG_SIDE_PX = 400.0
 DEBUG = False
-MAX_THREADS = 50
+MAX_THREADS = 100
 
 parser = argparse.ArgumentParser(description='Create an image index.')
 parser.add_argument('-i', metavar='<INPUT-FOLDER>',
@@ -71,6 +72,9 @@ def process_file (f_from, f_to):
                  
     print_process_file_status()
 
+def copy_file (f_from, f_to):
+    shutil.copy(f_from, f_to)
+
 def recursive_file_walk (directory, thread_pool = None):
     global current_dir
     curr_dir_abs = path.join(args.i, directory)
@@ -85,11 +89,11 @@ def recursive_file_walk (directory, thread_pool = None):
             f_from = path.join(curr_dir_abs, image)
             f_to = path.join(curr_trg_dir_abs, image) 
     
-            if not thread_pool:
-                print 'sdas'
-                process_file (f_from, f_to) 
-            else:
-                thread_pool.add_task(process_file, f_from, f_to)   
+            #if not thread_pool:
+            if not b_iotools.file_exists(f_to):
+                copy_file (f_from, f_to) 
+            #else:
+            #    thread_pool.add_task(process_file, f_from, f_to)   
     
     print 'dir {0}/{1} done...'.format(current_dir, len(directories))
     current_dir = current_dir + 1
