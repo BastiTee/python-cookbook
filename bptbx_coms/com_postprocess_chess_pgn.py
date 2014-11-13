@@ -33,6 +33,7 @@ if not args.p == None:
 else:
     print 'No pattern search & replace file detected.'
     
+print SE_PATTERNS
 print 'Applying {0} search & replace patterns'.format(len(SE_PATTERNS))
 FULL_PLAYBOOK_NAME = 'full-playbook'
 STATS_NAME = 'full-stats'
@@ -51,11 +52,12 @@ def strip_formatting (string):
     return string.strip()
                 
 def apply_fixes (line):
-    
     if SE_PATTERNS is None:
         return line
     for SE_PATTERN in SE_PATTERNS:
-        line = re.sub(SE_PATTERN[0], SE_PATTERN[1], line, re.IGNORECASE)
+        print line
+        line = re.sub(SE_PATTERN[0], SE_PATTERN[1], line, flags=re.IGNORECASE)
+        print line
     return line
 
 def apply_filename_pattern ():
@@ -265,6 +267,7 @@ for ifile in ifiles:
         full_data[date] = fixed_content
         b_iotools.write_list_to_file(fixed_content, ifile)
         i = i + 1
+        
     else:
         print 'ignored file {0}'.format(ifile)
 
