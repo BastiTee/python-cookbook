@@ -9,7 +9,7 @@ import os
 import math
 import argparse
 
-from bptbx import b_iotools
+from bptbx import b_iotools, b_cmdline
 
 # from bptbx.b_iotools import (findfiles, write_list_to_file,
 # read_file_to_list, zip_dir_recursively, basename, read_config_section_to_keyval_list)
@@ -18,16 +18,29 @@ from bptbx import b_iotools
 
 USER_FOLDER = os.getcwd()
 SE_PATTERNS = []
+PGN_EXTRACT = None
+PGN_ECO = None
+DO_ECO_EXTRACT = False
 
 parser = argparse.ArgumentParser(description='Postprocess PGN chess games.')
 parser.add_argument('-i', metavar='<ROOT-FOLDER>',
                     help='Root folder path (default: current location')
 parser.add_argument('-p', metavar='<PATTERN-FILE>',
                     help='Search & replace pattern file.')
+parser.add_argument('-e', metavar='<PGN-EXTRACT-EXE>',
+                    help='Path to optional pgn-extract executable.')
+parser.add_argument('-c', metavar='<PGN-EXTRACT-ECO>',
+                    help='Path to optional pgn-extract ECO file.')
 args = parser.parse_args()
 
 if not args.i == None:
     USER_FOLDER = args.i
+if not args.e == None and b_iotools.file_exists(args.e):
+    PGN_EXTRACT = args.e
+if not args.c == None and b_iotools.file_exists(args.c):
+    PGN_ECO = args.c
+if not PGN_EXTRACT == None and not PGN_ECO == None:
+    DO_ECO_EXTRACT = True 
 if not args.p == None:
     SE_PATTERNS = b_iotools.read_config_section_to_keyval_list(args.p)
 else:
@@ -35,6 +48,8 @@ else:
     
 print SE_PATTERNS
 print 'Applying {0} search & replace patterns'.format(len(SE_PATTERNS))
+print 'PGN Extract active: {0}. Set to "{1}" with ECO-file "{2}"'.format(DO_ECO_EXTRACT, PGN_EXTRACT, PGN_ECO)
+
 FULL_PLAYBOOK_NAME = 'full-playbook'
 STATS_NAME = 'full-stats'
 STATS_PATH = os.path.join(USER_FOLDER, STATS_NAME) + '.txt'
@@ -45,6 +60,15 @@ GAME_DATA = []
 ZIP_NAME = 'Spielearchiv.zip'
 
 #############################################################################
+
+def find_last_metadata_index (data):
+    i = 1
+    lastidx = i
+    for line in data:
+        if re.match('^[ ]*\[.*', line, re.IGNORECASE):
+            lastidx = i 
+        i = i + 1
+    return lastidx    
 
 def strip_formatting (string):
     string = re.sub('^[^\"]+\"', '', string)
@@ -60,7 +84,7 @@ def apply_fixes (line):
 
 def apply_filename_pattern ():
     
-    ifiles = b_iotools.findfiles(USER_FOLDER, '.*\\.(pgn|PGN)')
+    ifiles = b_iotools.findfiles(USER_FOLDER, '.*\\.(pgn|PGN)$')
     print 'found {0} pgn files for renaming'.format(len(ifiles))
     
     used_names = []
@@ -255,13 +279,32 @@ for ifile in ifiles:
     if (not FULL_PLAYBOOK_NAME in os.path.abspath(ifile) and 
         not '_Analysis_' in os.path.abspath(ifile)):
         content = b_iotools.read_file_to_list(ifile)
+        found_eco = False
+        found_round = False
         fixed_content = []
         for line in content:
+            if re.match('[ ]*\[[ ]*ECO.*',line, re.IGNORECASE):
+                found_eco = True
+            if re.match('[ ]*\[[ ]*Round.*',line, re.IGNORECASE):
+                line = re.sub('\?', '1', line)
+                found_round = True
             if 'Date' in line:
                 date = strip_formatting(line) + '_' + str(iterator).zfill(3)
                 iterator += 1
             fixed_line = apply_fixes(line)
             fixed_content.append(fixed_line)
+        
+        if not found_round:
+            idx = find_last_metadata_index(fixed_content)
+            fixed_content.insert(idx, '[Round "1"]')
+        if not found_eco:
+            if DO_ECO_EXTRACT:
+                idx = find_last_metadata_index(fixed_content)
+                _, stdouts, _ = b_cmdline.runcommand('{0} -e{1} {2}'.format(PGN_EXTRACT, PGN_ECO, ifile), True, True)
+                for stdout in stdouts:
+                    if '[ECO' in stdout:
+                        fixed_content.insert(idx, stdout)
+            
         full_data[date] = fixed_content
         b_iotools.write_list_to_file(fixed_content, ifile)
         i = i + 1
