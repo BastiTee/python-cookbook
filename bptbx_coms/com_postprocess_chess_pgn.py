@@ -79,7 +79,11 @@ def apply_fixes (line):
     if SE_PATTERNS is None:
         return line
     for SE_PATTERN in SE_PATTERNS:
-        line = re.sub(SE_PATTERN[0], SE_PATTERN[1], line, flags=re.IGNORECASE)
+        newline = re.sub(SE_PATTERN[0], SE_PATTERN[1], line, flags=re.IGNORECASE)
+        if not newline == line:
+            print 'pattern {0} matched on {1}'.format(SE_PATTERN[0], line)
+            line = newline
+            break
     return line
 
 def apply_filename_pattern ():
@@ -288,6 +292,8 @@ for ifile in ifiles:
             if re.match('[ ]*\[[ ]*Round.*',line, re.IGNORECASE):
                 line = re.sub('\?', '1', line)
                 found_round = True
+            if re.match('^[ ]*\[[ ]*Event[ ]*\"\?\"[ ]*\]',line, re.IGNORECASE):
+                line = '[Event "Freizeitspiel"]'
             if 'Date' in line:
                 date = strip_formatting(line) + '_' + str(iterator).zfill(3)
                 iterator += 1
@@ -385,6 +391,3 @@ apply_filename_pattern ()
 print 'zipping folder for backup'
 b_iotools.zip_dir_recursively(USER_FOLDER, os.path.join(os.path.join(
                     USER_FOLDER, '..'), ZIP_NAME))
-    
-    
-
