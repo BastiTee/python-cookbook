@@ -310,6 +310,8 @@ for ifile in ifiles:
                 for stdout in stdouts:
                     if '[ECO' in stdout:
                         fixed_content.insert(idx, stdout)
+                    if '[Opening' in stdout:
+                        fixed_content.insert(idx, stdout)
             
         full_data[date] = fixed_content
         b_iotools.write_list_to_file(fixed_content, ifile)
