@@ -312,9 +312,14 @@ for ifile in ifiles:
                         fixed_content.insert(idx, stdout)
                     if '[Opening' in stdout:
                         fixed_content.insert(idx, stdout)
-            
-        full_data[date] = fixed_content
-        b_iotools.write_list_to_file(fixed_content, ifile)
+        
+        # remove empty lines 
+        fixed_content_no_blanks = []
+        for fixed_line in fixed_content:
+            if not fixed_line == "":
+                fixed_content_no_blanks.append(fixed_line)
+        full_data[date] = fixed_content_no_blanks
+        b_iotools.write_list_to_file(fixed_content_no_blanks, ifile)
         i = i + 1
         
     else:
