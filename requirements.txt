@@ -22,4 +22,3 @@ Pillow>=2.5
 
 # twain == 1.0.5
 # https://pypi.python.org/pypi/twain
- 
