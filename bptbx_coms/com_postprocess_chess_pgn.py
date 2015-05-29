@@ -130,7 +130,7 @@ def apply_filename_pattern ():
                     used_names.append(trg_filename)
                     break
             
-            trg_filename = '{0}.pgn'.format(trg_filename)
+            trg_filename = '{0}.pgn'.format(re.sub("[ ]+", "_", trg_filename))
             
             # Generate target folder name
             src_filename = os.path.abspath(ifile)
