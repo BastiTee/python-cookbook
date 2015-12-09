@@ -1,8 +1,6 @@
-# Basti's Python Toolbox
-
 This project contains various personal python methods, modules and scripts. 
 
-## Install environment
+### Install environment
 
 Assuming that you have installed `pip` and `git` for your operating system you can install the toolbox by running
 
