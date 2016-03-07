@@ -8,7 +8,7 @@ setup(
     description='''Basti\'s python toolbox.''',
 	long_description='''Basti\'s personal python toolbox for everyday use.''',
     author='Basti Tee',
-    author_email='bastis.trash.email@gmx.de',
+	author_email='basti.tee@gmx.de',
     url='https://github.com/BastiTee/bastis-python-toolbox',
     packages=['bptbx', 'bptbx_coms'],
 	package_data={'bptbx': ['*.txt']},
