@@ -18,7 +18,7 @@ Pillow>=2.5
 ### For package: b_scan 
 
 # reportlab >= 3.0
-# http://www.reportlab.com/software/opensource/
+# https://www.reportlab.com/pypi/packages/
 
 # twain == 1.0.5
 # https://pypi.python.org/pypi/twain
