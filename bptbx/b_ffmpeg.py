@@ -1,8 +1,10 @@
 r"""This module contains FFMPEG and Audio/Video related functions."""
 
 import re
+
 import b_cmdline
 import b_iotools
+
 
 class FFMPEG_Handler:
     """Python handler binding for ffmpeg"""

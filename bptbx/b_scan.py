@@ -1,9 +1,11 @@
 r"""This module contains methods to work with scan devices""" 
 
-import twain
-from reportlab.pdfgen import canvas
 from reportlab.lib.units import cm
-    
+from reportlab.pdfgen import canvas
+
+import twain
+
+
 def convert_images_to_a4_pdf (images, target_pdf='output.pdf'):  
     """Takes a list of JPG/PNG/BMP images and stores the images to 
        an A4-format PDF with each image as one page."""

@@ -1,8 +1,10 @@
 """Wrapper for operations using Python image library (PIL)""" 
 
-from PIL import Image
 from os import path
 from re import compile
+
+from PIL import Image
+
 
 GIF_PATTERN = compile('^.*\\.gif$')
 """Pattern for GIF files"""

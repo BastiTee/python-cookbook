@@ -1,11 +1,13 @@
 r"""This module contains tools for multi-threading operations."""
 
 from Queue import Queue
-from threading import Thread
 import multiprocessing
 from random import randrange
+from threading import Thread
 from time import sleep
+
 from b_cmdline import runcommand
+
 
 class Worker(Thread):
     """Thread executing tasks from a given tasks queue"""

@@ -1,10 +1,11 @@
 r"""This module contains various tools for string operations."""
 
-import string
-from re import sub
-import random
 from datetime import datetime
+import random
+from re import sub
+import string
 import time
+
 
 def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
     """This method creates a random string with given length and given 

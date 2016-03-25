@@ -1,12 +1,14 @@
 r"""This module contains various tools for recurring I/O operations."""
 
+import ConfigParser
+import datetime
+import hashlib
 import os
 import re
-import hashlib
-import datetime
-import b_enum
 import zipfile
-import ConfigParser
+
+import b_enum
+
 
 def mkdirs (directory):
     """Create directory structure if it does not exist"""

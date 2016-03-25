@@ -10,7 +10,7 @@ setup(
     author='Basti Tee',
 	author_email='basti.tee@gmx.de',
     url='https://github.com/BastiTee/bastis-python-toolbox',
-    packages=['bptbx', 'bptbx_coms'],
+    packages=['bptbx'],
 	package_data={'bptbx': ['*.txt']},
-    scripts=[ 'bpt.py', 'bpt_test.py' ]
+    scripts=[]
 ) 

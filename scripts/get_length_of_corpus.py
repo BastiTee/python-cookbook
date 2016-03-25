@@ -1,8 +1,9 @@
 #! /usr/bin/env python
 
-from bptbx import b_iotools
-from bptbx import b_ffmpeg
 import argparse
+
+from bptbx import b_ffmpeg, b_iotools
+
 
 FFMPEG_PATH = 'ffmpeg'
 CONTENT_PATH = '.'

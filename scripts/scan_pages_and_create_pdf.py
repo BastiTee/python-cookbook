@@ -6,11 +6,13 @@ scanned pages to a PDF. Also includes a routine to easily scan multiple
 pages at once. 
 """
 
-from bptbx import b_strings
-from bptbx import b_scan
-from os import path, remove, pardir
-from argparse import ArgumentParser
 import Tkinter, tkMessageBox, tkFileDialog
+from argparse import ArgumentParser
+from os import path, remove, pardir
+
+from bptbx import b_scan
+from bptbx import b_strings
+
 
 Tkinter.Tk().withdraw()
 

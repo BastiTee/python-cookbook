@@ -14,8 +14,10 @@ EOF//Nonewline
 Script will obtain layout from file first, test if layout in folders matches
 layout in text file and then applies filenames to files.
 """
-from bptbx import b_iotools
 from os import path, rename
+
+from bptbx import b_iotools
+
 
 basefolder = 'c:/basefolder'
 filename_txt = 'D:/titles.txt'

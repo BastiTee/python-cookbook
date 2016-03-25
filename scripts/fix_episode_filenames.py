@@ -4,16 +4,16 @@ available information from the given filename, looking up metadata in
 the web, creating a new filen name and finally renaming that file. 
 """
 
+import argparse
+import os
+import re
+import tempfile
+
 from bptbx import b_iotools
 from bptbx import b_web
 
-import re
-import os
-import tempfile
-import argparse
 
 #############################################################################
-
 # USER PROPERTIES
 # Base folder for processing
 user_folder = 'D:/Download/'

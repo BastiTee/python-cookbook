@@ -4,6 +4,7 @@ A very simple test script that adds two numbers. Used for testing.
 
 import argparse
 
+
 parser = argparse.ArgumentParser(description='Add two numbers')
 parser.add_argument('-a', metavar='<Number A>', help='First number argument')
 parser.add_argument('-b', metavar='<Number B>', help='Second number argument')

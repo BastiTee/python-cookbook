@@ -1,7 +1,8 @@
 r"""This module contains command line call tools."""
 
-import subprocess
 import os
+import subprocess
+
 
 def runcommand (command, suppress_stdout=False, suppress_stderr=False,
                 useshell=True):

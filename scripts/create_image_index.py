@@ -5,16 +5,16 @@ Scans a folder for image files and creates a thumbnail version to allow
 fast skimming of the image folder.
 """
 
+import argparse
 from os import path
 import re
+import shutil
 from threading import Lock
-import argparse
 
 from bptbx import b_iotools, b_pil, b_threading
-import shutil
+
 
 #############################################################################
-
 FILE_PATTERN = re.compile('^.*\\.(jpg|jpeg|gif|png){1}$')
 INDEX_IMAGE_LONG_SIDE_PX = 400.0
 DEBUG = False

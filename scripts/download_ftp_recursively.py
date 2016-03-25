@@ -3,7 +3,9 @@ A script to recursively download an ftp folder to a local folder.
 """
 
 import argparse
+
 from bptbx import b_web
+
 
 def print_help (message=''):
     print message

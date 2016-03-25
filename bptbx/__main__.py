@@ -66,7 +66,7 @@ def test_ffmpeg ():
     ffmpeg_handler = b_ffmpeg.FFMPEG_Handler (ffmpeg_path)
     print ffmpeg_handler.get_file_duration(testfile_path)
 
-def test_math ():	
+def test_math ():    
     from bptbx import b_math
     result = b_math.split_list_to_equal_buckets([1, 2, 3, 4, 5, 6, 7, 8], 3)
     assert result == [[1.0, 2.0, 3.0], [4.0, 5.0], [6.0, 7.0, 8.0]]
@@ -156,4 +156,4 @@ if __name__ == "__main__":
         exit(1)
     
     print 'Seems everything is alright! See above log for details.'
-    exit(0)	
+    exit(0)    
