@@ -2,6 +2,13 @@
 
 from distutils.core import setup
 
+from os import listdir, path
+
+sfiles = []
+for sfile in listdir('scripts'):
+	sfile = path.join('scripts', sfile)
+	sfiles.append(sfile)
+	
 setup(
 	name='bptbx',
     version='0.1.0',
@@ -12,5 +19,5 @@ setup(
     url='https://github.com/BastiTee/bastis-python-toolbox',
     packages=['bptbx'],
 	package_data={'bptbx': ['*.txt']},
-    scripts=[]
+    scripts=sfiles
 ) 

@@ -152,7 +152,7 @@ if __name__ == "__main__":
         print ('An error occurred on line ' + str(line) + ' in statement ' + text)
         exit(1)
     except Exception as e:
-        print 'Exception occured in test suite: {0}'.format(e)
+        print 'Exception occurred in test suite: {0}'.format(e)
         exit(1)
     
     print 'Seems everything is alright! See above log for details.'
