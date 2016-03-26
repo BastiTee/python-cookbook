@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
 A script to recursively download an ftp folder to a local folder.  
 """

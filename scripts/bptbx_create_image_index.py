@@ -1,5 +1,4 @@
 #! /usr/bin/env python
-
 """
 Scans a folder for image files and creates a thumbnail version to allow
 fast skimming of the image folder.
@@ -58,7 +57,7 @@ def print_process_file_status ():
         print '\tfile {0}/{1} done'.format(current_file, total_images)
         current_file = current_file + 1
     finally:
-        print_lock.release() #
+        print_lock.release()  #
 
 def process_file (f_from, f_to):
     
@@ -75,7 +74,7 @@ def process_file (f_from, f_to):
 def copy_file (f_from, f_to):
     shutil.copy(f_from, f_to)
 
-def recursive_file_walk (directory, thread_pool = None):
+def recursive_file_walk (directory, thread_pool=None):
     global current_dir
     curr_dir_abs = path.join(args.i, directory)
     curr_trg_dir_abs = path.join (args.o, directory)
@@ -89,10 +88,10 @@ def recursive_file_walk (directory, thread_pool = None):
             f_from = path.join(curr_dir_abs, image)
             f_to = path.join(curr_trg_dir_abs, image) 
     
-            #if not thread_pool:
+            # if not thread_pool:
             if not b_iotools.file_exists(f_to):
                 copy_file (f_from, f_to) 
-            #else:
+            # else:
             #    thread_pool.add_task(process_file, f_from, f_to)   
     
     print 'dir {0}/{1} done...'.format(current_dir, len(directories))

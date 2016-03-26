@@ -5,7 +5,7 @@ from matplotlib.dates import AutoDateLocator, DateFormatter
 import matplotlib.pyplot as plt
 
 
-def print_dataset (x_axis_dataset, y_axis_datasets, y_axis_datalabels, 
+def print_dataset (x_axis_dataset, y_axis_datasets, y_axis_datalabels,
                     x_axis_isdatetime=False,
                     title='Title', x_label='X-Label', y_label='Y-Label',
                     fontsize=8, fontweight='bold',
@@ -24,7 +24,7 @@ def print_dataset (x_axis_dataset, y_axis_datasets, y_axis_datalabels,
     plt.subplot(111)
     
     for i, y_axis_dataset in enumerate(y_axis_datasets):
-        plt.plot(x_axis_dataset, y_axis_dataset, '-', 
+        plt.plot(x_axis_dataset, y_axis_dataset, '-',
                  label=y_axis_datalabels[i])
 
     

@@ -1,4 +1,4 @@
-"""Wrapper for operations using Python image library (PIL)""" 
+r"""Wrapper for operations using Python image library (PIL)""" 
 
 from os import path
 from re import compile
@@ -9,7 +9,7 @@ from PIL import Image
 GIF_PATTERN = compile('^.*\\.gif$')
 """Pattern for GIF files"""
 
-def get_length_of_long_side ( source_image ):
+def get_length_of_long_side (source_image):
     """Returns the number of pixels of the long side of the image"""
     image = Image.open(source_image)
     width, height = image.size
@@ -34,8 +34,8 @@ def resize_image_with_factor (source_image, target_image, factor):
      
     image = Image.open(source_image)
     width, height = image.size
-    width_new = int(float(width)*factor)
-    height_new = int(float(height)*factor)
+    width_new = int(float(width) * factor)
+    height_new = int(float(height) * factor)
 
     image = image.resize((width_new, height_new), Image.ANTIALIAS) 
     if GIF_PATTERN.match(target_image.lower()):

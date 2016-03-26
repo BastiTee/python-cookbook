@@ -7,7 +7,7 @@ from urllib2 import build_opener, urlopen
 from ftputil import FTPHost
 
 
-DEFAULT_USER_AGENT = ('Mozilla/5.0 (X11; U; Linux i686) Gecko/20071127' +
+DEFAULT_USER_AGENT = ('Mozilla/5.0 (X11; U; Linux i686) Gecko/20071127' + 
                       ' Firefox/2.0.0.11')
 DEFAULT_ACCEPT = 'text/html'
 
@@ -44,7 +44,7 @@ def download_file (file_url, target_filepath):
     output.write(remote_file.read())
     output.close()
     
-def recursively_download_ftp (host, username, password, ftp_root_path, 
+def recursively_download_ftp (host, username, password, ftp_root_path,
                               local_dest_dir):
     
     # Data preparation
@@ -64,7 +64,7 @@ def recursively_download_ftp (host, username, password, ftp_root_path,
         short_folder_path = sub('^' + ftp_root_path, '', folder_path)
         local_folder_path = local_dest_dir
         if short_folder_path:
-            local_folder_path = path.join(local_dest_dir, sub('^/', '', 
+            local_folder_path = path.join(local_dest_dir, sub('^/', '',
                                                         short_folder_path))
             if not path.exists(local_folder_path):
                 makedirs(local_folder_path)

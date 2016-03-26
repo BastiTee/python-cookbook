@@ -1,5 +1,4 @@
 #! /usr/bin/env python
-
 """
 Script to invoke scanning on a twain-compatible printer and to convert 
 scanned pages to a PDF. Also includes a routine to easily scan multiple 
@@ -22,7 +21,7 @@ parser.add_argument('-r', metavar='<Resoultion>', default=100,
                     help='Scan resoultion in DPI (> 100).')
 parser.add_argument('-c', metavar='<Contrast>', default=0,
                     help='Contrast (-1000 - 1000).')
-parser.add_argument('-keeptemp', action='store_true', 
+parser.add_argument('-keeptemp', action='store_true',
                     help='Keep temporary image files', default='False')
 
 args = parser.parse_args()
@@ -63,7 +62,7 @@ while True:
     image = path.join(target_folder, timestamp) + '.bmp'
     print 'Creating temporary file at: {0}'.format(image)
     
-    b_scan.scan_image ( image, scanner_name, args.r, args.c )
+    b_scan.scan_image (image, scanner_name, args.r, args.c)
     images.append(image)
     
     # Now the temporary image file lies on the file system

@@ -1,1 +1,1 @@
-'''Core library modules'''
+"""Core library modules"""

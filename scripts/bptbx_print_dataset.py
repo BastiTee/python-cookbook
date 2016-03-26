@@ -1,5 +1,4 @@
 #! /usr/bin/env python
-
 """
 Script for visualizing a special ping log file and for exampling the usage
 of the visual package in conjunction with the math package

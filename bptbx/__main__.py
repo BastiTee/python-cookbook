@@ -1,14 +1,15 @@
 #! /usr/bin/env python
-
 """Not really a test suite but used to test if all modules can be called"""
 
 from platform import system
-import traceback
-import sys
 import random
+import sys
+import traceback
+
+from bptbx.b_iotools import import_modules_with_check, import_module_with_check
+
 
 print '# EXTERNAL DEPENDENCIES (see DEPENDS for details)'
-from bptbx.b_iotools import import_modules_with_check, import_module_with_check
 message = 'Missing external modules for module \'{0}\': {1}'
 # b_web
 ext_modules = [ 'ftputil' ]
