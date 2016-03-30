@@ -1,9 +1,8 @@
 r"""This module contains command line call tools."""
 
-from os import devnull, errno
 from platform import system
 import subprocess
-
+import os
 
 def runcommand (command, suppress_stdout=False, suppress_stderr=False,
                 useshell=True):
@@ -27,10 +26,10 @@ def checkforcommand(name):
     """Tests whether an executable with the given name exists on the path"""
     
     try:
-        devnull = open(devnull)
+        devnull = open(os.devnull)
         subprocess.Popen([name], stdout=devnull, stderr=devnull).communicate()
     except OSError as e:
-        if e.errno == errno.ENOENT:
+        if e.errno == os.errno.ENOENT:
             return False
     return True
 
