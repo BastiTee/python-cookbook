@@ -25,13 +25,6 @@ parser.add_argument('-keeptemp', action='store_true',
                     help='Keep temporary image files', default='False')
 
 args = parser.parse_args()
-
-# Select scanner
-try:
-    scanner_name = b_scan.get_scanner ()
-except Exception as e:
-    print 'Scanner seems not to be connected. {0}'.format(e)
-    exit(1)
     
 # Get target_filename for final PDF file
 default_filename = b_strings.get_current_date_for_filename() + '-DOCNAME'
@@ -62,7 +55,7 @@ while True:
     image = path.join(target_folder, timestamp) + '.bmp'
     print 'Creating temporary file at: {0}'.format(image)
     
-    b_scan.scan_image (image, scanner_name, args.r, args.c)
+    b_scan.scan_image (image, args.r, args.c)
     images.append(image)
     
     # Now the temporary image file lies on the file system

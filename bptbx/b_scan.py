@@ -1,9 +1,13 @@
 r"""This module contains methods to work with scan devices""" 
+from os import path
 
 from reportlab.lib.units import cm
 from reportlab.pdfgen import canvas
 
-import twain
+from bptbx import b_cmdline
+
+
+
 
 
 def convert_images_to_a4_pdf (images, target_pdf='output.pdf'):  
@@ -17,42 +21,17 @@ def convert_images_to_a4_pdf (images, target_pdf='output.pdf'):
         c.showPage()
     c.save()
     
-def get_scanner (pickfirst=False):
-    """Obtain the name of an available scanner"""
-    
-    sm = twain.SourceManager(0)
-    scanner_name = ''
 
-    if pickfirst:
-        scanners = sm.GetSourceList()
-        if len(scanners) > 0:
-            scanner_name = scanners[0]
-    else:
-        source = sm.OpenSource()
-        scanner_name = source.GetSourceName()
-
-    sm.destroy()
-    return scanner_name
-
-def scan_image (target_file, scanner_name=None, resolution=100, contrast=0):
+def scan_image (target_file, resolution=100, contrast=0):
     """Uses a twain-compatible scanner to scan an image to BMP"""
     
-    # Initialize scanner
-    sm = twain.SourceManager(0)
+    pf = b_cmdline.get_platform()
+    if not 'windows' in pf:
+        raise OSError
     
-    if scanner_name == None:
-        scanner_name = get_scanner (False)
-        
-    ss = sm.OpenSource(scanner_name)
-    
-    ss.SetCapability(twain.ICAP_XRESOLUTION, 7 , float(resolution))
-    ss.SetCapability(twain.ICAP_CONTRAST, 7 , float(contrast))
-    ss.HideUI()
-    ss.RequestAcquire(0, 0)
-    
-    # the next command actually performs the scanning 
-    rv = ss.XferImageNatively()
-    if rv:
-        (handle, _) = rv
-        twain.DIBToBMFile(handle, target_file)
-    sm.destroy() 
+    here = path.dirname(path.realpath(__file__))
+
+    command = path.join(here, 'ext', 'cmdtwain-win', 'ScanBmp.exe')
+    command = '{} /PAPER=a4 /RGB /DPI={} {}'.format(command, resolution,
+                                                    target_file)
+    b_cmdline.runcommand(command, True, True)

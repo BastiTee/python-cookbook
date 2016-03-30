@@ -1,6 +1,7 @@
 r"""This module contains command line call tools."""
 
-import os
+from os import devnull, errno
+from platform import system
 import subprocess
 
 
@@ -26,9 +27,15 @@ def checkforcommand(name):
     """Tests whether an executable with the given name exists on the path"""
     
     try:
-        devnull = open(os.devnull)
+        devnull = open(devnull)
         subprocess.Popen([name], stdout=devnull, stderr=devnull).communicate()
     except OSError as e:
-        if e.errno == os.errno.ENOENT:
+        if e.errno == errno.ENOENT:
             return False
     return True
+
+def get_platform():
+    """Returns the system's platform string"""
+    
+    platform = str(system()).lower()
+    return platform    

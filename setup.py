@@ -18,6 +18,6 @@ setup(
 	author_email='basti.tee@gmx.de',
     url='https://github.com/BastiTee/bastis-python-toolbox',
     packages=['bptbx'],
-	package_data={'bptbx': [] },
+	package_data={'bptbx': ['ext/**/*',] },
     scripts=scripts
 ) 

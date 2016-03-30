@@ -6,10 +6,3 @@ reportlab >= 3.3
 matplotlib >= 1.5.1
 numpy >= 1.6
 epydoc >= 3.0.0
-
-########################################################
-# The following references need to be installed manually
-########################################################
-# For package: b_scan 
-# twain == 1.0.5
-# https://pypi.python.org/pypi/twain
