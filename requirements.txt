@@ -2,7 +2,6 @@ ftputil >= 3.1
 pyparsing >= 2.0.2
 python-dateutil >= 2.2  
 Pillow >= 2.5
-reportlab >= 3.3
 matplotlib >= 1.5.1
 numpy >= 1.6
 epydoc >= 3.0.0

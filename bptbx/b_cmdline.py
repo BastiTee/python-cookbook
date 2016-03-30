@@ -5,12 +5,12 @@ import subprocess
 import os
 
 def runcommand (command, suppress_stdout=False, suppress_stderr=False,
-                useshell=True):
+                useshell=True, workdir=None):
     """Run a command on the command line"""
     
     log_stdout = []
     handle = subprocess.Popen(command, shell=useshell, stdout=subprocess.PIPE,
-                              stderr=subprocess.STDOUT)
+                              stderr=subprocess.STDOUT, cwd=workdir)
         
     while handle.poll() is None:
         line = handle.stdout.readline().strip()

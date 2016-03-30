@@ -23,12 +23,6 @@ success, failed_modules = import_modules_with_check(ext_modules)
 if success == False:
     print message.format('b_visual', failed_modules)
 
-# b_scan
-ext_modules = [ 'reportlab', 'PIL', 'twain' ]
-success, failed_modules = import_modules_with_check(ext_modules)
-if success == False:
-    print message.format('b_scan', failed_modules)
-
 print '#################################\n'
                 
 def test_cmdline ():
@@ -53,20 +47,7 @@ def test_iotools():
      == 'filetype')
     assert (b_iotools.basename('/somewhere/on/the/disc/filetype.css') 
     == 'filetype.css')
-        
-def test_ffmpeg ():
-    from bptbx import b_cmdline, b_iotools, b_ffmpeg
-    ffmpeg_path = 'F:/ffmpeg.exe'
-    testfile_path = 'F:/bigbuckbunny.mp4'
-    if not b_cmdline.checkforcommand(ffmpeg_path):
-        print 'Skipping ffmpeg test. Path {0} not available.'.format(ffmpeg_path)
-        return
-    if not b_iotools.file_exists(testfile_path):
-        print 'Skipping ffmpeg test. Test file {0} not available.'.format(testfile_path)
-        return
-    ffmpeg_handler = b_ffmpeg.FFMPEG_Handler (ffmpeg_path)
-    print ffmpeg_handler.get_file_duration(testfile_path)
-
+       
 def test_math ():    
     from bptbx import b_math
     result = b_math.split_list_to_equal_buckets([1, 2, 3, 4, 5, 6, 7, 8], 3)
@@ -139,7 +120,6 @@ if __name__ == "__main__":
         test_cmdline()
         test_enum()
         test_iotools ()
-        test_ffmpeg ()
         test_math()
         test_strings()
         test_threading()
