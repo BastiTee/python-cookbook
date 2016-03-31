@@ -6,7 +6,7 @@ from random import randrange
 from threading import Thread
 from time import sleep
 
-from b_cmdline import runcommand
+from b_cmdline import run_command
 
 
 class Worker(Thread):
@@ -68,6 +68,6 @@ def run_commands_from_file_parallel (filepath):
     print 'Machine has {0} cpus'.format(cpus)
     pool = ThreadPool(cpus)
     for command in commands:
-        pool.add_task(runcommand, command, True, True)
+        pool.add_task(run_command, command, True, True)
     print 'Waiting for jobs to be completed'
     pool.wait_completion()

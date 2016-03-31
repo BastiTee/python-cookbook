@@ -1,10 +1,10 @@
 r"""This module contains command line call tools."""
 
-from platform import system
+import platform
 import subprocess
 import os
 
-def runcommand (command, suppress_stdout=False, suppress_stderr=False,
+def run_command (command, suppress_stdout=False, suppress_stderr=False,
                 useshell=True, workdir=None):
     """Run a command on the command line"""
     
@@ -22,7 +22,7 @@ def runcommand (command, suppress_stdout=False, suppress_stderr=False,
     log_stderr = log_stdout
     return handle.returncode, log_stdout, log_stderr
 
-def checkforcommand(name):
+def check_for_command(name):
     """Tests whether an executable with the given name exists on the path"""
     
     try:
@@ -36,5 +36,5 @@ def checkforcommand(name):
 def get_platform():
     """Returns the system's platform string"""
     
-    platform = str(system()).lower()
+    platform = str(platform.system()).lower()
     return platform    

@@ -32,8 +32,8 @@ def test_cmdline ():
         command = 'cd'
     else:
         command = 'ls'
-    b_cmdline.checkforcommand(command)
-    b_cmdline.runcommand(command, True, True)    
+    b_cmdline.check_for_command(command)
+    b_cmdline.run_command(command, True, True)    
         
 def test_enum ():
     from bptbx import b_enum
