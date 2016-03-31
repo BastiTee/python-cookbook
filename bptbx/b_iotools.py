@@ -234,6 +234,8 @@ def read_file_to_list (filepath, strip=True):
     """Reads a file and writes content to a list"""
     
     content = []
+    if not file_exists(filepath):
+        return content
     ofile = open (filepath)
     for line in ofile:
         if strip == True:
@@ -286,3 +288,15 @@ def read_config_section_to_keyval_list (config_file, section=None):
     print 'For config file {0} using section {1}'.format(config_file, section)
     items = Config.items(section)
     return items
+
+def remove_silent(path):
+    """Silently remove a file from filesystem. Ignore any errors, especially
+    I/O errors when the file does not exist."""
+    
+    if path is None:
+        return
+    try:
+        os.remove(path)
+    except OSError:
+        pass  # catch if file does not exist
+
