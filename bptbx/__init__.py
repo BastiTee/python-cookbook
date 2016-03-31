@@ -1,1 +1,1 @@
-"""Core library modules"""
+"""Basti's Python Toolbox core modules"""
