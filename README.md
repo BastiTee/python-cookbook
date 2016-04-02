@@ -1,6 +1,7 @@
-This project contains various personal python methods, modules and scripts. 
+## Basti's Python Toolbox
+> Personal collection of pure-python modules and script
 
-**Install environment**
+**Install**
 
 Assuming that you have installed `pip` and `git` for your operating system you can install the toolbox by running
 
