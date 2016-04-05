@@ -225,8 +225,9 @@ def file_exists (path):
     """Tests if a file exists"""
     
     try:
-        with open(path):
-            return True
+        fobj = open(path)
+        fobj.close()
+        return True
     except IOError:
         return False
             
