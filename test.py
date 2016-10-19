@@ -2,12 +2,12 @@
                 
 def test_cmdline ():
     from bptbx import b_cmdline
-    command = ''
     if 'windows' in b_cmdline.get_platform():
         command = 'cmd.exe'
         command_exe = command +  ' /C dir'
     else:
         command = 'ls'
+        command_exe = command + ' ~/'
     
     assert b_cmdline.check_for_command(command)
     code, _, _ = b_cmdline.execute_command(command_exe, True, True)    
