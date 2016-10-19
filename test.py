@@ -177,7 +177,7 @@ if __name__ == "__main__":
     Tk = b_legacy.get_tk()
     try:
         test_visual()
-    except Tk.TclError:
+    except Tk[0].TclError:
         print( 'Catched TclError. Most probably there is no display available.')
         pass
     test_web() 
