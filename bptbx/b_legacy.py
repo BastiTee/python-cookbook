@@ -29,3 +29,9 @@ def get_urllib2():
     else:
         from urllib import request
         return request
+
+def iterator_next(iterator):
+    if get_python_major_version() <= 2:
+        return iterator.next()
+    else:
+        return iterator.__next__()

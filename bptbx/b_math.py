@@ -1,5 +1,6 @@
 r"""This module contains math functions and data conversion methods."""
 
+from bptbx import b_legacy
 avg = lambda x : sum(x) / len(x)
 
 def split_list_to_equal_buckets(list_to_reduce, desired_buckets=10):
@@ -34,15 +35,16 @@ def split_list_to_equal_buckets(list_to_reduce, desired_buckets=10):
     iterator = iter(list_to_reduce)
     
     if f_bucketrest != 0:
-        subsets[p_subset].append(float(iterator.next()))
+        subsets[p_subset].append(float(b_legacy.iterator_next(iterator)))
         t_count += 1
     while t_count < len(list_to_reduce):
-        subsets[p_subset].append(float(iterator.next()))
+        subsets[p_subset].append(float(b_legacy.iterator_next(iterator)))
         p_count += 1
         t_count += 1
         if p_count == i_blocksize:
             if f_bucketrest != 0 and p_subset >= f_insertion_point:
-                subsets[p_subset].append(float(iterator.next()))
+                subsets[p_subset].append(
+                        float(b_legacy.iterator_next(iterator)))
                 p_count += 1
                 t_count += 1
                 f_insertion_point += f_add_one_interval

@@ -45,6 +45,7 @@ def check_for_command(name):
         devnull = open(os.devnull)
         subprocess.Popen([name], stdout=devnull, stderr=devnull).communicate()
     except OSError as e:
+        print (e)
         if e.errno == os.errno.ENOENT:
             return False
     return True
