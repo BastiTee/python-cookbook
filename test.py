@@ -88,16 +88,30 @@ def test_legacy():
     pass
 
 def test_logging():
-    pass 
-
+    print ('--- testing b_logging')
+    from bptbx import b_logging
+    b_logging.setup_logging(True)
+    
 def test_math ():    
+    print ('--- testing b_math')
     from bptbx import b_math
     result = b_math.split_list_to_equal_buckets([1, 2, 3, 4, 5, 6, 7, 8], 3)
     assert result == [[1.0, 2.0, 3.0], [4.0, 5.0], [6.0, 7.0, 8.0]]
-
+    result = b_math.reduce_list([1, 3, 4, 3], 2)
+    assert result == [ 2.0, 3.5 ]
+    
 def test_pil():
-    pass
-        
+    print ('--- testing b_pil')
+    from bptbx import b_pil
+    from bptbx import b_iotools
+    b_pil.resize_image_with_factor('test-data/image.jpg', 
+                                   './image-resized.jpg', 0.5)
+    length = b_pil.get_length_of_long_side('test-data/image.jpg')
+    assert length == 460
+    length = b_pil.get_length_of_long_side('./image-resized.jpg')
+    assert length == 230, length
+    b_iotools.remove_silent('./image-resized.jpg')
+    
 def test_strings ():
     from bptbx import b_strings
     print (b_strings.id_generator())
@@ -161,9 +175,9 @@ if __name__ == "__main__":
     test_enum()
     test_iotools()
     test_legacy()
-#     test_logging()
-#     test_math()
-#     test_pil()
+    test_logging()
+    test_math()
+    test_pil()
 #     test_strings()
 #     test_threading()
 #     test_visual()

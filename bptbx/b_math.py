@@ -1,7 +1,6 @@
 r"""This module contains math functions and data conversion methods."""
 
 from bptbx import b_legacy
-avg = lambda x : sum(x) / len(x)
 
 def split_list_to_equal_buckets(list_to_reduce, desired_buckets=10):
     """This method splits a given list into a list of equally sized buckets 
@@ -53,14 +52,15 @@ def split_list_to_equal_buckets(list_to_reduce, desired_buckets=10):
 
     return subsets
 
-def reduce_list (list_to_reduce, desired_elements=10, reduce_method=avg):
+def reduce_list (list_to_reduce, desired_elements=10):
     """Reduces a list to the given number of elements, averaging over blocks"""
     
     subsets = split_list_to_equal_buckets (list_to_reduce, desired_elements)
+    avg = lambda x : sum(x) / len(x)
 
     out_list = []                    
     for subset in subsets:
-        value = reduce_method(subset)
+        value = avg(subset)
         out_list.append(value)
-        
+
     return out_list
