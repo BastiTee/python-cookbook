@@ -158,6 +158,7 @@ def test_visual ():
         pass
 
 def test_web ():
+    print ('--- testing b_web')
     from bptbx import b_web
     content = b_web.download_webpage_to_list('http://www.google.de')
     assert len(content) > 0
