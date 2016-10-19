@@ -136,4 +136,4 @@ if __name__ == "__main__":
 #     test_visual()
 #     test_web() 
     
-    print ('--- all tests passed.')
+    print ('--- all tests have passed.')
