@@ -41,6 +41,9 @@ class ThreadPool:
     def wait_completion(self):
         """Wait for completion of all the tasks in the queue"""
         self.tasks.join()
+        
+    def is_empty(self):
+        return self.tasks.empty()
 
 def get_cpus():
     """This method obtains the number of available cpus"""

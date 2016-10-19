@@ -13,21 +13,8 @@ def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
 
     return ''.join(random.choice(chars) for _ in range(size))
 
-def convert_seconds_to_timestamp (timecode):
-
-    sec = int(timecode)
-    sec = sec % 60
-    secs = str(sec).zfill(2)
-    mini = (int(timecode) / 60) % 60
-    minis = str(mini).zfill(2)
-    hrs = (int(timecode) / 60 / 60) % 24
-    hrss = str(hrs).zfill(2)
-    timestamp = hrss + "_" + minis + "_" + secs
-
-    return timestamp
-
 def fillzeros (number, desiredlength=1):
-    print (str(number).zfill(desiredlength))
+    return (str(number).zfill(desiredlength))
 
 def epoch2timestamp (epoch, formatstring='%Y-%m-%d %H:%M:%S.%f'):
     """Converts an epoch/unix time string to a timestamp"""

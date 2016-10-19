@@ -49,3 +49,5 @@ build
 .pydevproject
 *.ini
 bptbx_doc
+__pycache__
+

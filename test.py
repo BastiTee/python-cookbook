@@ -37,15 +37,6 @@ def test_daemon():
     assert daemon.runs > 0
     daemon.stop()
     
-def test_enum ():
-    print ('--- testing b_enum')
-    from bptbx import b_enum
-    my_enum = b_enum.enum ('START', 'STOP')
-    assert my_enum.START == 0
-    assert my_enum.STOP == 1
-    assert b_enum.Filetype.FILE == 0
-    assert b_enum.Filetype.DIR == 1    
-
 def test_iotools():
     print ('--- testing b_iotools')
     from bptbx import b_iotools
@@ -113,35 +104,49 @@ def test_pil():
     b_iotools.remove_silent('./image-resized.jpg')
     
 def test_strings ():
+    print ('--- testing b_strings')
     from bptbx import b_strings
-    print (b_strings.id_generator())
+    assert b_strings.id_generator()
+    assert b_strings.concat_list_to_string([ 'a', 'b', 'c' ]) == 'abc'
+    assert b_strings.fillzeros('12', 4) == '0012'
+    epoch = 1476908186
+    ts = b_strings.epoch2timestamp(epoch)
+    assert ts == '2016-10-19 22:16:26.000000', ts
+    dto = b_strings.epoch2dtobject(epoch)
+    assert dto
+     
+
+def _random_calculation ():
+    from random import randint 
+    val1 = randint(1, 100)
+    val2 = randint(1, 100)
+    print ('Calculated: {0} + {1} = {2}'.format(val1, val2, (val1 + val2)))
 
 def test_threading ():
+    print ('--- testing b_threading')
     from bptbx import b_threading
     cpus = b_threading.get_cpus()
     print ('Machine has {0} cpus'.format(cpus))
     pool = b_threading.ThreadPool(cpus)
     for _ in range(0, 10):
-        pool.add_task(random_calculation)
+        pool.add_task(_random_calculation)
+        assert not pool.is_empty()
     print ('Waiting for jobs to be completed')
     pool.wait_completion()
-
-def test_visual ():
+    assert pool.is_empty()
     
-    ext_modules = [ 'matplotlib', 'numpy', 'dateutil', 'pyparsing' ]
-    success, _ = import_modules_with_check(ext_modules)
-    if success:
-        from bptbx import b_visual
-    else:
-        print ('Skipped test for b_visual. Missing external imports.')
-        return
+def test_visual ():
+    print ('--- testing b_visual')
+    from bptbx import b_visual
+    from random import randint 
+    
     x_axis_dataset = []
     y1 = []
     y2 = []
     for x in range(1, 11):
         x_axis_dataset.append(x)
-        y1.append(random.randint(1, 100))
-        y2.append(random.randint(1, 100))
+        y1.append(randint(1, 100))
+        y2.append(randint(1, 100))
     y_axis_datasets = [y1, y2]
     y_axis_datalabels = ['Some data', 'Some other data']
     x_axis_isdatetime = False
@@ -159,12 +164,7 @@ def test_visual ():
         pass
 
 def test_web ():
-    success = import_module_with_check('ftputil')
-    if success:
-        from bptbx import b_web
-    else:
-        print ('Skipped test for b_web. Missing external imports.')
-        return
+    from bptbx import b_web
     content = b_web.download_webpage_to_list('http://www.google.de')
     assert len(content) > 0
     print (content[0])
@@ -172,16 +172,15 @@ def test_web ():
 if __name__ == "__main__":
 
     test_cmdline()
-    test_enum()
     test_iotools()
     test_legacy()
     test_logging()
     test_math()
     test_pil()
-#     test_strings()
-#     test_threading()
-#     test_visual()
-#     test_web() 
+    test_strings()
+    test_threading()
+    test_visual()
+    test_web() 
     test_daemon()
     
     print ('--- all tests have passed.')

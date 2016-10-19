@@ -6,7 +6,7 @@ import os
 import re
 import zipfile
 
-from bptbx import b_enum, b_legacy
+from bptbx import b_legacy
 
 def mkdirs (directory):
     """Create directory structure if it does not exist"""
@@ -68,14 +68,9 @@ def import_module_with_check ( module ):
     success, _ = import_modules_with_check( module_names )
     return success
 
-def appendzeros (directory, filetype):
+def appendzeros (directory, directories=False):
     """Appends leading zeros to all files or directories in given
     directory path if theses objects have leading numbers."""
-
-    if (filetype is not b_enum.Filetype.FILE and
-    filetype is not b_enum.Filetype.DIR):
-        print ("Argument 'filetype' must be of type b_enum.Filetype")
-        return False
 
     # list all directory content
     dir_contents = os.listdir(directory)
@@ -86,11 +81,7 @@ def appendzeros (directory, filetype):
 
     for dir_content in dir_contents:
 
-        use_dirs = True
-        if filetype is b_enum.Filetype.FILE:
-            use_dirs = False
-
-        if os.path.isdir(dir_content) == use_dirs:
+        if os.path.isdir(dir_content) == directories:
 
             # check if directory starts with number
             result = re.match("^[0-9]+", dir_content)
