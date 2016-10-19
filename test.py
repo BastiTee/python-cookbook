@@ -108,13 +108,7 @@ def test_strings ():
     from bptbx import b_strings
     assert b_strings.id_generator()
     assert b_strings.concat_list_to_string([ 'a', 'b', 'c' ]) == 'abc'
-    assert b_strings.fillzeros('12', 4) == '0012'
-    epoch = 1476908186
-    ts = b_strings.epoch2timestamp(epoch)
-    assert ts == '2016-10-19 22:16:26.000000', ts
-    dto = b_strings.epoch2dtobject(epoch)
-    assert dto
-     
+    assert b_strings.fillzeros('12', 4) == '0012' 
 
 def _random_calculation ():
     from random import randint 
