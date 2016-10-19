@@ -67,10 +67,12 @@ def test_iotools():
     b_iotools.import_modules_with_check( [ 'numpy', 'math' ])
     assert b_iotools.insertintofilename('test.txt', 'foo') == 'testfoo.txt'
     assert b_iotools.md5sum('LICENSE') == '175792518e4ac015ab6696d16c4f607e'
-    assert (b_iotools.read_config_section_to_keyval_list(
-                'test-data/config.txt', 'AlbumInfo') == [('key', 'Value')])
-    assert (b_iotools.read_config_section_to_keyval_list(
-                'test-data/config.txt', 'TextInfo') == [('foo', 'Bar')])
+    kv = b_iotools.read_config_section_to_keyval_list(
+                'test-data/config.txt', 'AlbumInfo')
+    assert kv == [('key', 'Value')], kv
+    kv = b_iotools.read_config_section_to_keyval_list(
+                'test-data/config.txt', 'TextInfo')
+    assert kv == [('foo', 'Bar')], kv
     assert len(b_iotools.read_file_to_list('LICENSE')) == 202
     b_iotools.zip_dir_recursively('test-data', 'test-data/zip.zip')
     assert b_iotools.file_exists('test-data/zip.zip')
