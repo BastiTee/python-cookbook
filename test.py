@@ -124,7 +124,6 @@ def test_threading ():
     pool = b_threading.ThreadPool(cpus)
     for _ in range(0, 10):
         pool.add_task(_random_calculation)
-        assert not pool.is_empty()
     print ('Waiting for jobs to be completed')
     pool.wait_completion()
     assert pool.is_empty()
