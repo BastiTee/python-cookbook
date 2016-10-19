@@ -4,7 +4,7 @@ from os import path, makedirs
 from re import sub
 from ftputil import FTPHost
 from bptbx import b_legacy
-urllib2 = b_legacy.get_urllib2()
+urllib2 = b_legacy.b_urllib2()
 
 DEFAULT_USER_AGENT = ('Mozilla/5.0 (X11; U; Linux i686) Gecko/20071127' +
                       ' Firefox/2.0.0.11')

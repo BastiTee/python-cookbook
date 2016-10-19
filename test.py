@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-                
+
 def test_cmdline ():
     print ('--- testing b_cmdline')
     from bptbx import b_cmdline
@@ -9,44 +9,51 @@ def test_cmdline ():
     else:
         command = 'ls'
         command_exe = command + ' ~/'
-    
+
     assert b_cmdline.check_for_command(command)
-    code, _, _ = b_cmdline.execute_command(command_exe, True, True)    
+    code, _, _ = b_cmdline.execute_command(command_exe, True, True)
     assert code == 0
     assert b_cmdline.get_command_process(command)
-        
+
 def test_daemon():
     print ('--- testing b_daemon')
     from bptbx import b_daemon
-    from threading import Thread 
-    from time import sleep 
-    
+    from threading import Thread
+    from time import sleep
+
     class TestDaemon(b_daemon.Daemon):
         runs = 0
         def _run_daemon_process(self):
             print ('daemon running. iteration #{}'.format(self.runs+1))
             self.runs += 1
-    
+
     def start_daemon(daemon):
         daemon.start()
-        
+
     daemon = TestDaemon(1)
     thread = Thread(target=start_daemon, args = (daemon,))
     thread.start()
     sleep(2)
     assert daemon.runs > 0
     daemon.stop()
-    
+
+def test_enum():
+    print ('--- testing b_enum')
+    from bptbx import b_enum
+    my_enum = b_enum.enum ('START', 'STOP')
+    assert my_enum.START == 0
+    assert my_enum.STOP == 1
+
 def test_iotools():
     print ('--- testing b_iotools')
     from bptbx import b_iotools
-    
+
     assert (b_iotools.basename('/somewhere/on/the/disc/filetype.css', '.css')
      == 'filetype')
-    assert (b_iotools.basename('/somewhere/on/the/disc/filetype.css') 
-    == 'filetype.css')    
+    assert (b_iotools.basename('/somewhere/on/the/disc/filetype.css')
+    == 'filetype.css')
     assert b_iotools.countlines('LICENSE') == 202
-    assert b_iotools.file_exists('LICENSE') 
+    assert b_iotools.file_exists('LICENSE')
     assert len(b_iotools.filedatetime()) == 2
     assert len(b_iotools.finddirs('.')) > 0
     assert len(b_iotools.findfiles('.')) > 0
@@ -68,50 +75,50 @@ def test_iotools():
     b_iotools.zip_dir_recursively('test-data', 'test-data/zip.zip')
     assert b_iotools.file_exists('test-data/zip.zip')
     b_iotools.remove_silent('test-data/zip.zip')
-    assert not b_iotools.file_exists('test-data/zip.zip') 
-    
+    assert not b_iotools.file_exists('test-data/zip.zip')
+
 def test_legacy():
     print ('--- testing b_legacy')
     from bptbx import b_legacy
-    assert b_legacy.get_config_parser()
-    assert b_legacy.get_queue()
-    assert b_legacy.get_urllib2()
-    pass
+    assert b_legacy.b_configparser()
+    assert b_legacy.b_queue()
+    assert b_legacy.b_urllib2()
+    assert b_legacy.b_tk()
 
 def test_logging():
     print ('--- testing b_logging')
     from bptbx import b_logging
     b_logging.setup_logging(True)
-    
-def test_math ():    
+
+def test_math ():
     print ('--- testing b_math')
     from bptbx import b_math
     result = b_math.split_list_to_equal_buckets([1, 2, 3, 4, 5, 6, 7, 8], 3)
     assert result == [[1.0, 2.0, 3.0], [4.0, 5.0], [6.0, 7.0, 8.0]]
     result = b_math.reduce_list([1, 3, 4, 3], 2)
     assert result == [ 2.0, 3.5 ]
-    
+
 def test_pil():
     print ('--- testing b_pil')
     from bptbx import b_pil
     from bptbx import b_iotools
-    b_pil.resize_image_with_factor('test-data/image.jpg', 
+    b_pil.resize_image_with_factor('test-data/image.jpg',
                                    './image-resized.jpg', 0.5)
     length = b_pil.get_length_of_long_side('test-data/image.jpg')
     assert length == 460
     length = b_pil.get_length_of_long_side('./image-resized.jpg')
     assert length == 230, length
     b_iotools.remove_silent('./image-resized.jpg')
-    
+
 def test_strings ():
     print ('--- testing b_strings')
     from bptbx import b_strings
     assert b_strings.id_generator()
     assert b_strings.concat_list_to_string([ 'a', 'b', 'c' ]) == 'abc'
-    assert b_strings.fillzeros('12', 4) == '0012' 
+    assert b_strings.fillzeros('12', 4) == '0012'
 
 def _random_calculation ():
-    from random import randint 
+    from random import randint
     val1 = randint(1, 100)
     val2 = randint(1, 100)
     print ('Calculated: {0} + {1} = {2}'.format(val1, val2, (val1 + val2)))
@@ -127,7 +134,7 @@ def test_threading ():
     print ('Waiting for jobs to be completed')
     pool.wait_completion()
     assert pool.is_empty()
-    
+
 def test_visual ():
     print ('--- testing b_visual')
     from bptbx import b_visual
@@ -147,7 +154,7 @@ def test_visual ():
     y_label = 'Random values'
     fontsize = 9
     fontweight = 'bold'
-    
+
     try:
         b_visual.print_dataset(x_axis_dataset, y_axis_datasets,
                 y_axis_datalabels, x_axis_isdatetime, title, x_label,
@@ -165,6 +172,8 @@ def test_web ():
 if __name__ == "__main__":
 
     test_cmdline()
+    test_daemon()
+    test_enum()
     test_iotools()
     test_legacy()
     test_logging()
@@ -176,7 +185,6 @@ if __name__ == "__main__":
         test_visual()
     except Exception:
         print( 'Catched TclError. Most probably there is no display available.')
-    test_web() 
-    test_daemon()
-    
+    test_web()
+
     print ('--- all tests have passed.')

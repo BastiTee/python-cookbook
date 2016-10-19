@@ -74,7 +74,7 @@ def appendzeros (directory, directories=False):
 
     # list all directory content
     dir_contents = os.listdir(directory)
-    
+
     # create an array of signed integers
     nos = []
     directories = []
@@ -267,7 +267,7 @@ def read_config_section_to_keyval_list (config_file, section=None):
         print ('Config file {0} does not exist'.format(config_file))
         return items
 
-    cp = b_legacy.get_config_parser()
+    cp = b_legacy.b_configparser()
     Config = cp()
     try:
         Config.read(config_file)

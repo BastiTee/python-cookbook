@@ -7,7 +7,7 @@ from time import sleep
 
 from bptbx.b_cmdline import execute_command
 from bptbx import b_legacy
-Queue = b_legacy.get_queue()
+Queue = b_legacy.b_queue()
 
 class Worker(Thread):
     """Thread executing tasks from a given tasks queue"""
@@ -41,7 +41,7 @@ class ThreadPool:
     def wait_completion(self):
         """Wait for completion of all the tasks in the queue"""
         self.tasks.join()
-        
+
     def is_empty(self):
         return self.tasks.empty()
 
