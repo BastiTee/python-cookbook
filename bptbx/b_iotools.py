@@ -78,28 +78,28 @@ def appendzeros (directory, filetype):
         return False
 
     # list all directory content
-    folders = os.listdir(directory)
-
+    dir_contents = os.listdir(directory)
+    
     # create an array of signed integers
     nos = []
     directories = []
 
-    for direc in folders:
+    for dir_content in dir_contents:
 
-        usedirs = True
+        use_dirs = True
         if filetype is b_enum.Filetype.FILE:
-            usedirs = False
+            use_dirs = False
 
-        if os.path.isdir(direc) == usedirs:
+        if os.path.isdir(dir_content) == use_dirs:
 
             # check if directory starts with number
-            result = re.match("^[0-9]+", direc)
+            result = re.match("^[0-9]+", dir_content)
 
             if result is not None:
 
                 # remind number at begin
                 dirname = result.group()
-                directories.append(direc)
+                directories.append(dir_content)
                 no = int(dirname)
                 nos.append(no)
 
@@ -113,14 +113,14 @@ def appendzeros (directory, filetype):
     zeros = len(str(maximum))
 
     # go trough lists to rename objects
-    for direc in directories:
-        result = re.match("^[0-9]+", direc)
+    for dir_content in directories:
+        result = re.match("^[0-9]+", dir_content)
         pattern = result.group()
         replace = pattern.zfill(zeros)
-        new_name = direc.replace(pattern, replace)
+        new_name = dir_content.replace(pattern, replace)
 
         # do the renaming
-        os.rename(direc, new_name)
+        os.rename(dir_content, new_name)
 
     return True
 
@@ -182,8 +182,10 @@ def finddirs (path, doprint=False):
 def insertintofilename (filepath, insertion):
     """Append some text between a filename and the file suffix."""
 
-    newfile = (os.path.dirname(filepath) + os.sep +
-    os.path.basename(os.path.splitext(filepath)[0]) +
+    newfile = ''
+    if os.path.dirname(filepath):
+        newfile += os.path.dirname(filepath) + os.sep
+    newfile += (os.path.basename(os.path.splitext(filepath)[0]) +
     insertion + os.path.splitext(filepath)[1])
     return newfile
 

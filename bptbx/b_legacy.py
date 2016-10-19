@@ -1,13 +1,13 @@
 r"""This module is used to handle interchangable support for python 2 and 3."""
 
-def get_python_major_version():
+def _get_python_major_version():
     """Returns the integer value of the major version of Python
     that runs this script."""
     import sys
     return int(sys.version_info[0])
 
 def get_config_parser():
-    if get_python_major_version() <= 2:
+    if _get_python_major_version() <= 2:
         import ConfigParser
         return ConfigParser.ConfigParser
     else:
@@ -15,7 +15,7 @@ def get_config_parser():
         return ConfigParser
 
 def get_queue():
-    if get_python_major_version() <= 2:
+    if _get_python_major_version() <= 2:
         from Queue import Queue
         return Queue
     else:
@@ -23,7 +23,7 @@ def get_queue():
         return Queue
 
 def get_urllib2():
-    if get_python_major_version() <= 2:
+    if _get_python_major_version() <= 2:
         import urllib2
         return urllib2
     else:
@@ -31,7 +31,7 @@ def get_urllib2():
         return request
 
 def iterator_next(iterator):
-    if get_python_major_version() <= 2:
+    if _get_python_major_version() <= 2:
         return iterator.next()
     else:
         return iterator.__next__()

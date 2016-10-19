@@ -38,19 +38,51 @@ def test_daemon():
     daemon.stop()
     
 def test_enum ():
+    print ('--- testing b_enum')
     from bptbx import b_enum
     my_enum = b_enum.enum ('START', 'STOP')
     assert my_enum.START == 0
     assert my_enum.STOP == 1
+    assert b_enum.Filetype.FILE == 0
+    assert b_enum.Filetype.DIR == 1    
 
 def test_iotools():
+    print ('--- testing b_iotools')
     from bptbx import b_iotools
+    
     assert (b_iotools.basename('/somewhere/on/the/disc/filetype.css', '.css')
      == 'filetype')
     assert (b_iotools.basename('/somewhere/on/the/disc/filetype.css') 
-    == 'filetype.css')
-
+    == 'filetype.css')    
+    assert b_iotools.countlines('LICENSE') == 202
+    assert b_iotools.file_exists('LICENSE') 
+    assert len(b_iotools.filedatetime()) == 2
+    assert len(b_iotools.finddirs('.')) > 0
+    assert len(b_iotools.findfiles('.')) > 0
+    assert len(b_iotools.findfiles('.', '120410hd1212re')) == 0
+    assert len(b_iotools.get_immediate_subdirectories('.')) > 0
+    assert len(b_iotools.get_immediate_subfiles('.')) > 0
+    assert b_iotools.getuidfromfilepath('LICENSE') == 'LICENSE'
+    b_iotools.import_module_with_check('numpy')
+    b_iotools.import_modules_with_check( [ 'numpy', 'math' ])
+    assert b_iotools.insertintofilename('test.txt', 'foo') == 'testfoo.txt'
+    assert b_iotools.md5sum('LICENSE') == '175792518e4ac015ab6696d16c4f607e'
+    assert (b_iotools.read_config_section_to_keyval_list(
+                'test-data/config.txt', 'AlbumInfo') == [('key', 'Value')])
+    assert (b_iotools.read_config_section_to_keyval_list(
+                'test-data/config.txt', 'TextInfo') == [('foo', 'Bar')])
+    assert len(b_iotools.read_file_to_list('LICENSE')) == 202
+    b_iotools.zip_dir_recursively('test-data', 'test-data/zip.zip')
+    assert b_iotools.file_exists('test-data/zip.zip')
+    b_iotools.remove_silent('test-data/zip.zip')
+    assert not b_iotools.file_exists('test-data/zip.zip') 
+    
 def test_legacy():
+    print ('--- testing b_legacy')
+    from bptbx import b_legacy
+    assert b_legacy.get_config_parser()
+    assert b_legacy.get_queue()
+    assert b_legacy.get_urllib2()
     pass
 
 def test_logging():
@@ -124,10 +156,9 @@ def test_web ():
 if __name__ == "__main__":
 
     test_cmdline()
-    test_daemon()
-#     test_enum()
-#     test_iotools()
-#     test_legacy()
+    test_enum()
+    test_iotools()
+    test_legacy()
 #     test_logging()
 #     test_math()
 #     test_pil()
@@ -135,5 +166,6 @@ if __name__ == "__main__":
 #     test_threading()
 #     test_visual()
 #     test_web() 
+    test_daemon()
     
     print ('--- all tests have passed.')
