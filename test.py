@@ -172,13 +172,10 @@ if __name__ == "__main__":
     test_pil()
     test_strings()
     test_threading()
-    from bptbx import b_legacy
-    Tk = b_legacy.get_tk()
     try:
         test_visual()
-    except Tk[0].TclError:
+    except Exception:
         print( 'Catched TclError. Most probably there is no display available.')
-        pass
     test_web() 
     test_daemon()
     
