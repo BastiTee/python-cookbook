@@ -1,6 +1,7 @@
 ## Basti's Python Toolbox
 > Personal collection of pure-python modules and script
 
+![Testing](https://travis-ci.org/BastiTee/bastis-python-toolbox.svg?branch=master)
 ![Python 2 support](https://img.shields.io/badge/python2-stable-green.svg)
 ![Python 3 support](https://img.shields.io/badge/python3-wip-yellow.svg)
 
