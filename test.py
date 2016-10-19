@@ -132,8 +132,7 @@ def test_threading ():
 def test_visual ():
     print ('--- testing b_visual')
     from bptbx import b_visual
-    from random import randint 
-    
+    from random import randint
     x_axis_dataset = []
     y1 = []
     y2 = []
@@ -174,7 +173,13 @@ if __name__ == "__main__":
     test_pil()
     test_strings()
     test_threading()
-    test_visual()
+    from bptbx import b_legacy
+    Tk = b_legacy.get_tk()
+    try:
+        test_visual()
+    except Tk.TclError:
+        print( 'Catched TclError. Most probably there is no display available.')
+        pass
     test_web() 
     test_daemon()
     

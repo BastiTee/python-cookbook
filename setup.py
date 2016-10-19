@@ -3,7 +3,6 @@
 from distutils.core import setup
 from os import listdir, path
 
-
 scripts = []
 for sfile in listdir('scripts'):
 	sfile = path.join('scripts', sfile)
@@ -11,7 +10,7 @@ for sfile in listdir('scripts'):
 	
 setup(
 	name='bptbx',
-    version='0.1.0',
+    version='0.2.0',
     description='''Basti\'s Python Toolbox.''',
 	long_description='''Basti\'s personal python toolbox for everyday use.''',
     author='Basti Tee',

@@ -30,6 +30,16 @@ def get_urllib2():
         from urllib import request
         return request
 
+def get_tk():
+    if _get_python_major_version() <= 2:
+        import Tkinter, tkMessageBox, tkFileDialog
+        Tk = Tkinter.Tk
+        messagebox = tkMessageBox 
+        filedialog = tkFileDialog
+    else:
+        from tkinter import Tk, messagebox, filedialog
+    return Tk, messagebox, filedialog    
+
 def iterator_next(iterator):
     if _get_python_major_version() <= 2:
         return iterator.next()
