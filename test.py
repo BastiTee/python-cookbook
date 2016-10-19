@@ -1,6 +1,7 @@
 #! /usr/bin/env python
                 
 def test_cmdline ():
+    print ('--- testing b_cmdline')
     from bptbx import b_cmdline
     if 'windows' in b_cmdline.get_platform():
         command = 'cmd.exe'
@@ -15,8 +16,27 @@ def test_cmdline ():
     assert b_cmdline.get_command_process(command)
         
 def test_daemon():
-    pass
-
+    print ('--- testing b_daemon')
+    from bptbx import b_daemon
+    from threading import Thread 
+    from time import sleep 
+    
+    class TestDaemon(b_daemon.Daemon):
+        runs = 0
+        def _run_daemon_process(self):
+            print ('daemon running. iteration #{}'.format(self.runs+1))
+            self.runs += 1
+    
+    def start_daemon(daemon):
+        daemon.start()
+        
+    daemon = TestDaemon(1)
+    thread = Thread(target=start_daemon, args = (daemon,))
+    thread.start()
+    sleep(2)
+    assert daemon.runs > 0
+    daemon.stop()
+    
 def test_enum ():
     from bptbx import b_enum
     my_enum = b_enum.enum ('START', 'STOP')
@@ -104,7 +124,7 @@ def test_web ():
 if __name__ == "__main__":
 
     test_cmdline()
-#     test_daemon()
+    test_daemon()
 #     test_enum()
 #     test_iotools()
 #     test_legacy()
@@ -116,4 +136,4 @@ if __name__ == "__main__":
 #     test_visual()
 #     test_web() 
     
-    print ('Seems everything is alright! See above log for details.')
+    print ('--- all tests passed.')

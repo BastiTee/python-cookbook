@@ -9,19 +9,24 @@ class Daemon:
     stopped = False
     lock = Lock()
     daemon_locked = False
+    main_thread = None
     
     def __init__(self, interval):
         self.interval = float(interval)
-
+        self.main_thread = Thread(target=self._main_loop)
+        
     def start(self):
+        self.main_thread.start()
+  
+    def stop(self):
+        self.stopped = True
+        self.main_thread.join()
+        
+    def _main_loop(self):
         while not self.stopped:
             thr = Thread(target=self._invoke_process)
             thr.start()
             sleep(self.interval)
-                    
-    def stop(self):
-        """Not yet implemented."""
-        pass
 
     def _invoke_process(self):
         if self.daemon_locked:
