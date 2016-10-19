@@ -2,30 +2,30 @@ r"""This module contains command line call tools."""
 import platform
 import subprocess
 import os
-import logging 
+import logging
 
 def execute_command (command, suppress_stdout=False, suppress_stderr=False,
                 useshell=True, workdir=None):
     """Run a command on the command line"""
-    
+
     log_stdout = []
     handle = subprocess.Popen(command, shell=useshell, stdout=subprocess.PIPE,
                               stderr=subprocess.STDOUT, cwd=workdir)
-        
+
     while handle.poll() is None:
         line = handle.stdout.readline().strip()
         if not line == None:
             log_stdout.append(line)
             if suppress_stdout == False:
-                print line
-    
+                print (line)
+
     log_stderr = log_stdout
     return handle.returncode, log_stdout, log_stderr
 
 def get_command_process(command, cwd=None, stdin=subprocess.PIPE,
                         stdout=subprocess.PIPE):
     """Creates a subprocess"""
-    
+
     logging.debug('Invoking: {}'.format(command))
     shell = False
     if get_platform() == 'linux':
@@ -40,7 +40,7 @@ def get_command_process(command, cwd=None, stdin=subprocess.PIPE,
 
 def check_for_command(name):
     """Tests whether an executable with the given name exists on the path"""
-    
+
     try:
         devnull = open(os.devnull)
         subprocess.Popen([name], stdout=devnull, stderr=devnull).communicate()
@@ -51,6 +51,6 @@ def check_for_command(name):
 
 def get_platform():
     """Returns the system's platform string"""
-    
+
     pstring = str(platform.system()).lower()
     return pstring
