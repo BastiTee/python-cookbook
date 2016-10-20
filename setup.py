@@ -9,14 +9,13 @@ for sfile in listdir('scripts'):
 	scripts.append(sfile)
 	
 setup(
-	name='bptbx',
-    version='0.2.0',
+    name='bptbx',
+    version='0.1.1',
     description='''Basti\'s Python Toolbox.''',
-	long_description='''Basti\'s personal python toolbox for everyday use.''',
+    long_description='''Basti\'s personal python toolbox for everyday use.''',
     author='Basti Tee',
-	author_email='basti.tee@gmx.de',
+    author_email='basti.tee@gmx.de',
     url='https://github.com/BastiTee/bastis-python-toolbox',
     packages=['bptbx'],
-	package_data={'bptbx': [] },
-    scripts=scripts
+    package_data={'bptbx': [] }
 ) 
