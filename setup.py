@@ -1,13 +1,6 @@
 #!/usr/bin/env python
 
 from distutils.core import setup
-from os import listdir, path
-
-scripts = []
-for sfile in listdir('scripts'):
-	sfile = path.join('scripts', sfile)
-	scripts.append(sfile)
-	
 setup(
     name='bptbx',
     version='0.1.1',
