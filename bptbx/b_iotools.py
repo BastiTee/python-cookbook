@@ -278,7 +278,6 @@ def read_config_section_to_keyval_list (config_file, section=None):
     if section is None:
         section = Config.sections()[0]
 
-    print ('For config file {0} using section {1}'.format(config_file, section))
     items = Config.items(section)
     return items
 
