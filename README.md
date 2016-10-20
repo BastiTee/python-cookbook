@@ -12,4 +12,8 @@ Assuming that you have installed `pip` and `git` for your operating system you c
 
     pip install git+git://github.com/BastiTee/bastis-python-toolbox#egg=bptbx
 
+This will give you the bleeding-edge master branch. For a specific release run
+
+    pip install git+git://github.com/BastiTee/bastis-python-toolbox@0.1.1#egg=bptbx
+
 Refer to [the requirements file](requirements.txt) to see what other projects you'll need to run specific modules.
