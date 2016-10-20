@@ -18,7 +18,8 @@ def mkdirs (directory):
     if not os.path.exists(directory_abs):
         os.makedirs(directory_abs)
 
-def get_immediate_subdirectories(file_path):
+def get_immediate_subdirectories(file_path, reverse_order=False,
+    show_hidden=False):
     """Return the sub-directories of a given file path, but
     only the first level."""
 
@@ -28,8 +29,10 @@ def get_immediate_subdirectories(file_path):
     directories = []
     for name in os.listdir(file_path):
         if os.path.isdir(os.path.join(file_path, name)):
-            directories.append(name)
-    directories.sort()
+            if show_hidden or not str(name).startswith('.'):
+                directories.append(name)
+    directories.sort(key=None, reverse=reverse_order)
+
     return directories
 
 def get_immediate_subfiles(file_path):
