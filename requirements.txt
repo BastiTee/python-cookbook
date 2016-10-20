@@ -4,4 +4,3 @@ python-dateutil >= 2.2
 Pillow >= 2.5
 matplotlib >= 1.5.1
 numpy >= 1.6
-epydoc >= 3.0.0
