@@ -3,7 +3,7 @@
 from distutils.core import setup
 setup(
     name='bptbx',
-    version='0.1.2',
+    version='0.1.x',
     description='''Basti\'s Python Toolbox.''',
     long_description='''Basti\'s personal python toolbox for everyday use.''',
     author='Basti Tee',
