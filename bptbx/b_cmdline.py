@@ -53,5 +53,4 @@ def check_for_command(name):
 def get_platform():
     """Returns the system's platform string"""
 
-    pstring = str(platform.system()).lower()
-    return pstring
+    return str(platform.system()).lower()
