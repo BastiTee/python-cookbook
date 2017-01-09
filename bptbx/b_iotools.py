@@ -298,3 +298,13 @@ def remove_silent(path):
         os.remove(path)
     except OSError:
         pass  # catch if file does not exist
+
+def get_file_size(path):
+    """Reads the size of the given file path and returns it. If path is
+    a directory or file does not exist, method will return None."""
+
+    if not file_exists(path):
+        return None
+    if os.path.isdir(path):
+        return None
+    return os.path.getsize(path)
