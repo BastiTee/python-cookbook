@@ -96,23 +96,23 @@ def extract_main_text_content(html):
     has been adapted from http://nirmalpatel.com/fcgi/hn.py (GPLv3) written
     by Nirmal Patel."""
 
-    negative = re.compile("comment|meta|footer|footnote|foot")
-    positive = re.compile("post|hentry|entry|content|text|body|article")
-    punctation = re.compile("""[!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~]""")
+    negative = re.compile('comment|meta|footer|footnote|foot')
+    positive = re.compile('post|hentry|entry|content|text|body|article')
+    punctation = re.compile('''[!'#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~]''')
 
-    replace_brs = re.compile("<br */? *>[ \r\n]*<br */? *>")
-    html = re.sub(replace_brs, "</p><p>", html)
+    replace_brs = re.compile('<br */? *>[ \r\n]*<br */? *>')
+    html = re.sub(replace_brs, '</p><p>', html)
 
     try:
         soup = BeautifulSoup(html, 'html.parser')
     except:
-        return ""
+        return ''
 
     # REMOVE SCRIPTS
-    for s in soup.findAll("script"):
+    for s in soup.findAll('script'):
         s.extract()
 
-    all_paragraphs = soup.findAll("p")
+    all_paragraphs = soup.findAll('p')
     top_parent = None
 
     parents = []
@@ -124,42 +124,42 @@ def extract_main_text_content(html):
             parents.append(parent)
             parent.score = 0
 
-            if (parent.has_attr("class")):
-                if (negative.match(str(parent["class"]))):
+            if (parent.has_attr('class')):
+                if (negative.match(str(parent['class']))):
                     parent.score -= 50
-                if (positive.match(str(parent["class"]))):
+                if (positive.match(str(parent['class']))):
                     parent.score += 25
 
-            if (parent.has_attr("id")):
-                if (negative.match(str(parent["id"]))):
+            if (parent.has_attr('id')):
+                if (negative.match(str(parent['id']))):
                     parent.score -= 50
-                if (positive.match(str(parent["id"]))):
+                if (positive.match(str(parent['id']))):
                     parent.score += 25
 
         if (parent.score == None):
             parent.score = 0
 
-        # "".join(paragraph.findAll(text=True))
+        # ''.join(paragraph.findAll(text=True))
         inner_text = paragraph.renderContents()
         if (len(inner_text) > 10):
             parent.score += 1
 
-        parent.score += str(inner_text).count(",")
+        parent.score += str(inner_text).count(',')
 
     for parent in parents:
         if ((not top_parent) or (parent.score > top_parent.score)):
             top_parent = parent
 
     if (not top_parent):
-        return ""
+        return ''
 
     # REMOVE LINK'D STYLES
-    style_links = soup.findAll("link", attrs={"type": "text/css"})
+    style_links = soup.findAll('link', attrs={'type': 'text/css'})
     for s in style_links:
         s.extract()
 
     # REMOVE ON PAGE STYLES
-    for s in soup.findAll("style"):
+    for s in soup.findAll('style'):
         s.extract()
 
     # CLEAN STYLES FROM ELEMENTS IN TOP PARENT
@@ -168,9 +168,9 @@ def extract_main_text_content(html):
         del(ele['class'])
 
     _extract_main_text_content_remove_divs(top_parent)
-    _extract_main_text_content_clean(top_parent, "form")
-    _extract_main_text_content_clean(top_parent, "object")
-    _extract_main_text_content_clean(top_parent, "iframe")
+    _extract_main_text_content_clean(top_parent, 'form')
+    _extract_main_text_content_clean(top_parent, 'object')
+    _extract_main_text_content_clean(top_parent, 'iframe')
 
     full_text = top_parent.renderContents().decode('utf-8')
     full_text_final = []
@@ -186,27 +186,27 @@ def extract_main_text_content(html):
 def _extract_main_text_content_clean(top, tag, min_words=10000):
     tags = top.findAll(tag)
     for t in tags:
-        if (str(t.renderContents()).count(" ") < min_words):
+        if (str(t.renderContents()).count(' ') < min_words):
             t.extract()
 
 
 def _extract_main_text_content_remove_divs(parent):
-    divs = parent.findAll("div")
+    divs = parent.findAll('div')
     for d in divs:
-        p = len(d.findAll("p"))
-        img = len(d.findAll("img"))
-        li = len(d.findAll("li"))
-        a = len(d.findAll("a"))
-        embed = len(d.findAll("embed"))
-        pre = len(d.findAll("pre"))
-        code = len(d.findAll("code"))
+        p = len(d.findAll('p'))
+        img = len(d.findAll('img'))
+        li = len(d.findAll('li'))
+        a = len(d.findAll('a'))
+        embed = len(d.findAll('embed'))
+        pre = len(d.findAll('pre'))
+        code = len(d.findAll('code'))
 
-        if (str(d.renderContents()).count(",") < 10):
+        if (str(d.renderContents()).count(',') < 10):
             if ((pre == 0) and (code == 0)):
                 if ((img > p) or (li > p) or (a > p) or (p == 0) or (embed > 0)):
                     d.extract()
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     import requests
     import sys
     if len(sys.argv) < 2:

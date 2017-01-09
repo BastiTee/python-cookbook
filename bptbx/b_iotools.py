@@ -16,7 +16,10 @@ def mkdirs (directory):
 
     directory_abs = os.path.abspath(directory)
     if not os.path.exists(directory_abs):
-        os.makedirs(directory_abs)
+        try:
+            os.makedirs(directory_abs)
+        except FileExistsError:
+            pass # ignore 
 
 def get_immediate_subdirectories(file_path, reverse_order=False,
     show_hidden=False):
