@@ -141,7 +141,7 @@ def filedatetime ():
     now = datetime.datetime.now()
     return now.strftime('%Y-%m-%d'), now.strftime('%H-%M-%S')
 
-def findfiles (path, filter_regex=None, doprint=False):
+def findfiles (path, filter_regex=None, doprint=False, file_limit=0):
     """Lists all files in given directory path recursively."""
 
     filelist = []
@@ -149,15 +149,19 @@ def findfiles (path, filter_regex=None, doprint=False):
         for filename in filenames:
             path = os.path.join(dirname, filename)
             if filter_regex != None:
-                match = re.match(filter_regex, path.lower())
+                match = re.match(filter_regex, path, re.IGNORECASE)
                 if match != None:
                     filelist.append(path)
                     if (doprint):
                         print (path)
+                    if file_limit > 0 and len(filelist) >= file_limit:
+                        return filelist
             else:
                 filelist.append(path)
                 if (doprint):
                     print (path)
+                if file_limit > 0 and len(filelist) >= file_limit:
+                    return filelist
     return filelist
 
 def finddirs (path, doprint=False):

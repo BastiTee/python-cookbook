@@ -64,3 +64,8 @@ def reduce_list (list_to_reduce, desired_elements=10):
         out_list.append(value)
 
     return out_list
+
+def intersect(list_a, list_b):
+    """Intersects the two given lists"""
+    
+    return list(set(list_a) & set(list_b))
