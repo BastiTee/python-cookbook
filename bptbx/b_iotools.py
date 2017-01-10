@@ -19,7 +19,7 @@ def mkdirs (directory):
         try:
             os.makedirs(directory_abs)
         except FileExistsError:
-            pass # ignore 
+            pass # ignore
 
 def get_immediate_subdirectories(file_path, reverse_order=False,
     show_hidden=False):
@@ -232,7 +232,7 @@ def file_exists (path):
     except IOError:
         return False
 
-def read_file_to_list (filepath, strip=True):
+def read_file_to_list (filepath, strip=True, ignore_empty_lines=False):
     """Reads a file and writes content to a list"""
 
     content = []
@@ -242,6 +242,8 @@ def read_file_to_list (filepath, strip=True):
     for line in ofile:
         if strip == True:
             line = line.strip()
+        if ignore_empty_lines and not line:
+            continue
         content.append(line)
     ofile.close()
     return content
