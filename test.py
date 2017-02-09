@@ -113,6 +113,16 @@ class BptbxTestSuite(unittest.TestCase):
         self.assertEqual('sub2', b_iotools.get_immediate_subdirectories(temp_dir)[1])
         self.assertEqual('sub3', b_iotools.get_immediate_subdirectories(temp_dir)[2])
 
+        self.assertRaises(TypeError, b_iotools.read_csv_to_array)
+        self.assertRaises(TypeError, b_iotools.read_csv_to_array, None)
+        self.assertRaises(IOError, b_iotools.read_csv_to_array, 'doesnotexist')
+        csv_data = b_iotools.read_csv_to_array(
+            path.join('test-data','input.csv'))
+        self.assertEqual(csv_data,
+            [
+                ['test line', '47', '12'], ['test', '47', '12']
+            ])
+
     def test_legacy(self):
         print ('--- testing b_legacy')
         from bptbx import b_legacy

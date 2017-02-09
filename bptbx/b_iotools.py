@@ -8,7 +8,8 @@ import zipfile
 
 from bptbx import b_legacy
 
-def mkdirs (directory):
+
+def mkdirs(directory):
     """Create directory structure if it does not exist"""
 
     if not directory:
@@ -19,10 +20,11 @@ def mkdirs (directory):
         try:
             os.makedirs(directory_abs)
         except FileExistsError:
-            pass # ignore
+            pass  # ignore
+
 
 def get_immediate_subdirectories(file_path, reverse_order=False,
-    show_hidden=False):
+                                 show_hidden=False):
     """Return the sub-directories of a given file path, but
     only the first level."""
 
@@ -38,6 +40,7 @@ def get_immediate_subdirectories(file_path, reverse_order=False,
 
     return directories
 
+
 def get_immediate_subfiles(file_path):
     """Return the sub-files of a given file path, but
     only the first level."""
@@ -52,7 +55,8 @@ def get_immediate_subfiles(file_path):
     files.sort()
     return files
 
-def import_modules_with_check ( module_names ):
+
+def import_modules_with_check(module_names):
     """Checks if a given set of modules exists. Returns a boolean that
     indicates the import success and a list of failed module names"""
 
@@ -66,15 +70,17 @@ def import_modules_with_check ( module_names ):
             failed_modules.append(module_name)
     return success, failed_modules
 
-def import_module_with_check ( module ):
+
+def import_module_with_check(module):
     """Checks if a given module exists. If yes, imports it. If no,
     throws an exception and exits."""
 
-    module_names = [ module ]
-    success, _ = import_modules_with_check( module_names )
+    module_names = [module]
+    success, _ = import_modules_with_check(module_names)
     return success
 
-def appendzeros (directory, directories=False):
+
+def appendzeros(directory, directories=False):
     """Appends leading zeros to all files or directories in given
     directory path if theses objects have leading numbers."""
 
@@ -102,7 +108,7 @@ def appendzeros (directory, directories=False):
 
     # stop if no directory
     if len(directories) == 0:
-        print ("No objects available")
+        print("No objects available")
         return False
 
     # find out how many zeros to append
@@ -122,11 +128,11 @@ def appendzeros (directory, directories=False):
     return True
 
 
-def md5sum (filename):
+def md5sum(filename):
     """Calculates an md5 sum for a given filename."""
 
     if os.path.exists(filename) is False:
-        raise IOError ('Path does not exist')
+        raise IOError('Path does not exist')
 
     if os.path.isdir(filename):
         raise ValueError('Path is a directory')
@@ -134,17 +140,19 @@ def md5sum (filename):
     md5 = hashlib.md5()
     with open(filename, 'rb') as input_file_handle:
         for chunk in iter(lambda: input_file_handle.read(
-                        128 * md5.block_size), b''):
+                128 * md5.block_size), b''):
             md5.update(chunk)
     return md5.hexdigest()
 
-def filedatetime ():
+
+def filedatetime():
     """Creates a file-name compatible string of the current date and time."""
 
     now = datetime.datetime.now()
     return now.strftime('%Y-%m-%d'), now.strftime('%H-%M-%S')
 
-def findfiles (path, filter_regex=None, doprint=False, file_limit=0):
+
+def findfiles(path, filter_regex=None, doprint=False, file_limit=0):
     """Lists all files in given directory path recursively."""
 
     filelist = []
@@ -156,18 +164,19 @@ def findfiles (path, filter_regex=None, doprint=False, file_limit=0):
                 if match != None:
                     filelist.append(path)
                     if (doprint):
-                        print (path)
+                        print(path)
                     if file_limit > 0 and len(filelist) >= file_limit:
                         return filelist
             else:
                 filelist.append(path)
                 if (doprint):
-                    print (path)
+                    print(path)
                 if file_limit > 0 and len(filelist) >= file_limit:
                     return filelist
     return filelist
 
-def finddirs (path, doprint=False):
+
+def finddirs(path, doprint=False):
     """ Lists all directories in given directory path recursively."""
 
     dirlist = []
@@ -176,21 +185,22 @@ def finddirs (path, doprint=False):
             path = os.path.join(dirname, subdirname)
             dirlist.append(path)
             if (doprint):
-                print (path)
+                print(path)
     return dirlist
 
 
-def insertintofilename (filepath, insertion):
+def insertintofilename(filepath, insertion):
     """Append some text between a filename and the file suffix."""
 
     newfile = ''
     if os.path.dirname(filepath):
         newfile += os.path.dirname(filepath) + os.sep
     newfile += (os.path.basename(os.path.splitext(filepath)[0]) +
-    insertion + os.path.splitext(filepath)[1])
+                insertion + os.path.splitext(filepath)[1])
     return newfile
 
-def countlines (fname):
+
+def countlines(fname):
     """Counts the lines of the given file"""
     i = -1
     with open(fname) as input_file_handle:
@@ -198,15 +208,16 @@ def countlines (fname):
             pass
     return i + 1
 
-def getuidfromfilepath (filename):
+
+def getuidfromfilepath(filename):
     """Gets a UID from a filepath"""
 
     if os.path.exists(filename) is False:
-        print ("Path does not exist")
+        print("Path does not exist")
         return
 
     if os.path.isdir(filename):
-        print ("Path is a directory")
+        print("Path is a directory")
         return
 
     filename = os.path.basename(filename)
@@ -214,7 +225,8 @@ def getuidfromfilepath (filename):
 
     return re.sub("[^a-zA-Z0-9_-]", "_", filename)
 
-def basename (path, suffix=None):
+
+def basename(path, suffix=None):
     """Basic implementation of Unix basename command with optional suffix"""
 
     basename = os.path.basename(path)
@@ -222,7 +234,8 @@ def basename (path, suffix=None):
         basename = re.sub(suffix + '$', '', basename)
     return basename
 
-def file_exists (path):
+
+def file_exists(path):
     """Tests if a file exists"""
 
     try:
@@ -232,13 +245,14 @@ def file_exists (path):
     except IOError:
         return False
 
-def read_file_to_list (filepath, strip=True, ignore_empty_lines=False):
+
+def read_file_to_list(filepath, strip=True, ignore_empty_lines=False):
     """Reads a file and writes content to a list"""
 
     content = []
     if not file_exists(filepath):
         return content
-    ofile = open (filepath)
+    ofile = open(filepath)
     for line in ofile:
         if strip == True:
             line = line.strip()
@@ -248,15 +262,17 @@ def read_file_to_list (filepath, strip=True, ignore_empty_lines=False):
     ofile.close()
     return content
 
-def write_list_to_file (content, filepath):
+
+def write_list_to_file(content, filepath):
     """Writes content of a list to a given file"""
 
-    ofile = open (filepath, 'w')
+    ofile = open(filepath, 'w')
     for line in content:
         ofile.write(str(line) + '\n')
     ofile.close()
 
-def zip_dir_recursively (base_dir, zip_file):
+
+def zip_dir_recursively(base_dir, zip_file):
     """Zip compresses a base_dir recursively"""
 
     zip_file = zipfile.ZipFile(zip_file, 'w', compression=zipfile.ZIP_DEFLATED)
@@ -270,13 +286,14 @@ def zip_dir_recursively (base_dir, zip_file):
     zip_file.close()
     return zip_file
 
-def read_config_section_to_keyval_list (config_file, section=None):
+
+def read_config_section_to_keyval_list(config_file, section=None):
     """Takes a configuration config_file and returns a list
     of options for the given or the first section found"""
 
     items = []
     if not file_exists(config_file):
-        print ('Config file {0} does not exist'.format(config_file))
+        print('Config file {0} does not exist'.format(config_file))
         return items
 
     cp = b_legacy.b_configparser()
@@ -284,7 +301,7 @@ def read_config_section_to_keyval_list (config_file, section=None):
     try:
         Config.read(config_file)
     except cp.MissingSectionHeaderError:
-        print ('Config file {0} has no sections'.format(config_file))
+        print('Config file {0} has no sections'.format(config_file))
         return items
 
     if section is None:
@@ -292,6 +309,7 @@ def read_config_section_to_keyval_list (config_file, section=None):
 
     items = Config.items(section)
     return items
+
 
 def remove_silent(path):
     """Silently remove a file from filesystem. Ignore any errors, especially
@@ -304,6 +322,7 @@ def remove_silent(path):
     except OSError:
         pass  # catch if file does not exist
 
+
 def get_file_size(path):
     """Reads the size of the given file path and returns it. If path is
     a directory or file does not exist, method will return None."""
@@ -313,3 +332,19 @@ def get_file_size(path):
     if os.path.isdir(path):
         return None
     return os.path.getsize(path)
+
+
+def read_csv_to_array(path, delimiter=';', quotechar='"'):
+    """Basic recipe to read a CSV-file to an array of arrays of input fields"""
+
+    import csv
+    datasets = []
+    if not file_exists(path):
+        raise IOError('Input file \'{}\' does not exist.'.format(path))
+    with open(path, 'rt') as csvfile:
+        csv_datasets = csv.reader(csvfile,
+                                  delimiter=delimiter, quotechar=quotechar)
+        for csv_dataset in csv_datasets:
+            datasets.append(csv_dataset)
+    csvfile.close()
+    return datasets
