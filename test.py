@@ -126,13 +126,7 @@ class BptbxTestSuite(unittest.TestCase):
         from bptbx import b_logging
         b_logging.setup_logging(True)
 
-    def test_math (self):
-        print ('--- testing b_math')
-        from bptbx import b_math
-        result = b_math.split_list_to_equal_buckets([1, 2, 3, 4, 5, 6, 7, 8], 3)
-        assert result == [[1.0, 2.0, 3.0], [4.0, 5.0], [6.0, 7.0, 8.0]]
-        result = b_math.reduce_list([1, 3, 4, 3], 2)
-        assert result == [ 2.0, 3.5 ]
+
 
     def test_pil(self):
         print ('--- testing b_pil')

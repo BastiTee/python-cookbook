@@ -20,6 +20,7 @@ def execute_command (command, suppress_stdout=False, suppress_stderr=False,
                 print (line)
 
     log_stderr = log_stdout
+    handle.stdout.close()
     return handle.returncode, log_stdout, log_stderr
 
 def get_command_process(command, cwd=None, stdin=subprocess.PIPE,
@@ -44,6 +45,7 @@ def check_for_command(name):
     try:
         devnull = open(os.devnull)
         subprocess.Popen([name], stdout=devnull, stderr=devnull).communicate()
+        devnull.close()
     except OSError as e:
         print (e)
         if e.errno == os.errno.ENOENT:
