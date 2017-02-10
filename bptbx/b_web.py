@@ -2,7 +2,6 @@ r"""This module contains tools for web connectivity etc."""
 
 from os import path, makedirs
 from re import sub
-from ftputil import FTPHost
 from bptbx import b_legacy
 import re
 from bs4 import BeautifulSoup
@@ -52,7 +51,7 @@ def download_file(file_url, target_filepath):
 
 def recursively_download_ftp(host, username, password, ftp_root_path,
                              local_dest_dir):
-
+    from ftputil import FTPHost
     # Data preparation
     ftp_root_path = sub('\\\\', '/', ftp_root_path)
     ftp_root_path = sub('^[/]*', '/', ftp_root_path)
