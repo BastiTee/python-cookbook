@@ -39,12 +39,13 @@ def get_command_process(command, cwd=None, stdin=subprocess.PIPE,
         return subprocess.Popen(command, stdin=stdin, stdout=stdout,
                     stderr=stdout, cwd=cwd, shell=shell)
 
-def check_for_command(name):
+def check_for_command(name, opts=[]):
     """Tests whether an executable with the given name exists on the path"""
 
     try:
         devnull = open(os.devnull)
-        subprocess.Popen([name], stdout=devnull, stderr=devnull).communicate()
+        cmdline = [name] + opts
+        subprocess.Popen(cmdline, stdout=devnull, stderr=devnull).communicate()
         devnull.close()
     except OSError as e:
         print (e)
