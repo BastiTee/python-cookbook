@@ -263,6 +263,33 @@ def read_file_to_list(filepath, strip=True, ignore_empty_lines=False):
     return content
 
 
+def add_to_pythonpath(syspath):
+    """Add the given path to system's pythonpath."""
+    from os import path
+    from sys import path as spath
+    if not syspath:
+        return
+    syspath = path.abspath(syspath)
+    if not path.isdir(syspath):
+        return
+    spath.insert(0, syspath)
+
+
+def read_file_to_string(filepath, ignore_empty_lines=False):
+    """Read file and write content to a string."""
+    content = []
+    if not file_exists(filepath):
+        return content
+    ofile = open(filepath)
+    for line in ofile:
+        line = line.strip()
+        if not line and ignore_empty_lines:
+            continue
+        content.append(line)
+    ofile.close()
+    return '\n'.join(content)
+
+
 def write_list_to_file(content, filepath):
     """Writes content of a list to a given file"""
 
