@@ -16,3 +16,11 @@ def fillzeros(string, desiredlength=1):
     length is reached."""
 
     return (str(string).zfill(desiredlength))
+
+
+def contains_any(string, candidates=[]):
+    """Return True if a string contains any of the given candidate strings."""
+    for candidate in candidates:
+        if candidate in string:
+            return True
+    return False
