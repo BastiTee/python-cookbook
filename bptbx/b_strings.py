@@ -21,6 +21,6 @@ def fillzeros(string, desiredlength=1):
 def contains_any(string, candidates=[]):
     """Return True if a string contains any of the given candidate strings."""
     for candidate in candidates:
-        if candidate in string:
+        if candidate.lower() in string.lower():
             return True
     return False
