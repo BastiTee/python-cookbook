@@ -9,6 +9,11 @@ import zipfile
 from bptbx import b_legacy
 
 
+def change_to_scriptdir(file):
+    """Change to the folder where the script resides."""
+    os.chdir(os.path.dirname(os.path.abspath(file)))
+
+
 def mkdirs(directory):
     """Create directory structure if it does not exist"""
 

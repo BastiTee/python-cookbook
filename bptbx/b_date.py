@@ -87,3 +87,7 @@ def print_intervals(start_timestamp, end_timestamp,
         if end_iv >= end:
             break
         start_iv = end_iv
+
+def now():
+    """Return the current time as date object."""
+    return datetime.now()
