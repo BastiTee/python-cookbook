@@ -380,3 +380,24 @@ def read_csv_to_array(path, delimiter=';', quotechar='"'):
             datasets.append(csv_dataset)
     csvfile.close()
     return datasets
+
+
+def expect_file_argument(directory=False, index=1, add_info=''):
+    """A convenience function to request a file or folder argument."""
+
+    from sys import argv, exit
+    from os import path
+    if len(argv) < (index + 1):
+        msg = 'You must provide a {} at option index {}'.format(
+            'folder' if directory else 'file', index)
+        if add_info and add_info != '':
+            msg = '{} ({})'.format(msg, add_info)
+        print(msg)
+        exit(1)
+    return path.abspath(argv[index])
+
+
+def touch(fname):
+    """Touch for python"""
+
+    open(fname, 'a').close()
