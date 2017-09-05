@@ -17,3 +17,7 @@ This will give you the bleeding-edge master branch. For a specific release run
     pip install git+git://github.com/BastiTee/bastis-python-toolbox@0.1.1#egg=bptbx
 
 Refer to [the requirements file](requirements.txt) to see what other projects you'll need to run specific modules.
+
+**External dependencies**
+
+In order to install all the dependencies correctly you will probably need `python-tk` and `python-dev` installed.

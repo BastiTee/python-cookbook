@@ -1,21 +1,17 @@
 r"""This module contains command line call tools."""
-import platform
-import subprocess
-import os
-import logging
 
 
 def exe(command, suppress_stdout=False,
         suppress_stderr=False, useshell=True, workdir=None):
-    """Run a command on the command line (short alias)"""
+    """Run a command on the command line (short alias)."""
     return execute_command(command, suppress_stdout, suppress_stderr,
                            useshell, workdir)
 
 
 def execute_command(command, suppress_stdout=False, suppress_stderr=False,
                     useshell=True, workdir=None):
-    """Run a command on the command line"""
-
+    """Run a command on the command line."""
+    import subprocess
     log_stdout = []
     handle = subprocess.Popen(command, shell=useshell, stdout=subprocess.PIPE,
                               stderr=subprocess.STDOUT, cwd=workdir)
@@ -32,11 +28,14 @@ def execute_command(command, suppress_stdout=False, suppress_stderr=False,
     return handle.returncode, log_stdout, log_stderr
 
 
-def get_command_process(command, cwd=None, stdin=subprocess.PIPE,
-                        stdout=subprocess.PIPE):
-    """Creates a subprocess"""
-
-    logging.debug('Invoking: {}'.format(command))
+def get_command_process(command, cwd=None, stdin=None, stdout=None):
+    """Create a subprocess."""
+    import subprocess
+    import os
+    if not stdin:
+        stdin = subprocess.PIPE
+    if not stdout:
+        stdout = subprocess.PIPE
     shell = False
     if get_platform() == 'linux':
         shell = True
@@ -50,8 +49,9 @@ def get_command_process(command, cwd=None, stdin=subprocess.PIPE,
 
 
 def check_for_command(name, opts=[]):
-    """Tests whether an executable with the given name exists on the path"""
-
+    """Test whether an executable with the given name exists on the path."""
+    import subprocess
+    import os
     try:
         devnull = open(os.devnull)
         cmdline = [name] + opts
@@ -65,6 +65,6 @@ def check_for_command(name, opts=[]):
 
 
 def get_platform():
-    """Returns the system's platform string"""
-
+    """Return the system's platform string."""
+    import platform
     return str(platform.system()).lower()
