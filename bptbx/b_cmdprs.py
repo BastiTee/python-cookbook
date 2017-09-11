@@ -21,18 +21,17 @@ def show_help(prs, message):
 # FILE IN ---------------------------------------------------------------------
 
 
-def add_file_in(prs):
+def add_file_in(prs, arg='-i', help='Input file'):
     """Add an input file option."""
-    prs.add_argument('-i', metavar='INPUT', help='Input file')
+    prs.add_argument(arg, metavar='INPUT', help=help)
 
-
-def check_file_in(prs, args):
+def check_file_in(prs, arg):
     """Check the input file option."""
-    if not args.i:
+    if not arg:
         show_help(prs, 'No input file set.')
-    if not file_exists(args.i):
+    if not file_exists(arg):
         show_help(prs, 'Input file does not exist.')
-    args.i = path.abspath(args.i)
+    arg = path.abspath(arg)
 
 
 # DIRECTORY IN ----------------------------------------------------------------
