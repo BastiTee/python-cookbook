@@ -1,5 +1,5 @@
 ## Basti's Python Toolbox
-> Personal collection of pure-python modules and script
+> Personal collection of pure-python modules and script 
 
 [![GitHub release](https://img.shields.io/github/release/BastiTee/bastis-python-toolbox.svg)](https://github.com/BastiTee/bastis-python-toolbox/releases/latest)
 ![Testing](https://travis-ci.org/BastiTee/bastis-python-toolbox.svg?branch=master)
