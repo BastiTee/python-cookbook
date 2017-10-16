@@ -72,7 +72,8 @@ def get_current_date_for_filename():
 
 
 def print_intervals(start_timestamp, end_timestamp,
-                    interval_sec=relativedelta(months=+1), input_format=DEFAULT_CONVERT_FORMAT,
+                    interval_sec=relativedelta(months=+1),
+                    input_format=DEFAULT_CONVERT_FORMAT,
                     output_format=DEFAULT_CONVERT_FORMAT,
                     list_format='{} {}'):
     """Print one interval per line for the given time span."""
@@ -87,6 +88,7 @@ def print_intervals(start_timestamp, end_timestamp,
         if end_iv >= end:
             break
         start_iv = end_iv
+
 
 def now():
     """Return the current time as date object."""
