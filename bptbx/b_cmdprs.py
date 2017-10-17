@@ -1,4 +1,20 @@
-"""Command-line parsing presets."""
+"""Command-line parsing presets.
+Example:
+
+prs = b_cmdprs.init('My script') # Initialization
+# Setup
+b_cmdprs.add_dir_in(prs)
+b_cmdprs.add_file_out(prs)
+b_cmdprs.add_option(prs, 'u', 'Username')
+
+args = prs.parse_args() # Parsing
+
+# Testing
+b_cmdprs.check_dir_in(prs, args)
+b_cmdprs.check_file_out(prs, args)
+b_cmdprs.check_option(prs, args.u)
+
+"""
 
 
 from bptbx.b_iotools import file_exists
@@ -11,9 +27,10 @@ def init(info=''):
     return ArgumentParser(description=info)
 
 
-def show_help(prs, message):
+def show_help(prs, message=None):
     """Show argument parser help."""
-    print(message)
+    if message:
+        print(message)
     prs.print_help()
     exit(1)
 
@@ -24,6 +41,7 @@ def show_help(prs, message):
 def add_file_in(prs, arg='-i', help='Input file'):
     """Add an input file option."""
     prs.add_argument(arg, metavar='INPUT', help=help)
+
 
 def check_file_in(prs, arg):
     """Check the input file option."""
@@ -122,6 +140,8 @@ def add_option(prs, arg, info='Mandatory text value.', default=None):
     """Add a mandatory input option."""
     info_msg = info if not default else '{} (default: {})'.format(
         info, default)
+    if not arg.startswith('-'):
+        arg = '-{}'.format(arg)
     prs.add_argument(arg, metavar='VALUE', help=info_msg, default=default)
 
 
@@ -157,6 +177,8 @@ def check_mongo_collection(prs, args, required=False):
 
 def add_bool(prs, opt, label):
     """Add a toggle option."""
+    if not opt.startswith('-'):
+        opt = '-{}'.format(opt)
     prs.add_argument(opt, action='store_true', help=label, default=False)
 
 
