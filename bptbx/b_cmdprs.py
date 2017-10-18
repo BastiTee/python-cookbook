@@ -40,6 +40,8 @@ def show_help(prs, message=None):
 
 def add_file_in(prs, arg='-i', help='Input file'):
     """Add an input file option."""
+    if not arg.startswith('-'):
+        arg = '-{}'.format(arg)
     prs.add_argument(arg, metavar='INPUT', help=help)
 
 
@@ -108,9 +110,11 @@ def check_dir_out_and_chdir(prs, args):
 # AUXILIARY- ------------------------------------------------------------------
 
 
-def add_opt_dir_in(prs, opt, label):
+def add_opt_dir_in(prs, arg, label):
     """Add an optional input directory option."""
-    prs.add_argument(opt, metavar='IN_DIR', help=label)
+    if not arg.startswith('-'):
+        arg = '-{}'.format(arg)
+    prs.add_argument(arg, metavar='IN_DIR', help=label)
 
 
 def check_opt_dir_in(prs, arg, info='Optional directory does not exist.'):
@@ -122,9 +126,11 @@ def check_opt_dir_in(prs, arg, info='Optional directory does not exist.'):
     return path.abspath(arg)
 
 
-def add_opt_file_in(prs, opt, label):
+def add_opt_file_in(prs, arg, label):
     """Add an optional input file option."""
-    prs.add_argument(opt, metavar='IN_FILE', help=label)
+    if not arg.startswith('-'):
+        arg = '-{}'.format(arg)
+    prs.add_argument(arg, metavar='IN_FILE', help=label)
 
 
 def check_opt_file_in(prs, arg, info='Optional file does not exist.'):
@@ -175,11 +181,11 @@ def check_mongo_collection(prs, args, required=False):
     return col
 
 
-def add_bool(prs, opt, label):
+def add_bool(prs, arg, label):
     """Add a toggle option."""
-    if not opt.startswith('-'):
-        opt = '-{}'.format(opt)
-    prs.add_argument(opt, action='store_true', help=label, default=False)
+    if not arg.startswith('-'):
+        arg = '-{}'.format(arg)
+    prs.add_argument(arg, action='store_true', help=label, default=False)
 
 
 def add_max_threads(prs):
