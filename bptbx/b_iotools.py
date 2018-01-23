@@ -164,9 +164,9 @@ def findfiles(path, filter_regex=None, doprint=False, file_limit=0):
     for dirname, _, filenames in os.walk(path):
         for filename in filenames:
             path = os.path.join(dirname, filename)
-            if filter_regex != None:
+            if filter_regex is not None:
                 match = re.match(filter_regex, path, re.IGNORECASE)
-                if match != None:
+                if match is not None:
                     filelist.append(path)
                     if (doprint):
                         print(path)
@@ -259,7 +259,7 @@ def read_file_to_list(filepath, strip=True, ignore_empty_lines=False):
         return content
     ofile = open(filepath)
     for line in ofile:
-        if strip == True:
+        if strip:
             line = line.strip()
         if ignore_empty_lines and not line:
             continue
