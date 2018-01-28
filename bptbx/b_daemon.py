@@ -24,13 +24,15 @@ class Daemon:
         self.main_thread.join()
 
     def _main_loop(self):
+        # single-run mode
+        if self.interval <= 0:
+            self._invoke_process()
+            return
+        # interval mode
         while not self.stopped:
             thr = Thread(target=self._invoke_process)
             thr.start()
-            if self.interval <= 0:
-                self.stop()
-            else:
-                sleep(self.interval)
+            sleep(self.interval)
 
     def _invoke_process(self):
         if self.daemon_locked:
