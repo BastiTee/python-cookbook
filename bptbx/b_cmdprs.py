@@ -54,12 +54,21 @@ def check_file_in(prs, arg):
     arg = path.abspath(arg)
 
 
+def check_file_in(prs, args, arg):
+    """Check the input file option."""
+    vargs = vars(args)
+    if not vargs[arg]:
+        show_help(prs, 'No input file set.')
+    if not file_exists(vargs[arg]):
+        show_help(prs, 'Input file does not exist.')
+    vargs[arg] = path.abspath(vargs[arg])
+
 # DIRECTORY IN ----------------------------------------------------------------
 
 
-def add_dir_in(prs, label='Input directory'):
+def add_dir_in(prs, arg='-i', label='Input directory'):
     """Add an input directory option."""
-    prs.add_argument('-i', metavar='INPUT', help=label)
+    prs.add_argument(arg, metavar='INPUT', help=label)
 
 
 def check_dir_in(prs, args):

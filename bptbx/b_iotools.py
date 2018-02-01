@@ -46,7 +46,7 @@ def get_immediate_subdirectories(file_path, reverse_order=False,
     return directories
 
 
-def get_immediate_subfiles(file_path):
+def get_immediate_subfiles(file_path, pattern=None, ignorecase=False):
     """Return the sub-files of a given file path, but
     only the first level."""
 
@@ -55,8 +55,15 @@ def get_immediate_subfiles(file_path):
 
     files = []
     for name in os.listdir(file_path):
-        if not os.path.isdir(os.path.join(file_path, name)):
-            files.append(name)
+        if os.path.isdir(os.path.join(file_path, name)):
+            continue
+        if pattern:
+            if ignorecase and re.match(pattern, name, re.IGNORECASE):
+                files.append(name)
+            elif re.match(pattern, name):
+                files.append(name)
+            continue
+        files.append(name)
     files.sort()
     return files
 
