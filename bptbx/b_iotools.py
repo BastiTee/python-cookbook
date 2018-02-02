@@ -244,7 +244,14 @@ def basename(path, suffix=None):
     basename = os.path.basename(path)
     if suffix is not None:
         basename = re.sub(suffix + '$', '', basename)
-    return basename
+    return basename.strip()
+
+
+def basename_without_suffix(path):
+    """Basic implementation of Unix basename command with suffix removed."""
+
+    bn = basename(path)
+    return re.sub('\.[^\.]+$', '', bn).strip()
 
 
 def file_exists(path):
