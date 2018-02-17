@@ -1,213 +1,242 @@
-"""Command-line parsing presets.
-Example:
+# -*- coding: utf-8 -*-
+"""Command-line parsing presets"""
 
-prs = b_cmdprs.init('My script') # Initialization
-# Setup
-b_cmdprs.add_dir_in(prs)
-b_cmdprs.add_file_out(prs)
-b_cmdprs.add_option(prs, 'u', 'Username')
-
-args = prs.parse_args() # Parsing
-
-# Testing
-b_cmdprs.check_dir_in(prs, args)
-b_cmdprs.check_file_out(prs, args)
-b_cmdprs.check_option(prs, args.u)
-
-"""
-
-
-from bptbx.b_iotools import file_exists
-from argparse import ArgumentParser
+from argparse import ArgumentParser, Namespace
 from os import path, chdir
+from re import sub
+from sys import stderr
+from bptbx.b_iotools import file_exists, mkdirs
+
+# -----------------------------------------------------------------------------
+# INITIALIZATION
+# -----------------------------------------------------------------------------
 
 
 def init(info=''):
-    """Init argument parser."""
+    """Initialize a basic argument parser."""
     return ArgumentParser(description=info)
 
 
 def show_help(prs, message=None):
-    """Show argument parser help."""
+    """Show argument parser help with a user-message and exit with error."""
     if message:
         print(message)
     prs.print_help()
     exit(1)
 
-
-# FILE IN ---------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# ADD METHODS
+# -----------------------------------------------------------------------------
 
 
 def add_file_in(prs, arg='-i', help='Input file'):
     """Add an input file option."""
-    if not arg.startswith('-'):
-        arg = '-{}'.format(arg)
+    arg = _validate_setup_input(prs, arg)
     prs.add_argument(arg, metavar='INPUT', help=help)
-
-
-def check_file_in(prs, arg):
-    """Check the input file option."""
-    if not arg:
-        show_help(prs, 'No input file set.')
-    if not file_exists(arg):
-        show_help(prs, 'Input file does not exist.')
-    arg = path.abspath(arg)
-
-
-def check_file_in(prs, args, arg):
-    """Check the input file option."""
-    vargs = vars(args)
-    if not vargs[arg]:
-        show_help(prs, 'No input file set.')
-    if not file_exists(vargs[arg]):
-        show_help(prs, 'Input file does not exist.')
-    vargs[arg] = path.abspath(vargs[arg])
-
-# DIRECTORY IN ----------------------------------------------------------------
+    return prs
 
 
 def add_dir_in(prs, arg='-i', label='Input directory'):
     """Add an input directory option."""
+    arg = _validate_setup_input(prs, arg)
     prs.add_argument(arg, metavar='INPUT', help=label)
+    return prs
 
 
-def check_dir_in(prs, args):
-    """Check the input directory option."""
-    if not args.i:
-        show_help(prs, 'No input directory set.')
-    if not path.isdir(args.i):
-        show_help(prs, 'Input directory does not exist.')
-    args.i = path.abspath(args.i)
-
-
-# FILE OUT --------------------------------------------------------------------
-
-
-def add_file_out(prs):
+def add_file_out(prs, arg='-o', help='Output file'):
     """Add an output file option."""
-    prs.add_argument('-o', metavar='OUTPUT', help='Output file')
+    arg = _validate_setup_input(prs, arg)
+    prs.add_argument(arg, metavar='OUTPUT', help=help)
+    return prs
 
 
-def check_file_out(prs, args):
-    """Check the output file option."""
-    if args.o is None:
-        show_help(prs, 'No output file provided.')
-    if file_exists(args.o):
-        show_help(prs, 'Output file already exists.')
-    args.o = path.abspath(args.o)
-
-
-# DIRECTORY OUT ---------------------------------------------------------------
-
-
-def add_dir_out(prs):
+def add_dir_out(prs, arg='-o', help='Output directory'):
     """Add an output directory option."""
-    prs.add_argument('-o', metavar='OUTPUT', help='Output directory')
+    arg = _validate_setup_input(prs, arg)
+    prs.add_argument(arg, metavar='OUTPUT', help=help)
+    return prs
 
 
-def check_dir_out_and_chdir(prs, args):
-    """Check the output directory option."""
-    if not args.o:
-        show_help(prs, 'No output directory set.')
-    if not path.isdir(args.o):
-        show_help(prs, 'Output directory does not exist.')
-    args.o = path.abspath(args.o)
-    chdir(args.o)
-    # r_util.log('Working directory {}'.format(getcwd()))
-
-
-# AUXILIARY- ------------------------------------------------------------------
-
-
-def add_opt_dir_in(prs, arg, label):
-    """Add an optional input directory option."""
-    if not arg.startswith('-'):
-        arg = '-{}'.format(arg)
-    prs.add_argument(arg, metavar='IN_DIR', help=label)
-
-
-def check_opt_dir_in(prs, arg, info='Optional directory does not exist.'):
-    """Check the optional input directory option."""
-    if arg is None:
-        return
-    if not path.isdir(arg):
-        show_help(prs, info)
-    return path.abspath(arg)
-
-
-def add_opt_file_in(prs, arg, label):
-    """Add an optional input file option."""
-    if not arg.startswith('-'):
-        arg = '-{}'.format(arg)
-    prs.add_argument(arg, metavar='IN_FILE', help=label)
-
-
-def check_opt_file_in(prs, arg, info='Optional file does not exist.'):
-    """Check the optional input file option."""
-    if arg is None:
-        return
-    if not path.isfile(arg):
-        show_help(prs, info)
-    return path.abspath(arg)
-
-
-def add_option(prs, arg, info='Mandatory text value.', default=None):
-    """Add a mandatory input option."""
-    info_msg = info if not default else '{} (default: {})'.format(
-        info, default)
-    if not arg.startswith('-'):
-        arg = '-{}'.format(arg)
-    prs.add_argument(arg, metavar='VALUE', help=info_msg, default=default)
-
-
-def check_option(prs, arg):
-    """Check the input file option."""
-    if not arg:
-        show_help(prs, 'Mandatory option not set.')
+def add_bool(prs, arg='-b', help='Option'):
+    """Add a toggle option."""
+    arg = _validate_setup_input(prs, arg)
+    prs.add_argument(arg, action='store_true', help=help)
+    return prs
 
 
 def add_verbose(prs):
     """Add verbose option."""
-    prs.add_argument('-v', action='store_true',
-                     help='Verbose output', default=False)
+    add_bool(prs, '-v', 'Verbose output')
+    return prs
 
 
-def add_mongo_collection(prs):
-    """Add Mongo DB collection option."""
-    prs.add_argument('-c', default='', help='MongoDB collection name')
-
-
-def check_mongo_collection(prs, args, required=False):
-    """Check Mongo DB collection option."""
-    if not args.c and required:
-        show_help(prs, 'MongoDB collection required but not set.')
-    elif not args.c:
-        return
-    from robota import r_mongo
-    col = r_mongo.get_client_for_collection(args.c, create=False)
-    if not col:
-        show_help(prs, 'Given MongoDB collection does not exist.')
-    return col
-
-
-def add_bool(prs, arg, label):
-    """Add a toggle option."""
-    if not arg.startswith('-'):
-        arg = '-{}'.format(arg)
-    prs.add_argument(arg, action='store_true', help=label, default=False)
+def add_option(prs, arg='-s', help='Value', default=None):
+    """Add an input option."""
+    arg = _validate_setup_input(prs, arg)
+    help = help if not default else '{} (default: {})'.format(
+        help, default)
+    prs.add_argument(arg, metavar='VALUE', help=help, default=default)
+    return prs
 
 
 def add_max_threads(prs):
     """Add a max threads option."""
-    prs.add_argument('-t', metavar='THREADS',
-                     help='Number of threads', default=10)
+    add_option(prs, '-t', help='Number of threads', default=10)
+    return prs
+
+
+def add_mongo_collection(prs):
+    """Add Mongo DB collection option."""
+    add_option(prs, '-c', help='MongoDB collection name')
+
+# -----------------------------------------------------------------------------
+# CHECK OPTIONS
+# -----------------------------------------------------------------------------
+
+
+def check_file_in(prs, args, arg='-i', optional=False):
+    """Check the file option for existence and make path absolute."""
+    vargs, arg = _validate_parse_input(prs, args, arg)
+    if not vargs.get(arg, None) and not optional:
+        show_help(prs, '-' + arg + ': No input file set.')
+    elif not vargs.get(arg, None):
+        return
+    if not path.isfile(vargs[arg]):
+        show_help(prs, '-' + arg + ': Given input does not point to a file.')
+    if not file_exists(vargs[arg]):
+        show_help(prs, '-' + arg + ': Input file does not exist.')
+    vargs[arg] = path.abspath(vargs[arg])
+
+
+def check_dir_in(prs, args, arg='-i', optional=False):
+    """Check the directory option for existence and make path absolute."""
+    vargs, arg = _validate_parse_input(prs, args, arg)
+    if not vargs.get(arg, None) and not optional:
+        show_help(prs, '-' + arg + ': No input directory set.')
+    elif not vargs.get(arg, None):
+        return
+    elif not vargs.get(arg, None):
+        return
+    if not path.isdir(vargs[arg]):
+        show_help(prs, '-' + arg + ': Given input does not point to a dir.')
+    vargs[arg] = path.abspath(vargs[arg])
+
+
+def check_file_out(prs, args, arg='-o', optional=False, can_exist=False):
+    """Check the output file option."""
+    vargs, arg = _validate_parse_input(prs, args, arg)
+    if not vargs.get(arg, None) and not optional:
+        show_help(prs, '-' + arg + ': No output file set.')
+    elif not vargs.get(arg, None):
+        return
+    if path.isdir(vargs[arg]):
+        show_help(prs, '-' + arg + ': Given input does not point to a file.')
+    if path.isfile(vargs[arg]) and not can_exist:
+        show_help(prs, '-' + arg + ': Output file already exists.')
+    vargs[arg] = path.abspath(vargs[arg])
+
+
+def check_dir_out(prs, args, arg='-o', optional=False, can_exist=True,
+                  mk_dir=False, ch_dir=False):
+    """Check the output directory option and optionally change to it."""
+    vargs, arg = _validate_parse_input(prs, args, arg)
+    if not vargs.get(arg, None) and not optional:
+        show_help(prs, '-' + arg + ': No output dir set.')
+    elif not vargs.get(arg, None):
+        return
+    if path.isfile(vargs[arg]):
+        show_help(prs, '-' + arg + ': Given input does not point to a dir.')
+    if path.isdir(vargs[arg]) and not can_exist:
+        show_help(prs, '-' + arg + ': Output file already exists.')
+    vargs[arg] = path.abspath(vargs[arg])
+    if mk_dir:
+        mkdirs(vargs[arg])
+    if ch_dir:
+        chdir(vargs[arg])
+
+
+def check_option(prs, args, arg='-s', optional=False, is_int=False):
+    """Check the input option"""
+    vargs, arg = _validate_parse_input(prs, args, arg)
+    if not vargs.get(arg, None) and not optional:
+        show_help(prs, '-' + arg + ': Not defined.')
+    elif not vargs.get(arg, None):
+        return
+    if is_int:
+        try:
+            vargs[arg] = int(vargs[arg])
+        except ValueError:
+            show_help(prs, '-' + arg + ': Requires a number.')
 
 
 def check_max_threads(prs, args):
     """Check the max threads option."""
-    try:
-        args.t = int(args.t)
-    except ValueError:
-        show_help(prs, 'Invalid number of threads.')
-    if int(args.t) <= 0:
-        show_help(prs, 'Invalid number of threads.')
+    check_option(prs, args, 't', is_int=True)
+
+
+def check_mongo_collection(prs, args, optional=True):
+    """Check Mongo DB collection option."""
+    check_option(prs, args, '-c', optional)
+
+
+# -----------------------------------------------------------------------------
+# HELPER METHODS
+# -----------------------------------------------------------------------------
+
+
+def _validate_setup_input(prs, arg):
+    if not isinstance(prs, ArgumentParser):
+        raise ValueError('Provided prs object is not of type argument parser.')
+    if not arg.startswith('-'):
+        arg = '-{}'.format(arg)
+    return arg
+
+
+def _validate_parse_input(prs, args, arg):
+    if not isinstance(prs, ArgumentParser):
+        raise ValueError('Provided prs object is not of type argument parser.')
+    if not isinstance(args, Namespace):
+        raise ValueError('Provided args object is not of type list.')
+    arg = sub('^-+', '', arg)
+    return vars(args), arg
+
+
+def _e(msg):
+    print(msg, file=stderr)
+
+# -----------------------------------------------------------------------------
+# MAIN / EXAMPLE
+# -----------------------------------------------------------------------------
+
+
+if __name__ == '__main__':
+    prs = init('Test')
+    # ---
+    add_file_in(prs)
+    add_file_in(prs, '-j')
+    add_file_in(prs, '-k', 'Another input file')
+    add_dir_in(prs, '-l')
+    add_dir_out(prs)
+    add_dir_out(prs, 'p')
+    add_bool(prs)
+    add_verbose(prs)
+    add_option(prs)
+    add_option(prs, 'u')
+    add_max_threads(prs)
+    add_mongo_collection(prs)
+    # ---
+    prs.print_help()
+    args = prs.parse_args()
+    # ---
+    check_file_in(prs, args)
+    check_file_in(prs, args, '-j')
+    check_file_in(prs, args, '-k', optional=True)
+    check_dir_in(prs, args, 'l')
+    check_dir_out(prs, args)
+    check_dir_out(prs, args, 'p', optional=True)
+    check_option(prs, args)
+    check_option(prs, args, 'u', is_int=True)
+    check_max_threads(prs, args)
+    check_mongo_collection(prs, args, False)
+    # ---
+    print(args)
