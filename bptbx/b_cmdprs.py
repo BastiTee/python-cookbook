@@ -4,7 +4,6 @@
 from argparse import ArgumentParser, Namespace
 from os import path, chdir
 from re import sub
-from sys import stderr
 from bptbx.b_iotools import file_exists, mkdirs
 
 # -----------------------------------------------------------------------------
@@ -19,8 +18,10 @@ def init(info=''):
 
 def show_help(prs, message=None):
     """Show argument parser help with a user-message and exit with error."""
+    if not isinstance(prs, ArgumentParser):
+        raise ValueError('Provided prs object is not of type argument parser.')
     if message:
-        print(message)
+        print(message, '\n')
     prs.print_help()
     exit(1)
 

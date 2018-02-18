@@ -15,7 +15,7 @@ from bptbx import b_strings
 from bptbx import b_threading
 from bptbx import b_visual
 from bptbx import b_web
-from os import path, devnull, getcwd
+from os import path, devnull
 from random import randint
 from re import sub
 from shutil import rmtree
@@ -37,6 +37,8 @@ class BptbxTestSuite(unittest.TestCase):
         prs = b_cmdprs.init('test')
         self.assertIsNotNone(prs)
         self.assertEqual(prs.description, 'test')
+        self.assertRaises(TypeError, b_cmdprs.show_help)
+        self.assertRaises(ValueError, b_cmdprs.show_help, {})
 
         # file_in -------------------------------------------------------------
         prs = b_cmdprs.init()
