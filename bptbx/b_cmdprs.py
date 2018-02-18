@@ -11,9 +11,27 @@ from bptbx.b_iotools import file_exists, mkdirs
 # -----------------------------------------------------------------------------
 
 
+class ExtendedArgumentParser(ArgumentParser):
+
+    validators = []
+
+    def add_validator(self, func, **kwargs):
+        self.validators.append((func, kwargs))
+
+    def parse_and_validate_args(self):
+        args = self.parse_args()
+        print('args =', args)
+        for val in self.validators:
+            print('val =', val[0], ' kwargs =', val[1])
+            val[0](self, args, **val[1])
+        return args
+
+
 def init(info=''):
-    """Initialize a basic argument parser."""
-    return ArgumentParser(description=info)
+    """Initialize an extended argument parser."""
+    prs = ExtendedArgumentParser(description=info)
+    # prs['test'] = 'yo'
+    return prs
 
 
 def show_help(prs, message=None):
@@ -30,30 +48,38 @@ def show_help(prs, message=None):
 # -----------------------------------------------------------------------------
 
 
-def add_file_in(prs, arg='-i', help='Input file'):
+def add_file_in(prs, arg='-i', help='Input file', **kwargs):
     """Add an input file option."""
     arg = _validate_setup_input(prs, arg)
+    kwargs['arg'] = arg
+    prs.add_validator(check_file_in, **kwargs)
     prs.add_argument(arg, metavar='INPUT', help=help)
     return prs
 
 
-def add_dir_in(prs, arg='-i', label='Input directory'):
+def add_dir_in(prs, arg='-i', help='Input directory', **kwargs):
     """Add an input directory option."""
     arg = _validate_setup_input(prs, arg)
-    prs.add_argument(arg, metavar='INPUT', help=label)
+    kwargs['arg'] = arg
+    prs.add_validator(check_dir_in, **kwargs)
+    prs.add_argument(arg, metavar='INPUT', help=help)
     return prs
 
 
-def add_file_out(prs, arg='-o', help='Output file'):
+def add_file_out(prs, arg='-o', help='Output file', **kwargs):
     """Add an output file option."""
     arg = _validate_setup_input(prs, arg)
+    kwargs['arg'] = arg
+    prs.add_validator(check_file_out, **kwargs)
     prs.add_argument(arg, metavar='OUTPUT', help=help)
     return prs
 
 
-def add_dir_out(prs, arg='-o', help='Output directory'):
+def add_dir_out(prs, arg='-o', help='Output directory', **kwargs):
     """Add an output directory option."""
     arg = _validate_setup_input(prs, arg)
+    kwargs['arg'] = arg
+    prs.add_validator(check_dir_out, **kwargs)
     prs.add_argument(arg, metavar='OUTPUT', help=help)
     return prs
 
@@ -61,32 +87,35 @@ def add_dir_out(prs, arg='-o', help='Output directory'):
 def add_bool(prs, arg='-b', help='Option'):
     """Add a toggle option."""
     arg = _validate_setup_input(prs, arg)
+    # This adder has no validator
     prs.add_argument(arg, action='store_true', help=help)
     return prs
 
 
-def add_verbose(prs):
+def add_option(prs, arg='-s', help='Value', default=None, **kwargs):
+    """Add an input option."""
+    arg = _validate_setup_input(prs, arg)
+    help = help if not default else '{} (default: {})'.format(
+        help, default)
+    kwargs['arg'] = arg
+    prs.add_validator(check_option, **kwargs)
+    prs.add_argument(arg, metavar='VALUE', help=help, default=default)
+    return prs
+
+
+def add_verbose(prs, **kwargs):
     """Add verbose option."""
     add_bool(prs, '-v', 'Verbose output')
     return prs
 
 
-def add_option(prs, arg='-s', help='Value', default=None):
-    """Add an input option."""
-    arg = _validate_setup_input(prs, arg)
-    help = help if not default else '{} (default: {})'.format(
-        help, default)
-    prs.add_argument(arg, metavar='VALUE', help=help, default=default)
-    return prs
-
-
-def add_max_threads(prs):
+def add_max_threads(prs, **kwargs):
     """Add a max threads option."""
     add_option(prs, '-t', help='Number of threads', default=10)
     return prs
 
 
-def add_mongo_collection(prs):
+def add_mongo_collection(prs, **kwargs):
     """Add Mongo DB collection option."""
     add_option(prs, '-c', help='MongoDB collection name')
 
@@ -95,8 +124,10 @@ def add_mongo_collection(prs):
 # -----------------------------------------------------------------------------
 
 
-def check_file_in(prs, args, arg='-i', optional=False):
+def check_file_in(prs, args, **kwargs):
     """Check the file option for existence and make path absolute."""
+    arg = kwargs.get('arg', '-i')
+    optional = kwargs.get('optional', False)
     vargs, arg = _validate_parse_input(prs, args, arg)
     if not vargs.get(arg, None) and not optional:
         show_help(prs, '-' + arg + ': No input file set.')
@@ -109,8 +140,10 @@ def check_file_in(prs, args, arg='-i', optional=False):
     vargs[arg] = path.abspath(vargs[arg])
 
 
-def check_dir_in(prs, args, arg='-i', optional=False):
+def check_dir_in(prs, args, **kwargs):
     """Check the directory option for existence and make path absolute."""
+    arg = kwargs.get('arg', '-i')
+    optional = kwargs.get('optional', False)
     vargs, arg = _validate_parse_input(prs, args, arg)
     if not vargs.get(arg, None) and not optional:
         show_help(prs, '-' + arg + ': No input directory set.')
@@ -123,8 +156,11 @@ def check_dir_in(prs, args, arg='-i', optional=False):
     vargs[arg] = path.abspath(vargs[arg])
 
 
-def check_file_out(prs, args, arg='-o', optional=False, can_exist=False):
+def check_file_out(prs, args, **kwargs):
     """Check the output file option."""
+    arg = kwargs.get('arg', '-o')
+    optional = kwargs.get('optional', False)
+    can_exist = kwargs.get('can_exist', False)
     vargs, arg = _validate_parse_input(prs, args, arg)
     if not vargs.get(arg, None) and not optional:
         show_help(prs, '-' + arg + ': No output file set.')
@@ -137,9 +173,13 @@ def check_file_out(prs, args, arg='-o', optional=False, can_exist=False):
     vargs[arg] = path.abspath(vargs[arg])
 
 
-def check_dir_out(prs, args, arg='-o', optional=False, can_exist=True,
-                  mk_dir=False, ch_dir=False):
+def check_dir_out(prs, args, **kwargs):
     """Check the output directory option and optionally change to it."""
+    arg = kwargs.get('arg', '-o')
+    optional = kwargs.get('optional', False)
+    can_exist = kwargs.get('can_exist', True)
+    mk_dir = kwargs.get('mk_dir', False)
+    ch_dir = kwargs.get('ch_dir', False)
     vargs, arg = _validate_parse_input(prs, args, arg)
     if not vargs.get(arg, None) and not optional:
         show_help(prs, '-' + arg + ': No output dir set.')
@@ -156,8 +196,11 @@ def check_dir_out(prs, args, arg='-o', optional=False, can_exist=True,
         chdir(vargs[arg])
 
 
-def check_option(prs, args, arg='-s', optional=False, is_int=False):
+def check_option(prs, args, **kwargs):
     """Check the input option"""
+    arg = kwargs.get('arg', '-s')
+    optional = kwargs.get('optional', False)
+    is_int = kwargs.get('is_int', False)
     vargs, arg = _validate_parse_input(prs, args, arg)
     if not vargs.get(arg, None) and not optional:
         show_help(prs, '-' + arg + ': Not defined.')
@@ -168,16 +211,6 @@ def check_option(prs, args, arg='-s', optional=False, is_int=False):
             vargs[arg] = int(vargs[arg])
         except ValueError:
             show_help(prs, '-' + arg + ': Requires a number.')
-
-
-def check_max_threads(prs, args):
-    """Check the max threads option."""
-    check_option(prs, args, 't', is_int=True)
-
-
-def check_mongo_collection(prs, args, optional=True):
-    """Check Mongo DB collection option."""
-    check_option(prs, args, '-c', optional)
 
 
 # -----------------------------------------------------------------------------
@@ -208,33 +241,25 @@ def _validate_parse_input(prs, args, arg):
 
 
 if __name__ == '__main__':
+    # python3 -m bptbx.b_cmdprs -i test.py -j test.py -l bptbx/ -a new.txt -o
+    # dir/ -bv -s test -u 10  -t 4 -c mongo
     prs = init('Test')
     # ---
     add_file_in(prs)
-    add_file_in(prs, '-j')
-    add_file_in(prs, '-k', 'Another input file')
-    add_dir_in(prs, '-l')
+    add_file_in(prs, arg='-j')
+    add_file_in(prs, arg='-k', help='Another input file', optional=True)
+    add_dir_in(prs, arg='-l')
+    add_file_out(prs, arg='a')
     add_dir_out(prs)
-    add_dir_out(prs, 'p')
+    add_dir_out(prs, arg='p', optional=True)
     add_bool(prs)
     add_verbose(prs)
     add_option(prs)
-    add_option(prs, 'u')
+    add_option(prs, arg='u', is_int=True)
     add_max_threads(prs)
     add_mongo_collection(prs)
     # ---
-    prs.print_help()
-    args = prs.parse_args()
-    # ---
-    check_file_in(prs, args)
-    check_file_in(prs, args, '-j')
-    check_file_in(prs, args, '-k', optional=True)
-    check_dir_in(prs, args, 'l')
-    check_dir_out(prs, args)
-    check_dir_out(prs, args, 'p', optional=True)
-    check_option(prs, args)
-    check_option(prs, args, 'u', is_int=True)
-    check_max_threads(prs, args)
-    check_mongo_collection(prs, args, False)
-    # ---
-    print(args)
+    args = prs.parse_and_validate_args()
+    print('---')
+    for key in args._get_kwargs():
+        print(key)

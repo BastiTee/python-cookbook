@@ -63,15 +63,17 @@ class BptbxTestSuite(unittest.TestCase):
         args = prs.parse_args(['-i', 'test-data/config.txt'])
         try:
             b_cmdprs.check_file_in(prs, args)
-            b_cmdprs.check_file_in(prs, args, 'i')
-            b_cmdprs.check_file_in(prs, args, '-i')
+            b_cmdprs.check_file_in(prs, args, arg='i')
+            b_cmdprs.check_file_in(prs, args, arg='-i')
         except SystemExit:
             self.fail('Unexpected system exit')
         self.assertRaises(SystemExit, b_cmdprs.check_file_in, prs,
                           prs.parse_args(['-i', 'test-data/']))
-        self.assertRaises(SystemExit, b_cmdprs.check_file_in, prs, args, 'o')
+        self.assertRaises(SystemExit, b_cmdprs.check_file_in, prs, args,
+                          arg='o')
         args = prs.parse_args(['-i', 'doesnotexist'])
-        self.assertRaises(SystemExit, b_cmdprs.check_file_in, prs, args, 'i')
+        self.assertRaises(SystemExit, b_cmdprs.check_file_in, prs, args,
+                          arg='i')
 
         # dir_in --------------------------------------------------------------
         prs = b_cmdprs.init()
@@ -96,15 +98,17 @@ class BptbxTestSuite(unittest.TestCase):
         args = prs.parse_args(['-i', 'test-data/'])
         try:
             b_cmdprs.check_dir_in(prs, args)
-            b_cmdprs.check_dir_in(prs, args, 'i')
-            b_cmdprs.check_dir_in(prs, args, '-i')
+            b_cmdprs.check_dir_in(prs, args, arg='i')
+            b_cmdprs.check_dir_in(prs, args, arg='-i')
         except SystemExit:
             self.fail('Unexpected system exit')
         self.assertRaises(SystemExit, b_cmdprs.check_dir_in, prs,
                           prs.parse_args(['-i', 'test-data/config.txt']))
-        self.assertRaises(SystemExit, b_cmdprs.check_dir_in, prs, args, 'o')
+        self.assertRaises(SystemExit, b_cmdprs.check_dir_in, prs, args,
+                          arg='o')
         args = prs.parse_args(['-i', 'doesnotexist/'])
-        self.assertRaises(SystemExit, b_cmdprs.check_dir_in, prs, args, 'i')
+        self.assertRaises(SystemExit, b_cmdprs.check_dir_in, prs, args,
+                          arg='i')
 
         # file_out ------------------------------------------------------------
         prs = b_cmdprs.init()
@@ -129,8 +133,8 @@ class BptbxTestSuite(unittest.TestCase):
         args = prs.parse_args(['-o', 'test-data/new.txt'])
         try:
             b_cmdprs.check_file_out(prs, args)
-            b_cmdprs.check_file_out(prs, args, 'o')
-            b_cmdprs.check_file_out(prs, args, '-o')
+            b_cmdprs.check_file_out(prs, args, arg='o')
+            b_cmdprs.check_file_out(prs, args, arg='-o')
         except SystemExit:
             self.fail('Unexpected system exit')
         self.assertRaises(SystemExit, b_cmdprs.check_file_out, prs,
@@ -165,8 +169,8 @@ class BptbxTestSuite(unittest.TestCase):
         args = prs.parse_args(['-o', 'test-data/new_folder'])
         try:
             b_cmdprs.check_dir_out(prs, args)
-            b_cmdprs.check_dir_out(prs, args, 'o')
-            b_cmdprs.check_dir_out(prs, args, '-o')
+            b_cmdprs.check_dir_out(prs, args, arg='o')
+            b_cmdprs.check_dir_out(prs, args, arg='-o')
         except SystemExit:
             self.fail('Unexpected system exit')
         rmtree('test-data/new_folder')
@@ -216,8 +220,8 @@ class BptbxTestSuite(unittest.TestCase):
         args = prs.parse_args(['-s', 'Yo'])
         try:
             b_cmdprs.check_option(prs, args)
-            b_cmdprs.check_option(prs, args, 's')
-            b_cmdprs.check_option(prs, args, '-s')
+            b_cmdprs.check_option(prs, args, arg='s')
+            b_cmdprs.check_option(prs, args, arg='-s')
             b_cmdprs.check_option(prs, prs.parse_args([]), optional=True)
             b_cmdprs.check_option(prs, prs.parse_args(['-s', '20']),
                                   is_int=True)
@@ -231,6 +235,7 @@ class BptbxTestSuite(unittest.TestCase):
         # fin -----------------------------------------------------------------
         sys.stdout = sys.__stdout__
         dnull.close()
+        print('--- done')
 
     def _check_action(self, prs, letter, help, meta=None, ac=_StoreAction):
         a = self._get_action(prs, letter, ac)
