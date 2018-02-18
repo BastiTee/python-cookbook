@@ -26,10 +26,6 @@ import sys
 import unittest
 
 
-def _e(msg):
-    print(msg, file=sys.stderr)
-
-
 class BptbxTestSuite(unittest.TestCase):
 
     def test_cmdprs(self):
@@ -233,7 +229,6 @@ class BptbxTestSuite(unittest.TestCase):
         # fin -----------------------------------------------------------------
         sys.stdout = sys.__stdout__
         dnull.close()
-        print('--- done')
 
     def _check_action(self, prs, letter, help, meta=None, ac=_StoreAction):
         a = self._get_action(prs, letter, ac)
