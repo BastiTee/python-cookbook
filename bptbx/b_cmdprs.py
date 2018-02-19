@@ -7,7 +7,7 @@ from re import sub
 from bptbx.b_iotools import file_exists, mkdirs
 
 
-class ExtendedArgumentParser(ArgumentParser):
+class TemplateArgumentParser(ArgumentParser):
 
     validators = []
 
@@ -16,17 +16,14 @@ class ExtendedArgumentParser(ArgumentParser):
 
     def parse_and_validate_args(self):
         args = self.parse_args()
-        print('args =', args)
-        for val in self.validators:
-            print('val =', val[0], ' kwargs =', val[1])
-            val[0](args, **val[1])
+        [val[0](args, **val[1]) for val in self.validators]
         return args
 
-    def show_help(message=None):
+    def print_help_and_exit(self, message=None):
         """Show argument parser help with a user-message and exit with error"""
         if message:
             print(message, '\n')
-        prs.print_help()
+        self.print_help()
         exit(1)
 
     # ----------------------------------------------------------------
@@ -37,40 +34,40 @@ class ExtendedArgumentParser(ArgumentParser):
         """Add an input file option."""
         arg = self._validate_setup_input(arg)
         kwargs['arg'] = arg
-        self.add_validator(self.check_file_in, **kwargs)
+        self.add_validator(self._check_file_in, **kwargs)
         self.add_argument(arg, metavar='INPUT', help=help)
-        return prs
+        return self
 
     def add_dir_in(self, arg='-i', help='Input directory', **kwargs):
         """Add an input directory option."""
         arg = self._validate_setup_input(arg)
         kwargs['arg'] = arg
-        prs.add_validator(self.check_dir_in, **kwargs)
-        prs.add_argument(arg, metavar='INPUT', help=help)
-        return prs
+        self.add_validator(self._check_dir_in, **kwargs)
+        self.add_argument(arg, metavar='INPUT', help=help)
+        return self
 
     def add_file_out(self, arg='-o', help='Output file', **kwargs):
         """Add an output file option."""
         arg = self._validate_setup_input(arg)
         kwargs['arg'] = arg
-        prs.add_validator(self.check_file_out, **kwargs)
-        prs.add_argument(arg, metavar='OUTPUT', help=help)
-        return prs
+        self.add_validator(self._check_file_out, **kwargs)
+        self.add_argument(arg, metavar='OUTPUT', help=help)
+        return self
 
     def add_dir_out(self, arg='-o', help='Output directory', **kwargs):
         """Add an output directory option."""
         arg = self._validate_setup_input(arg)
         kwargs['arg'] = arg
-        prs.add_validator(self.check_dir_out, **kwargs)
-        prs.add_argument(arg, metavar='OUTPUT', help=help)
-        return prs
+        self.add_validator(self._check_dir_out, **kwargs)
+        self.add_argument(arg, metavar='OUTPUT', help=help)
+        return self
 
     def add_bool(self, arg='-b', help='Option'):
         """Add a toggle option."""
         arg = self._validate_setup_input(arg)
         # This adder has no validator
-        prs.add_argument(arg, action='store_true', help=help)
-        return prs
+        self.add_argument(arg, action='store_true', help=help)
+        return self
 
     def add_option(self, arg='-s', help='Value', default=None, **kwargs):
         """Add an input option."""
@@ -78,80 +75,78 @@ class ExtendedArgumentParser(ArgumentParser):
         help = help if not default else '{} (default: {})'.format(
             help, default)
         kwargs['arg'] = arg
-        prs.add_validator(self.check_option, **kwargs)
-        prs.add_argument(arg, metavar='VALUE', help=help, default=default)
-        return prs
+        self.add_validator(self._check_option, **kwargs)
+        self.add_argument(arg, metavar='VALUE', help=help, default=default)
+        return self
 
     def add_verbose(self, **kwargs):
         """Add verbose option."""
-        self.add_bool('-v', 'Verbose output')
-        return prs
+        return self.add_bool('-v', 'Verbose output')
 
     def add_max_threads(self, **kwargs):
         """Add a max threads option."""
-        self.add_option('-t', help='Number of threads', default=10)
-        return prs
+        return self.add_option('-t', help='Number of threads', default=10)
 
     def add_mongo_collection(self, **kwargs):
         """Add Mongo DB collection option."""
-        self.add_option('-c', help='MongoDB collection name')
+        return self.add_option('-c', help='MongoDB collection name')
 
     # ----------------------------------------------------------------
     # DEFAULT VALIDATORS
     # ----------------------------------------------------------------
 
-    def check_file_in(self, args, **kwargs):
+    def _check_file_in(self, args, **kwargs):
         """Check the file option for existence and make path absolute."""
         arg = kwargs.get('arg', '-i')
         optional = kwargs.get('optional', False)
-        print(arg)
-        print(optional)
         vargs, arg = self._validate_parse_input(args, arg)
         if not vargs.get(arg, None) and not optional:
-            self.show_help('-' + arg + ': No input file set.')
+            self.print_help_and_exit('-' + arg + ': No input file set.')
         elif not vargs.get(arg, None):
             return
         if not path.isfile(vargs[arg]):
-            self.show_help('-' + arg +
-                           ': Given input does not point to a file.')
+            self.print_help_and_exit('-' + arg +
+                                     ': Given input does not point to a file.')
         if not file_exists(vargs[arg]):
-            self.show_help('-' + arg + ': Input file does not exist.')
+            self.print_help_and_exit(
+                '-' + arg + ': Input file does not exist.')
         vargs[arg] = path.abspath(vargs[arg])
 
-    def check_dir_in(self, args, **kwargs):
+    def _check_dir_in(self, args, **kwargs):
         """Check the directory option for existence and make path absolute."""
         arg = kwargs.get('arg', '-i')
         optional = kwargs.get('optional', False)
         vargs, arg = self._validate_parse_input(args, arg)
         if not vargs.get(arg, None) and not optional:
-            self.show_help('-' + arg + ': No input directory set.')
+            self.print_help_and_exit('-' + arg + ': No input directory set.')
         elif not vargs.get(arg, None):
             return
         elif not vargs.get(arg, None):
             return
         if not path.isdir(vargs[arg]):
-            self.show_help('-' + arg +
-                           ': Given input does not point to a dir.')
+            self.print_help_and_exit('-' + arg +
+                                     ': Given input does not point to a dir.')
         vargs[arg] = path.abspath(vargs[arg])
 
-    def check_file_out(self, args, **kwargs):
+    def _check_file_out(self, args, **kwargs):
         """Check the output file option."""
         arg = kwargs.get('arg', '-o')
         optional = kwargs.get('optional', False)
         can_exist = kwargs.get('can_exist', False)
         vargs, arg = self._validate_parse_input(args, arg)
         if not vargs.get(arg, None) and not optional:
-            self.show_help('-' + arg + ': No output file set.')
+            self.print_help_and_exit('-' + arg + ': No output file set.')
         elif not vargs.get(arg, None):
             return
         if path.isdir(vargs[arg]):
-            self.show_help('-' + arg +
-                           ': Given input does not point to a file.')
+            self.print_help_and_exit('-' + arg +
+                                     ': Given input does not point to a file.')
         if path.isfile(vargs[arg]) and not can_exist:
-            self.show_help('-' + arg + ': Output file already exists.')
+            self.print_help_and_exit(
+                '-' + arg + ': Output file already exists.')
         vargs[arg] = path.abspath(vargs[arg])
 
-    def check_dir_out(self, args, **kwargs):
+    def _check_dir_out(self, args, **kwargs):
         """Check the output directory option and optionally change to it."""
         arg = kwargs.get('arg', '-o')
         optional = kwargs.get('optional', False)
@@ -160,35 +155,36 @@ class ExtendedArgumentParser(ArgumentParser):
         ch_dir = kwargs.get('ch_dir', False)
         vargs, arg = self._validate_parse_input(args, arg)
         if not vargs.get(arg, None) and not optional:
-            self.show_help('-' + arg + ': No output dir set.')
+            self.print_help_and_exit('-' + arg + ': No output dir set.')
         elif not vargs.get(arg, None):
             return
         if path.isfile(vargs[arg]):
-            self.show_help('-' + arg +
-                           ': Given input does not point to a dir.')
+            self.print_help_and_exit('-' + arg +
+                                     ': Given input does not point to a dir.')
         if path.isdir(vargs[arg]) and not can_exist:
-            self.show_help('-' + arg + ': Output file already exists.')
+            self.print_help_and_exit(
+                '-' + arg + ': Output file already exists.')
         vargs[arg] = path.abspath(vargs[arg])
         if mk_dir:
             mkdirs(vargs[arg])
         if ch_dir:
             chdir(vargs[arg])
 
-    def check_option(self, args, **kwargs):
+    def _check_option(self, args, **kwargs):
         """Check the input option"""
         arg = kwargs.get('arg', '-s')
         optional = kwargs.get('optional', False)
         is_int = kwargs.get('is_int', False)
         vargs, arg = self._validate_parse_input(args, arg)
         if not vargs.get(arg, None) and not optional:
-            self.show_help('-' + arg + ': Not defined.')
+            self.print_help_and_exit('-' + arg + ': Not defined.')
         elif not vargs.get(arg, None):
             return
         if is_int:
             try:
                 vargs[arg] = int(vargs[arg])
             except ValueError:
-                self.show_help('-' + arg + ': Requires a number.')
+                self.print_help_and_exit('-' + arg + ': Requires a number.')
 
     # ----------------------------------------------------------------
     # HELPER METHODS
@@ -214,7 +210,7 @@ class ExtendedArgumentParser(ArgumentParser):
 if __name__ == '__main__':
     # python3 -m bptbx.b_cmdprs -i test.py -j test.py -l bptbx/ -a new.txt -o
     # dir/ -bv -s test -u 10  -t 4 -c mongo
-    prs = ExtendedArgumentParser('Test')
+    prs = TemplateArgumentParser('Test')
     # ---
     prs.add_file_in()
     prs.add_file_in(arg='-j')
@@ -231,6 +227,5 @@ if __name__ == '__main__':
     prs.add_mongo_collection()
     # ---
     args = prs.parse_and_validate_args()
-    print('---')
     for key in args._get_kwargs():
         print(key)

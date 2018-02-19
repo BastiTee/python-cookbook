@@ -2,7 +2,7 @@
 """Test suite"""
 
 from argparse import _StoreAction, _StoreTrueAction, ArgumentError
-from bptbx import b_cmdprs
+from bptbx.b_cmdprs import TemplateArgumentParser
 from bptbx import b_daemon
 from bptbx import b_date
 from bptbx import b_enum
@@ -28,209 +28,209 @@ import unittest
 
 class BptbxTestSuite(unittest.TestCase):
 
+    # def err(self, *args):
+    #     print(*args, file=sys.stderr)
+
     def test_cmdprs(self):
         print('--- testing b_cmdprs')
         dnull = open(devnull, 'w')
         sys.stdout = dnull  # disable print
 
         # init ----------------------------------------------------------------
-        prs = b_cmdprs.init('test')
+        prs = TemplateArgumentParser(description='test')
         self.assertIsNotNone(prs)
         self.assertEqual(prs.description, 'test')
-        self.assertRaises(TypeError, b_cmdprs.show_help)
-        self.assertRaises(ValueError, b_cmdprs.show_help, {})
+        self.assertRaises(SystemExit, prs.print_help_and_exit)
 
         # file_in -------------------------------------------------------------
-        prs = b_cmdprs.init()
-        self.assertRaises(TypeError, b_cmdprs.add_file_in)
-        self.assertRaises(ValueError, b_cmdprs.add_file_in, {})
-        b_cmdprs.add_file_in(prs)
+        prs = TemplateArgumentParser()
+        prs.add_file_in()
         self.assertRaises(
-            ArgumentError, b_cmdprs.add_file_in, prs)  # Not allowed twice
+            ArgumentError, prs.add_file_in)  # Not allowed twice
         self._check_action(prs, 'i', 'Input file', 'INPUT')
-        self._check_action(b_cmdprs.add_file_in(
-            b_cmdprs.init(), '-i'), 'i', 'Input file', 'INPUT')
-        self._check_action(b_cmdprs.add_file_in(
-            b_cmdprs.init(), 'i'), 'i', 'Input file', 'INPUT')
-        self._check_action(b_cmdprs.add_file_in(
-            b_cmdprs.init(), 'o'), 'o', 'Input file', 'INPUT')
-        self._check_action(b_cmdprs.add_file_in(
-            b_cmdprs.init(), 'o', 'My input'), 'o', 'My input', 'INPUT')
-        self.assertRaises(TypeError, b_cmdprs.check_file_in)
-        self.assertRaises(TypeError, b_cmdprs.check_file_in, {})
-        self.assertRaises(ValueError, b_cmdprs.check_file_in, {}, {})
-        self.assertRaises(ValueError, b_cmdprs.check_file_in, prs, {})
+        self._check_action(
+            TemplateArgumentParser().add_file_in('-i'),
+            'i', 'Input file', 'INPUT')
+        self._check_action(
+            TemplateArgumentParser().add_file_in('i'),
+            'i', 'Input file', 'INPUT')
+        self._check_action(
+            TemplateArgumentParser().add_file_in('o'),
+            'o', 'Input file', 'INPUT')
+        self._check_action(
+            TemplateArgumentParser().add_file_in('o', 'My input'),
+            'o', 'My input', 'INPUT')
+
         args = prs.parse_args(['-i', 'test-data/config.txt'])
         try:
-            b_cmdprs.check_file_in(prs, args)
-            b_cmdprs.check_file_in(prs, args, arg='i')
-            b_cmdprs.check_file_in(prs, args, arg='-i')
+            prs._check_file_in(args)
+            prs._check_file_in(args, arg='i')
+            prs._check_file_in(args, arg='-i')
         except SystemExit:
             self.fail('Unexpected system exit')
-        self.assertRaises(SystemExit, b_cmdprs.check_file_in, prs,
-                          prs.parse_args(['-i', 'test-data/']))
-        self.assertRaises(SystemExit, b_cmdprs.check_file_in, prs, args,
-                          arg='o')
+        self.assertRaises(
+            SystemExit, TemplateArgumentParser()._check_file_in,
+            prs.parse_args(['-i', 'test-data/']))
+        self.assertRaises(
+            SystemExit, TemplateArgumentParser()._check_file_in,
+            args, arg='o')
         args = prs.parse_args(['-i', 'doesnotexist'])
-        self.assertRaises(SystemExit, b_cmdprs.check_file_in, prs, args,
-                          arg='i')
+        self.assertRaises(
+            SystemExit, TemplateArgumentParser()._check_file_in,
+            args, arg='i')
 
         # dir_in --------------------------------------------------------------
-        prs = b_cmdprs.init()
-        self.assertRaises(TypeError, b_cmdprs.add_dir_in)
-        self.assertRaises(ValueError, b_cmdprs.add_dir_in, {})
-        b_cmdprs.add_dir_in(prs)
+        prs = TemplateArgumentParser()
+        prs.add_dir_in()
         self.assertRaises(
-            ArgumentError, b_cmdprs.add_dir_in, prs)  # Not allowed twice
+            ArgumentError, prs.add_dir_in)  # Not allowed twice
         self._check_action(prs, 'i', 'Input directory', 'INPUT')
-        self._check_action(b_cmdprs.add_dir_in(
-            b_cmdprs.init(), '-i'), 'i', 'Input directory', 'INPUT')
-        self._check_action(b_cmdprs.add_dir_in(
-            b_cmdprs.init(), 'i'), 'i', 'Input directory', 'INPUT')
-        self._check_action(b_cmdprs.add_dir_in(
-            b_cmdprs.init(), 'o'), 'o', 'Input directory', 'INPUT')
-        self._check_action(b_cmdprs.add_dir_in(
-            b_cmdprs.init(), 'o', 'My input'), 'o', 'My input', 'INPUT')
-        self.assertRaises(TypeError, b_cmdprs.check_dir_in)
-        self.assertRaises(TypeError, b_cmdprs.check_dir_in, {})
-        self.assertRaises(ValueError, b_cmdprs.check_dir_in, {}, {})
-        self.assertRaises(ValueError, b_cmdprs.check_dir_in, prs, {})
+        self._check_action(
+            TemplateArgumentParser().add_dir_in('-i'),
+            'i', 'Input directory', 'INPUT')
+        self._check_action(
+            TemplateArgumentParser().add_dir_in('i'),
+            'i', 'Input directory', 'INPUT')
+        self._check_action(
+            TemplateArgumentParser().add_dir_in('o'),
+            'o', 'Input directory', 'INPUT')
+        self._check_action(
+            TemplateArgumentParser().add_dir_in('o', 'My input'),
+            'o', 'My input', 'INPUT')
         args = prs.parse_args(['-i', 'test-data/'])
         try:
-            b_cmdprs.check_dir_in(prs, args)
-            b_cmdprs.check_dir_in(prs, args, arg='i')
-            b_cmdprs.check_dir_in(prs, args, arg='-i')
+            prs._check_dir_in(args)
+            prs._check_dir_in(args, arg='i')
+            prs._check_dir_in(args, arg='-i')
         except SystemExit:
             self.fail('Unexpected system exit')
-        self.assertRaises(SystemExit, b_cmdprs.check_dir_in, prs,
-                          prs.parse_args(['-i', 'test-data/config.txt']))
-        self.assertRaises(SystemExit, b_cmdprs.check_dir_in, prs, args,
-                          arg='o')
+        self.assertRaises(
+            SystemExit, TemplateArgumentParser()._check_dir_in,
+            prs.parse_args(['-i', 'test-data/config.txt']))
+        self.assertRaises(
+            SystemExit, TemplateArgumentParser()._check_dir_in,
+            args, arg='o')
         args = prs.parse_args(['-i', 'doesnotexist/'])
-        self.assertRaises(SystemExit, b_cmdprs.check_dir_in, prs, args,
-                          arg='i')
+        self.assertRaises(
+            SystemExit, TemplateArgumentParser()._check_dir_in,
+            args, arg='i')
 
         # file_out ------------------------------------------------------------
-        prs = b_cmdprs.init()
-        self.assertRaises(TypeError, b_cmdprs.add_file_out)
-        self.assertRaises(ValueError, b_cmdprs.add_file_out, {})
-        b_cmdprs.add_file_out(prs)
+        prs = TemplateArgumentParser()
+        prs.add_file_out()
         self.assertRaises(
-            ArgumentError, b_cmdprs.add_file_out, prs)  # Not allowed twice
-        self._check_action(prs, 'o', 'Output file', 'OUTPUT')
-        self._check_action(b_cmdprs.add_file_out(
-            b_cmdprs.init(), '-o'), 'o', 'Output file', 'OUTPUT')
-        self._check_action(b_cmdprs.add_file_out(
-            b_cmdprs.init(), 'o'), 'o', 'Output file', 'OUTPUT')
-        self._check_action(b_cmdprs.add_file_out(
-            b_cmdprs.init(), 'a'), 'a', 'Output file', 'OUTPUT')
-        self._check_action(b_cmdprs.add_file_out(
-            b_cmdprs.init(), 'a', 'My OUTPUT'), 'a', 'My OUTPUT', 'OUTPUT')
-        self.assertRaises(TypeError, b_cmdprs.check_file_out)
-        self.assertRaises(TypeError, b_cmdprs.check_file_out, {})
-        self.assertRaises(ValueError, b_cmdprs.check_file_out, {}, {})
-        self.assertRaises(ValueError, b_cmdprs.check_file_out, prs, {})
+            ArgumentError, prs.add_file_out)  # Not allowed twice
+        self._check_action(
+            prs, 'o', 'Output file', 'OUTPUT')
+        self._check_action(
+            TemplateArgumentParser().add_file_out('-o'),
+            'o', 'Output file', 'OUTPUT')
+        self._check_action(
+            TemplateArgumentParser().add_file_out('o'),
+            'o', 'Output file', 'OUTPUT')
+        self._check_action(
+            TemplateArgumentParser().add_file_out('a'),
+            'a', 'Output file', 'OUTPUT')
+        self._check_action(
+            TemplateArgumentParser().add_file_out('a', 'My OUTPUT'),
+            'a', 'My OUTPUT', 'OUTPUT')
         args = prs.parse_args(['-o', 'test-data/new.txt'])
         try:
-            b_cmdprs.check_file_out(prs, args)
-            b_cmdprs.check_file_out(prs, args, arg='o')
-            b_cmdprs.check_file_out(prs, args, arg='-o')
+            prs._check_file_out(args)
+            prs._check_file_out(args, arg='o')
+            prs._check_file_out(args, arg='-o')
         except SystemExit:
             self.fail('Unexpected system exit')
-        self.assertRaises(SystemExit, b_cmdprs.check_file_out, prs,
-                          prs.parse_args(['-o', 'test-data/']))
-        self.assertRaises(SystemExit, b_cmdprs.check_file_out, prs,
-                          prs.parse_args(['-o', 'test-data/config.txt']))
-        b_cmdprs.check_file_out(prs,
-                                prs.parse_args(['-o', 'test-data/config.txt']),
-                                can_exist=True)
+        self.assertRaises(
+            SystemExit, TemplateArgumentParser()._check_file_out,
+            prs.parse_args(['-o', 'test-data/']))
+        self.assertRaises(
+            SystemExit, TemplateArgumentParser()._check_file_out,
+            prs.parse_args(['-o', 'test-data/config.txt']))
+        TemplateArgumentParser()._check_file_out(
+            prs.parse_args(['-o', 'test-data/config.txt']), can_exist=True)
 
         # dir_out ------------------------------------------------------------
-        prs = b_cmdprs.init()
-        self.assertRaises(TypeError, b_cmdprs.add_dir_out)
-        self.assertRaises(ValueError, b_cmdprs.add_dir_out, {})
-        b_cmdprs.add_dir_out(prs)
+        prs = TemplateArgumentParser()
+        prs.add_dir_out()
         self.assertRaises(
-            ArgumentError, b_cmdprs.add_dir_out, prs)  # Not allowed twice
+            ArgumentError, prs.add_dir_out)  # Not allowed twice
         self._check_action(prs, 'o', 'Output directory', 'OUTPUT')
-        self._check_action(b_cmdprs.add_dir_out(
-            b_cmdprs.init(), '-o'), 'o', 'Output directory', 'OUTPUT')
-        self._check_action(b_cmdprs.add_dir_out(
-            b_cmdprs.init(), 'o'), 'o', 'Output directory', 'OUTPUT')
-        self._check_action(b_cmdprs.add_dir_out(
-            b_cmdprs.init(), 'a'), 'a', 'Output directory', 'OUTPUT')
-        self._check_action(b_cmdprs.add_dir_out(
-            b_cmdprs.init(), 'a', 'My OUTPUT'), 'a', 'My OUTPUT', 'OUTPUT')
-        self.assertRaises(TypeError, b_cmdprs.check_dir_out)
-        self.assertRaises(TypeError, b_cmdprs.check_dir_out, {})
-        self.assertRaises(ValueError, b_cmdprs.check_dir_out, {}, {})
-        self.assertRaises(ValueError, b_cmdprs.check_dir_out, prs, {})
+        self._check_action(
+            TemplateArgumentParser().add_dir_out('-o'),
+            'o', 'Output directory', 'OUTPUT')
+        self._check_action(
+            TemplateArgumentParser().add_dir_out('o'),
+            'o', 'Output directory', 'OUTPUT')
+        self._check_action(
+            TemplateArgumentParser().add_dir_out('a'),
+            'a', 'Output directory', 'OUTPUT')
+        self._check_action(
+            TemplateArgumentParser().add_dir_out('a', 'My OUTPUT'),
+            'a', 'My OUTPUT', 'OUTPUT')
         b_iotools.mkdirs('test-data/new_folder')
         args = prs.parse_args(['-o', 'test-data/new_folder'])
         try:
-            b_cmdprs.check_dir_out(prs, args)
-            b_cmdprs.check_dir_out(prs, args, arg='o')
-            b_cmdprs.check_dir_out(prs, args, arg='-o')
+            prs._check_dir_out(args)
+            prs._check_dir_out(args, arg='o')
+            prs._check_dir_out(args, arg='-o')
         except SystemExit:
             self.fail('Unexpected system exit')
         rmtree('test-data/new_folder')
-        self.assertRaises(SystemExit, b_cmdprs.check_dir_out, prs,
-                          prs.parse_args(['-o', 'test-data/config.txt']))
-        self.assertRaises(SystemExit, b_cmdprs.check_dir_out, prs,
-                          prs.parse_args(['-o', 'test-data/']),
-                          can_exist=False)
-        b_cmdprs.check_dir_out(prs, prs.parse_args(['-o', 'test-data/']),
-                               can_exist=True)
+        self.assertRaises(
+            SystemExit, TemplateArgumentParser()._check_dir_out,
+            prs.parse_args(['-o', 'test-data/config.txt']))
+        self.assertRaises(
+            SystemExit, TemplateArgumentParser()._check_dir_out,
+            prs.parse_args(['-o', 'test-data/']), can_exist=False)
+        TemplateArgumentParser()._check_dir_out(
+            prs.parse_args(['-o', 'test-data/']), can_exist=True)
         ap = path.abspath('test-data/test')
-        b_cmdprs.check_dir_out(prs, prs.parse_args(['-o', 'test-data/test']),
-                               can_exist=False, mk_dir=True, ch_dir=False)
+        TemplateArgumentParser()._check_dir_out(
+            prs.parse_args(['-o', 'test-data/test']),
+            can_exist=False, mk_dir=True, ch_dir=False)
         rmtree(ap)
 
         # bool ----------------------------------------------------------------
-        prs = b_cmdprs.init()
-        self.assertRaises(TypeError, b_cmdprs.add_bool)
-        self.assertRaises(ValueError, b_cmdprs.add_bool, {})
-        b_cmdprs.add_bool(prs)
+        prs = TemplateArgumentParser()
+        prs.add_bool()
         self.assertRaises(
-            ArgumentError, b_cmdprs.add_bool, prs)  # Not allowed twice
+            ArgumentError, prs.add_bool)  # Not allowed twice
         self._check_action(prs, 'b', 'Option', None, _StoreTrueAction)
-        self._check_action(b_cmdprs.add_bool(
-            b_cmdprs.init(), '-b'), 'b', 'Option', None,
-            _StoreTrueAction)
-        self._check_action(b_cmdprs.add_bool(
-            b_cmdprs.init(), 'b', 'verbose'), 'b', 'verbose', None,
-            _StoreTrueAction)
+        self._check_action(
+            TemplateArgumentParser().add_bool('-b'),
+            'b', 'Option', None, _StoreTrueAction)
+        self._check_action(
+            TemplateArgumentParser().add_bool('b', 'verbose'),
+            'b', 'verbose', None, _StoreTrueAction)
 
         # opt -----------------------------------------------------------------
-        prs = b_cmdprs.init()
-        self.assertRaises(TypeError, b_cmdprs.add_option)
-        self.assertRaises(ValueError, b_cmdprs.add_option, {})
-        b_cmdprs.add_option(prs)
+        prs = TemplateArgumentParser()
+        prs.add_option()
         self.assertRaises(
-            ArgumentError, b_cmdprs.add_option, prs)  # Not allowed twice
+            ArgumentError, prs.add_option)  # Not allowed twice
         self._check_action(prs, 's', 'Value', None, _StoreAction)
-        self._check_action(b_cmdprs.add_option(
-            b_cmdprs.init(), '-s'), 's', 'Value', 'VALUE')
-        self._check_action(b_cmdprs.add_option(
-            b_cmdprs.init(), 's', 'testlabel'), 's', 'testlabel', 'VALUE')
-        self.assertRaises(TypeError, b_cmdprs.check_option)
-        self.assertRaises(TypeError, b_cmdprs.check_option, {})
-        self.assertRaises(ValueError, b_cmdprs.check_option, {}, {})
-        self.assertRaises(ValueError, b_cmdprs.check_option, prs, {})
+        self._check_action(
+            TemplateArgumentParser().add_option('-s'),
+            's', 'Value', 'VALUE')
+        self._check_action(
+            TemplateArgumentParser().add_option('s', 'testlabel'),
+            's', 'testlabel', 'VALUE')
         args = prs.parse_args(['-s', 'Yo'])
         try:
-            b_cmdprs.check_option(prs, args)
-            b_cmdprs.check_option(prs, args, arg='s')
-            b_cmdprs.check_option(prs, args, arg='-s')
-            b_cmdprs.check_option(prs, prs.parse_args([]), optional=True)
-            b_cmdprs.check_option(prs, prs.parse_args(['-s', '20']),
-                                  is_int=True)
+            prs._check_option(args)
+            prs._check_option(args, arg='s')
+            prs._check_option(args, arg='-s')
+            prs._check_option(prs.parse_args([]), optional=True)
+            prs._check_option(prs.parse_args(['-s', '20']), is_int=True)
         except SystemExit:
             self.fail('Unexpected system exit')
-        self.assertRaises(SystemExit, b_cmdprs.check_option, prs,
-                          prs.parse_args([]))
-        self.assertRaises(SystemExit, b_cmdprs.check_option, prs,
-                          prs.parse_args(['-s', 'noint']), is_int=True)
+        self.assertRaises(
+            SystemExit, TemplateArgumentParser()._check_option,
+            prs.parse_args([]))
+        self.assertRaises(
+            SystemExit, TemplateArgumentParser()._check_option,
+            prs.parse_args(['-s', 'noint']), is_int=True)
 
         # fin -----------------------------------------------------------------
         sys.stdout = sys.__stdout__
@@ -246,7 +246,6 @@ class BptbxTestSuite(unittest.TestCase):
 
     def _get_action(self, prs, arg, atype):
         for action in prs._get_optional_actions():
-            print(action)
             if isinstance(action, atype) and action.dest == arg:
                 return action
 
