@@ -61,7 +61,7 @@ class BptbxTestSuite(unittest.TestCase):
             TemplateArgumentParser().add_file_in('o', 'My input'),
             'o', 'My input', 'INPUT')
 
-        args = prs.parse_args(['-i', 'test-data/config.txt'])
+        args = prs._parse_args_super(['-i', 'test-data/config.txt'])
         try:
             prs._check_file_in(args)
             prs._check_file_in(args, arg='i')
@@ -70,11 +70,11 @@ class BptbxTestSuite(unittest.TestCase):
             self.fail('Unexpected system exit')
         self.assertRaises(
             SystemExit, TemplateArgumentParser()._check_file_in,
-            prs.parse_args(['-i', 'test-data/']))
+            prs._parse_args_super(['-i', 'test-data/']))
         self.assertRaises(
             SystemExit, TemplateArgumentParser()._check_file_in,
             args, arg='o')
-        args = prs.parse_args(['-i', 'doesnotexist'])
+        args = prs._parse_args_super(['-i', 'doesnotexist'])
         self.assertRaises(
             SystemExit, TemplateArgumentParser()._check_file_in,
             args, arg='i')
@@ -97,7 +97,7 @@ class BptbxTestSuite(unittest.TestCase):
         self._check_action(
             TemplateArgumentParser().add_dir_in('o', 'My input'),
             'o', 'My input', 'INPUT')
-        args = prs.parse_args(['-i', 'test-data/'])
+        args = prs._parse_args_super(['-i', 'test-data/'])
         try:
             prs._check_dir_in(args)
             prs._check_dir_in(args, arg='i')
@@ -106,11 +106,11 @@ class BptbxTestSuite(unittest.TestCase):
             self.fail('Unexpected system exit')
         self.assertRaises(
             SystemExit, TemplateArgumentParser()._check_dir_in,
-            prs.parse_args(['-i', 'test-data/config.txt']))
+            prs._parse_args_super(['-i', 'test-data/config.txt']))
         self.assertRaises(
             SystemExit, TemplateArgumentParser()._check_dir_in,
             args, arg='o')
-        args = prs.parse_args(['-i', 'doesnotexist/'])
+        args = prs._parse_args_super(['-i', 'doesnotexist/'])
         self.assertRaises(
             SystemExit, TemplateArgumentParser()._check_dir_in,
             args, arg='i')
@@ -134,7 +134,7 @@ class BptbxTestSuite(unittest.TestCase):
         self._check_action(
             TemplateArgumentParser().add_file_out('a', 'My OUTPUT'),
             'a', 'My OUTPUT', 'OUTPUT')
-        args = prs.parse_args(['-o', 'test-data/new.txt'])
+        args = prs._parse_args_super(['-o', 'test-data/new.txt'])
         try:
             prs._check_file_out(args)
             prs._check_file_out(args, arg='o')
@@ -143,12 +143,13 @@ class BptbxTestSuite(unittest.TestCase):
             self.fail('Unexpected system exit')
         self.assertRaises(
             SystemExit, TemplateArgumentParser()._check_file_out,
-            prs.parse_args(['-o', 'test-data/']))
+            prs._parse_args_super(['-o', 'test-data/']))
         self.assertRaises(
             SystemExit, TemplateArgumentParser()._check_file_out,
-            prs.parse_args(['-o', 'test-data/config.txt']))
+            prs._parse_args_super(['-o', 'test-data/config.txt']))
         TemplateArgumentParser()._check_file_out(
-            prs.parse_args(['-o', 'test-data/config.txt']), can_exist=True)
+            prs._parse_args_super(['-o', 'test-data/config.txt']),
+            can_exist=True)
 
         # dir_out ------------------------------------------------------------
         prs = TemplateArgumentParser()
@@ -169,7 +170,7 @@ class BptbxTestSuite(unittest.TestCase):
             TemplateArgumentParser().add_dir_out('a', 'My OUTPUT'),
             'a', 'My OUTPUT', 'OUTPUT')
         b_iotools.mkdirs('test-data/new_folder')
-        args = prs.parse_args(['-o', 'test-data/new_folder'])
+        args = prs._parse_args_super(['-o', 'test-data/new_folder'])
         try:
             prs._check_dir_out(args)
             prs._check_dir_out(args, arg='o')
@@ -179,15 +180,15 @@ class BptbxTestSuite(unittest.TestCase):
         rmtree('test-data/new_folder')
         self.assertRaises(
             SystemExit, TemplateArgumentParser()._check_dir_out,
-            prs.parse_args(['-o', 'test-data/config.txt']))
+            prs._parse_args_super(['-o', 'test-data/config.txt']))
         self.assertRaises(
             SystemExit, TemplateArgumentParser()._check_dir_out,
-            prs.parse_args(['-o', 'test-data/']), can_exist=False)
+            prs._parse_args_super(['-o', 'test-data/']), can_exist=False)
         TemplateArgumentParser()._check_dir_out(
-            prs.parse_args(['-o', 'test-data/']), can_exist=True)
+            prs._parse_args_super(['-o', 'test-data/']), can_exist=True)
         ap = path.abspath('test-data/test')
         TemplateArgumentParser()._check_dir_out(
-            prs.parse_args(['-o', 'test-data/test']),
+            prs._parse_args_super(['-o', 'test-data/test']),
             can_exist=False, mk_dir=True, ch_dir=False)
         rmtree(ap)
 
@@ -216,21 +217,21 @@ class BptbxTestSuite(unittest.TestCase):
         self._check_action(
             TemplateArgumentParser().add_option('s', 'testlabel'),
             's', 'testlabel', 'VALUE')
-        args = prs.parse_args(['-s', 'Yo'])
+        args = prs._parse_args_super(['-s', 'Yo'])
         try:
             prs._check_option(args)
             prs._check_option(args, arg='s')
             prs._check_option(args, arg='-s')
-            prs._check_option(prs.parse_args([]), optional=True)
-            prs._check_option(prs.parse_args(['-s', '20']), is_int=True)
+            prs._check_option(prs._parse_args_super([]), optional=True)
+            prs._check_option(prs._parse_args_super(['-s', '20']), is_int=True)
         except SystemExit:
             self.fail('Unexpected system exit')
         self.assertRaises(
             SystemExit, TemplateArgumentParser()._check_option,
-            prs.parse_args([]))
+            prs._parse_args_super([]))
         self.assertRaises(
             SystemExit, TemplateArgumentParser()._check_option,
-            prs.parse_args(['-s', 'noint']), is_int=True)
+            prs._parse_args_super(['-s', 'noint']), is_int=True)
 
         # fin -----------------------------------------------------------------
         sys.stdout = sys.__stdout__

@@ -14,8 +14,11 @@ class TemplateArgumentParser(ArgumentParser):
     def add_validator(self, func, **kwargs):
         self.validators.append((func, kwargs))
 
-    def parse_and_validate_args(self):
-        args = self.parse_args()
+    def _parse_args_super(self, args=None):
+        return super(TemplateArgumentParser, self).parse_args(args)
+
+    def parse_args(self):
+        args = self._parse_args_super()
         [val[0](args, **val[1]) for val in self.validators]
         return args
 
@@ -62,11 +65,11 @@ class TemplateArgumentParser(ArgumentParser):
         self.add_argument(arg, metavar='OUTPUT', help=help)
         return self
 
-    def add_bool(self, arg='-b', help='Option'):
+    def add_bool(self, arg='-b', help='Option', **kwargs):
         """Add a toggle option."""
         arg = self._validate_setup_input(arg)
         # This adder has no validator
-        self.add_argument(arg, action='store_true', help=help)
+        self.add_argument(arg, action='store_true', help=help, **kwargs)
         return self
 
     def add_option(self, arg='-s', help='Value', default=None, **kwargs):
@@ -81,15 +84,16 @@ class TemplateArgumentParser(ArgumentParser):
 
     def add_verbose(self, **kwargs):
         """Add verbose option."""
-        return self.add_bool('-v', 'Verbose output')
+        return self.add_bool('-v', 'Verbose output', **kwargs)
 
     def add_max_threads(self, **kwargs):
         """Add a max threads option."""
-        return self.add_option('-t', help='Number of threads', default=10)
+        return self.add_option(
+            '-t', help='Number of threads', default=10, **kwargs)
 
     def add_mongo_collection(self, **kwargs):
         """Add Mongo DB collection option."""
-        return self.add_option('-c', help='MongoDB collection name')
+        return self.add_option('-c', help='MongoDB collection name', **kwargs)
 
     # ----------------------------------------------------------------
     # DEFAULT VALIDATORS
@@ -124,8 +128,8 @@ class TemplateArgumentParser(ArgumentParser):
         elif not vargs.get(arg, None):
             return
         if not path.isdir(vargs[arg]):
-            self.print_help_and_exit('-' + arg +
-                                     ': Given input does not point to a dir.')
+            self.print_help_and_exit(
+                '-' + arg + ': Given input does not point to a dir.')
         vargs[arg] = path.abspath(vargs[arg])
 
     def _check_file_out(self, args, **kwargs):
@@ -159,14 +163,17 @@ class TemplateArgumentParser(ArgumentParser):
         elif not vargs.get(arg, None):
             return
         if path.isfile(vargs[arg]):
-            self.print_help_and_exit('-' + arg +
-                                     ': Given input does not point to a dir.')
+            self.print_help_and_exit(
+                '-' + arg + ': Given input does not point to a dir.')
         if path.isdir(vargs[arg]) and not can_exist:
             self.print_help_and_exit(
-                '-' + arg + ': Output file already exists.')
+                '-' + arg + ': Output directory already exists.')
         vargs[arg] = path.abspath(vargs[arg])
         if mk_dir:
             mkdirs(vargs[arg])
+        if not path.isdir(vargs[arg]) and ch_dir:
+            self.print_help_and_exit(
+                '-' + arg + ': Output directory does not exist.')
         if ch_dir:
             chdir(vargs[arg])
 
