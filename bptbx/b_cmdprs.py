@@ -182,6 +182,7 @@ class TemplateArgumentParser(ArgumentParser):
         arg = kwargs.get('arg', '-s')
         optional = kwargs.get('optional', False)
         is_int = kwargs.get('is_int', False)
+        is_float = kwargs.get('is_float', False)
         vargs, arg = self._validate_parse_input(args, arg)
         if not vargs.get(arg, None) and not optional:
             self.print_help_and_exit('-' + arg + ': Not defined.')
@@ -192,6 +193,12 @@ class TemplateArgumentParser(ArgumentParser):
                 vargs[arg] = int(vargs[arg])
             except ValueError:
                 self.print_help_and_exit('-' + arg + ': Requires a number.')
+        if is_float:
+            try:
+                vargs[arg] = float(vargs[arg])
+            except ValueError:
+                self.print_help_and_exit('-' + arg +
+                ': Requires a floating-point number.')
 
     # ----------------------------------------------------------------
     # HELPER METHODS
