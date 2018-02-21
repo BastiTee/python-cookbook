@@ -82,17 +82,20 @@ def get_intervals_for_epochs(start_epoch, end_epoch, interval='week',
     return get_intervals_for_dtos(start, end, interval, output_format)
 
 
+def _get_interval_sec(interval):
+    return {
+        'month': relativedelta(months=+1),
+        'week': relativedelta(weeks=+1),
+        'day': relativedelta(days=+1),
+        'year': relativedelta(months=+12),
+    }.get(interval, None)
+
+
 def get_intervals_for_dtos(start, end, interval='week',
                            output_format=DEFAULT_CONVERT_FORMAT):
     """Return a list of tuples representing the intervals between the
     two given datetime objects."""
-    def get_interval_sec(interval):
-        return {
-            'month': relativedelta(months=+1),
-            'week': relativedelta(weeks=+1),
-            'day': relativedelta(days=+1)
-        }.get(interval, None)
-    interval_sec = get_interval_sec(interval)
+    interval_sec = _get_interval_sec(interval)
     if not interval_sec:
         raise ValueError('Unsupported interval \'{}\'. '.format(interval) +
                          'Allowed values: week, day, month')
