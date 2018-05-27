@@ -3,12 +3,12 @@
 from distutils.core import setup
 setup(
     name='bptbx',
-    version='0.1.x',
+    version='0.2.2',
     description='''Basti\'s Python Toolbox.''',
-    long_description='''Basti\'s personal python toolbox for everyday use.''',
+    long_description='''Personal collection of pure-python modules and scripts''',
     author='Basti Tee',
-    author_email='basti.tee@gmx.de',
+    author_email='basti.tee@posteo.de',
     url='https://github.com/BastiTee/bastis-python-toolbox',
     packages=['bptbx'],
     package_data={'bptbx': [] }
-) 
+)

@@ -1,5 +1,5 @@
 ## Basti's Python Toolbox
-> Personal collection of pure-python modules and script 
+> Personal collection of pure-python modules and scripts
 
 [![GitHub release](https://img.shields.io/github/release/BastiTee/bastis-python-toolbox.svg)](https://github.com/BastiTee/bastis-python-toolbox/releases/latest)
 ![Testing](https://travis-ci.org/BastiTee/bastis-python-toolbox.svg?branch=master)
@@ -8,7 +8,7 @@
 
 **Install**
 
-Assuming that you have installed `pip` and `git` for your operating system you can install the toolbox by running 
+Assuming that you have installed `pip` and `git` for your operating system you can install the toolbox by running
 
     pip install git+git://github.com/BastiTee/bastis-python-toolbox#egg=bptbx
 
