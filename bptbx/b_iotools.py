@@ -10,7 +10,10 @@ from bptbx import b_legacy
 
 
 def change_to_scriptdir(file):
-    """Change to the folder where the script resides."""
+    """Change to the folder where the script resides.
+
+    For current script call with change_to_scriptdir(__file__)
+    """
     os.chdir(os.path.dirname(os.path.abspath(file)))
 
 
