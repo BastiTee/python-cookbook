@@ -1,0 +1,4 @@
+rx >= 1.5.9
+requests >= 2.18.4
+python-dateutil >= 2.7.3
+git+git://github.com/bastitee/bastis-python-toolbox.git@0.2.2#egg=bptbx

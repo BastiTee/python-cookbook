@@ -1,0 +1,6 @@
+scan2mail-config*.json
+SCAN2MAIL_RUNNING
+*/
+_*
+docker-run.log
+__pycache__

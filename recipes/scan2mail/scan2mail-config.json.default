@@ -1,0 +1,14 @@
+{
+    "workdir": "workdir",
+    "mail_account": "me@posteo.de",
+    "mail_pass": "myverysecretpassword",
+    "mail_host": "posteo.de",
+    "mail_recipient": "you@posteo.de",
+    "oc_user": "me",
+    "oc_pass": "myverysecretpassword",
+    "oc_host": "mynextcloud.com",
+    "oc_folder": "Scans",
+    "oc_verbose": false,
+    "skip_mailing": false,
+    "skip_owncloud": false
+}
