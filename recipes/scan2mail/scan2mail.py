@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""Scan2mail processor."""
 
-from bptbx import b_shell, b_iotools, b_mail, b_date
 from argparse import ArgumentParser
-from time import sleep, time as _time
 from datetime import datetime
-from sys import exit
-from shutil import rmtree
-from os import chdir, path
 from json import load
-from re import match, IGNORECASE
+from os import chdir, path
+from re import IGNORECASE, match
+from shutil import rmtree
+from sys import exit
+from time import sleep, time as _time
+
+from bptbx import b_date, b_iotools, b_mail, b_shell
 
 WORKFLOW_NAME = 'scan2mail'
 
@@ -34,7 +36,7 @@ def wdir(c, *subpaths):
 def get_input_files(c):
     """Obtain a list of all valid input files."""
     in_files = b_iotools.get_immediate_subfiles(
-        path.join(c['workdir']), pattern='.*\.(jpg|jpeg)', ignorecase=True)
+        path.join(c['workdir']), pattern=r'.*\.(jpg|jpeg)', ignorecase=True)
     return in_files, len(in_files)
 
 
@@ -48,8 +50,8 @@ def synchronize_owncloud(c, run_once=False):
         log('+', len_fin, 'input files present before update')
         silent = '-s' if not c.get('oc_verbose', False) else ''
         cmd = ('owncloudcmd {} -h {} https://{}:{}@{}/remote.php/webdav/{}'
-               .format(silent, c['workdir'], c['oc_user'], c['oc_pass'], c['oc_host'],
-                       c['oc_folder']))
+               .format(silent, c['workdir'], c['oc_user'], c['oc_pass'],
+                       c['oc_host'], c['oc_folder']))
         if not silent:
             log(cmd)
         b_shell.exe(cmd)
@@ -64,7 +66,7 @@ def synchronize_owncloud(c, run_once=False):
 def extract_by_filename_pattern(c, file):
     """Extract information via filename."""
     # default android pattern, e.g., IMG_20180202_072813.jpg
-    if match('^img_[0-9]{8}_[0-9]{6}\.(jpg|jpeg)$', file, IGNORECASE):
+    if match(r'^img_[0-9]{8}_[0-9]{6}\.(jpg|jpeg)$', file, IGNORECASE):
         bn = b_iotools.basename_without_suffix(file)
         return datetime.strptime(bn, 'IMG_%Y%m%d_%H%M%S').strftime('%s')
 
@@ -118,10 +120,10 @@ def partition_timestamps(list_ts):
     epoch timestamps and tries to find harmonic partitions for it. Harmonic
     means that timestamps in the same partition are close to each other
     compared to the remaining timestamps. If the time difference is bigger
-    than MAX_DIFFERENCE_IN_S then the timestamps will be considered as separate
+    than max_difference_in_s then the timestamps will be considered as separate
     partitions.
     """
-    MAX_DIFFERENCE_IN_S = 60
+    max_difference_in_s = 60
     list_ts = [int(ts) for ts in list_ts]
     list_ts.sort()
 
@@ -136,7 +138,7 @@ def partition_timestamps(list_ts):
     # calculate new partitions (this is trivial atm since it only considers
     # the max difference as criterion)
     for i, ts_diff in enumerate(ts_diffs):
-        if ts_diff > MAX_DIFFERENCE_IN_S:
+        if ts_diff > max_difference_in_s:
             list_pt += 1
             res_list_ts.append([])
         res_list_ts[list_pt].append(list_ts[i + 1])
@@ -194,6 +196,7 @@ def send_mail(c, new_documents):
 
 
 def run_toolchain(c):
+    """Run main lifecycle."""
     # -----------------------------------------------------
     c['workdir'] = path.abspath(c['workdir'])
     b_iotools.mkdirs(c['workdir'])
@@ -217,7 +220,7 @@ def run_toolchain(c):
     # -----------------------------------------------------
     log('Converting input files to tif')
     files = b_iotools.get_immediate_subfiles(
-        wdir(c, 'in'), pattern='.*\.(jpg)', ignorecase=True)
+        wdir(c, 'in'), pattern=r'.*\.(jpg)', ignorecase=True)
     for file in files:
         bn = b_iotools.basename_without_suffix(file)
         tf = wdir(c, 'tif', bn + '.tif')
@@ -229,7 +232,7 @@ def run_toolchain(c):
     # -----------------------------------------------------
     log('Converting tif to pdf')
     files = b_iotools.get_immediate_subfiles(
-        wdir(c, 'tif'), pattern='.*\.(tif)', ignorecase=True)
+        wdir(c, 'tif'), pattern=r'.*\.(tif)', ignorecase=True)
     for file in files:
         bn = b_iotools.basename_without_suffix(file)
         tf = wdir(c, 'pdf', bn + '.pdf')
