@@ -1,4 +1,4 @@
-r"""This module contains various tools for string operations."""
+"""This module contains various tools for string operations."""
 
 import random
 import string

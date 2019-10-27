@@ -1,11 +1,12 @@
-r"""This module contains an extendable daemon implementation."""
+"""An extendable daemon implementation."""
 
 import logging
 from threading import Lock, Thread
 from time import sleep
 
 
-class Daemon:
+class Daemon():
+    """An extendable daemon implementation."""
     interval = 30.0
     stopped = False
     lock = Lock()
@@ -43,7 +44,7 @@ class Daemon:
         self._unlock_daemon()
 
     def _run_daemon_process(self):
-        """This is the method you need to override in your implementation."""
+        """Override with your implementation."""
         pass
 
     def _lock_daemon(self):

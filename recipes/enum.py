@@ -1,5 +1,4 @@
-r"""This module contains an enumeration like data structure and various
-enumerations used in other modules."""
+"""Enumeration like data structure."""
 
 def enum(*sequential, **named):
     """Definition for an enumeration like data structure."""

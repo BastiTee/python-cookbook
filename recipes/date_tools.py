@@ -1,4 +1,4 @@
-r"""This module contains date/time conversion tools.
+"""This module contains date/time conversion tools.
 References for format strings:
 - https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior
 """

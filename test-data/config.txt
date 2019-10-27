@@ -1,4 +1,0 @@
-[AlbumInfo]
-Key=Value 
-[TextInfo]
-Foo=Bar

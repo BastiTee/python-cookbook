@@ -1,4 +1,4 @@
-r"""This module contains various tools for recurring I/O operations."""
+"""This module contains various tools for recurring I/O operations."""
 
 import datetime
 import hashlib

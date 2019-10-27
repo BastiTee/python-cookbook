@@ -1,4 +1,4 @@
-r"""This module contains tools for multi-threading operations."""
+"""This module contains tools for multi-threading operations."""
 
 import multiprocessing
 from random import randrange

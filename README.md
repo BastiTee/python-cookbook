@@ -1,23 +1,3 @@
-## Basti's Python Toolbox
-> Personal collection of pure-python modules and scripts
+## python-cookbook
 
-[![GitHub release](https://img.shields.io/github/release/BastiTee/bastis-python-toolbox.svg)](https://github.com/BastiTee/bastis-python-toolbox/releases/latest)
-![Testing](https://travis-ci.org/BastiTee/bastis-python-toolbox.svg?branch=master)
-![Python 2 support](https://img.shields.io/badge/python2-stable-green.svg)
-![Python 3 support](https://img.shields.io/badge/python3-stable-green.svg)
-
-**Install**
-
-Assuming that you have installed `pip` and `git` for your operating system you can install the toolbox by running
-
-    pip install git+git://github.com/BastiTee/bastis-python-toolbox#egg=bptbx
-
-This will give you the bleeding-edge master branch. For a specific release run
-
-    pip install git+git://github.com/BastiTee/bastis-python-toolbox@0.1.1#egg=bptbx
-
-Refer to [the requirements file](requirements.txt) to see what other projects you'll need to run specific modules.
-
-**External dependencies**
-
-In order to install all the dependencies correctly you will probably need `python-tk` and `python-dev` installed.
+> A collection of useful Python recipes
