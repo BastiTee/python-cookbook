@@ -1,103 +1,81 @@
-"""This module contains date/time conversion tools.
+"""Date/time conversion tools.
+
 References for format strings:
-- https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior
+https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior
 """
 
-from datetime import datetime, date, timedelta
-from dateutil.relativedelta import relativedelta
 import time
+from datetime import date, datetime, timedelta
 
-DEFAULT_CONVERT_FORMAT = '%Y-%m-%d %H:%M:%S.%f'
-DEFAULT_CONVERT_FORMAT_BOD = '%Y-%m-%d 00:00:00.000'
-DEFAULT_CONVERT_FORMAT_EOD = '%Y-%m-%d 23:59:59.999'
+from dateutil.relativedelta import relativedelta
 
-
-def validate_input(input):
-    if input is None:
-        raise ValueError('None-input is not allowed.')
+DEFAULT_CONVERT_FORMAT = r'%Y-%m-%d %H:%M:%S.%f'
+DEFAULT_CONVERT_FORMAT_BOD = r'%Y-%m-%d 00:00:00.000'
+DEFAULT_CONVERT_FORMAT_EOD = r'%Y-%m-%d 23:59:59.999'
 
 
 def epoch_to_timestamp(epoch, formatstring=DEFAULT_CONVERT_FORMAT):
-    """Converts an epoch to a human-readable timestamp."""
-
-    validate_input(epoch)
+    """Convert an epoch to a human-readable timestamp."""
+    __validate_input(epoch)
     epoch = float(epoch)
     return dto_to_timestamp(epoch_to_dto(epoch), formatstring)
 
 
 def epoch_to_dto(epoch):
-    """Converts an epoch to a python datetime object."""
-
-    validate_input(epoch)
+    """Convert an epoch to a python datetime object."""
+    __validate_input(epoch)
     epoch = float(epoch)
     return datetime.fromtimestamp(epoch)
 
 
 def timestamp_to_dto(timestamp, formatstring=DEFAULT_CONVERT_FORMAT):
-    """"Converts a human-readable timestamp to a python datetime object."""
-
-    validate_input(timestamp)
+    """Convert a human-readable timestamp to a python datetime object."""
+    __validate_input(timestamp)
     return datetime.strptime(timestamp, formatstring)
 
 
 def timestamp_to_epoch(timestamp, formatstring=DEFAULT_CONVERT_FORMAT):
-    """Converts a human-readable timestamp to an epoch."""
-
-    validate_input(timestamp)
+    """Convert a human-readable timestamp to an epoch."""
+    __validate_input(timestamp)
     return dto_to_epoch(timestamp_to_dto(timestamp, formatstring))
 
 
 def dto_to_timestamp(dto, formatstring=DEFAULT_CONVERT_FORMAT):
-    """Converts a python datetime object to a human-readable timestamp."""
-
-    validate_input(dto)
+    """Convert a python datetime object to a human-readable timestamp."""
+    __validate_input(dto)
     return dto.strftime(formatstring)
 
 
 def dto_to_epoch(dto):
-    """Converts a python datetime object to an epoch."""
-
-    validate_input(dto)
+    """Convert a python datetime object to an epoch."""
+    __validate_input(dto)
     return int(dto.strftime('%s'))
 
 
 def get_current_datetime_for_filename():
-    """Returns a date & time timestamp that can be used for filenames"""
-
-    return datetime.fromtimestamp(time.time()).strftime('%Y%m%d_%H%M%S')
+    """Return a date & time timestamp that can be used for filenames."""
+    return datetime.fromtimestamp(time.time()).strftime(r'%Y%m%d_%H%M%S')
 
 
 def get_current_date_for_filename():
-    """Returns a date timestamp that can be used for filenames"""
-
-    return datetime.fromtimestamp(time.time()).strftime('%Y%m%d')
+    """Return a date timestamp that can be used for filenames."""
+    return datetime.fromtimestamp(time.time()).strftime(r'%Y%m%d')
 
 
 def get_intervals_for_epochs(start_epoch, end_epoch, interval='week',
                              output_format=DEFAULT_CONVERT_FORMAT):
-    """Return a list of tuples representing the intervals between the
-    two given epoch timestamps."""
+    """Return tuples for the intervals between the two epochs."""
     start = epoch_to_dto(start_epoch)
     end = epoch_to_dto(end_epoch)
     return get_intervals_for_dtos(start, end, interval, output_format)
 
 
-def _get_interval_sec(interval):
-    return {
-        'month': relativedelta(months=+1),
-        'week': relativedelta(weeks=+1),
-        'day': relativedelta(days=+1),
-        'year': relativedelta(months=+12),
-    }.get(interval, None)
-
-
 def get_intervals_for_dtos(start, end, interval='week',
                            output_format=DEFAULT_CONVERT_FORMAT):
-    """Return a list of tuples representing the intervals between the
-    two given datetime objects."""
+    """Return a list of tuples for the intervals between two datetimes."""
     interval_sec = _get_interval_sec(interval)
     if not interval_sec:
-        raise ValueError('Unsupported interval \'{}\'. '.format(interval) +
+        raise ValueError('Unsupported interval "{}". '.format(interval) +
                          'Allowed values: week, day, month')
     start_iv = start
     intervals = []
@@ -160,3 +138,17 @@ def get_epoch_center_from_timestamps(
 def get_week_number_from_epoch(epoch):
     """Return week number from epoch."""
     return epoch_to_dto(epoch).isocalendar()[1]
+
+
+def __validate_input(input_string):
+    if input_string is None:
+        raise ValueError('None-input is not allowed.')
+
+
+def _get_interval_sec(interval):
+    return {
+        'month': relativedelta(months=+1),
+        'week': relativedelta(weeks=+1),
+        'day': relativedelta(days=+1),
+        'year': relativedelta(months=+12),
+    }.get(interval, None)
