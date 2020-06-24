@@ -9,8 +9,8 @@ See https://tools.ietf.org/html/rfc7636 for further information.
 """
 import base64
 import hashlib
-import urllib.parse
 import sys
+import urllib.parse
 
 if len(sys.argv) < 2:
     print('No code_verifier string provided.')

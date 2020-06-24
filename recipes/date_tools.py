@@ -75,8 +75,10 @@ def get_intervals_for_dtos(start, end, interval='week',
     """Return a list of tuples for the intervals between two datetimes."""
     interval_sec = _get_interval_sec(interval)
     if not interval_sec:
-        raise ValueError('Unsupported interval "{}". '.format(interval) +
-                         'Allowed values: week, day, month')
+        raise ValueError(
+            f'Unsupported interval "{interval}". '
+            + 'Allowed values: week, day, month'
+        )
     start_iv = start
     intervals = []
     while True:

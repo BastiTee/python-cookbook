@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Small experiment using the Python3 asyncio module.
+"""Experiment using the Python3 asyncio module.
 
 Futher information can be found at
 https://docs.python.org/3.5/library/asyncio.html

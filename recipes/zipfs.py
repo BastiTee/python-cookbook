@@ -6,9 +6,10 @@ filesystem folder. This code uses the pyfilesystem2 library by
 Will McGugan. See: https://github.com/PyFilesystem/pyfilesystem2.
 """
 
-from fs import zipfs, copy, osfs
-from os import remove, path
+from os import path, remove
 from sys import argv
+
+from fs import copy, osfs, zipfs
 
 # setup a fs-object using ZipFS
 target_filepath = 'sample.zip'

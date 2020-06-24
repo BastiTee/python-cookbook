@@ -1,13 +1,11 @@
 """This module contains tools for multi-threading operations."""
 
 import multiprocessing
+from queue import Queue
 from random import randrange
 from threading import Thread
 from time import sleep
-
-from bptbx.b_shell import execute_command
-from bptbx import b_legacy
-Queue = b_legacy.b_queue()
+from urllib import request
 
 
 class Worker(Thread):

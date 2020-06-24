@@ -21,3 +21,4 @@ twine = "*" # Interoperability with pypi.org
 
 [packages]
 requests = "*"
+aiohttp = "*"
