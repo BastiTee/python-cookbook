@@ -1,3 +1,3 @@
-## python-cookbook
+# python-cookbook
 
 > A collection of useful Python recipes
