@@ -57,7 +57,7 @@ coverage:
 
 lint:
 	# Run code formatting checks against source code base
-	pipenv run flake8 my_module tests
+	# pipenv run flake8 recipes tests
 
 build: test coverage lint
 	# Run setup.py-based build process to package application
