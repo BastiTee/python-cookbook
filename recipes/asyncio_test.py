@@ -2,16 +2,18 @@
 # -*- coding: utf-8 -*-
 """Small experiment using the Python3 asyncio module.
 
-Futher information can be found at https://docs.python.org/3.5/library/asyncio.html
+Futher information can be found at
+https://docs.python.org/3.5/library/asyncio.html
 https://www.python.org/dev/peps/pep-0492/
 """
 
 import asyncio  # Base library for python's asynchronous I/O submodule
+
 import aiohttp  # An async-io enabled HTTP submodule
 
 # Something to fetch
 urls = [
-    "https://twitter.com/basti_tee"
+    'https://twitter.com/basti_tee'
 ]
 
 # create a basic node.js-like event loop
@@ -46,4 +48,4 @@ responses = event_loop.run_until_complete(future)
 session.close()
 
 # result processing
-print('fetched {} responses.'.format(len(responses)))
+print(f'fetched {len(responses)} responses.')

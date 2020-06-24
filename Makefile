@@ -62,13 +62,3 @@ lint:
 build: test coverage lint
 	# Run setup.py-based build process to package application
 	pipenv run python setup.py bdist_wheel
-
-publish: all
-	# Release
-	pipenv run twine upload dist/*
-	git tag -a $(VERSION) -m "Version $(VERSION)"
-	git push --tags
-
-run:
-	# Execute my_module directly
-	pipenv run python -m my_module

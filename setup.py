@@ -13,14 +13,14 @@ with open(path.join(path.abspath(path.dirname(__file__)), 'README.md'),
 
 setup(
     # Basic project information
-    name='python3-boilerplate',
+    name='python-cookbook',
     version='0.0.4',
     # Authorship and online reference
     author='Basti Tee',
     author_email='basti.tee@posteo.de',
-    url='https://github.com/BastiTee/python3-boilerplate',
+    url='https://github.com/BastiTee/python-cookbook',
     # Detailled description
-    description='Python3 boilerplate module.',
+    description='A collection of useful Python recipes.',
     long_description=long_description,
     long_description_content_type='text/markdown',
     keywords='sample setuptools development',
