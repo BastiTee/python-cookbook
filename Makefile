@@ -23,51 +23,76 @@ VERSION = $(shell python3 setup.py --version)
 all: clean venv build
 
 venv: clean
+<<<<<<< HEAD
 	# Initialize virtualenv, i.e., install required packages etc.
 	pipenv --three install --dev --skip-lock
+=======
+	@echo Initialize virtualenv, i.e., install required packages etc.
+	pipenv --three install --dev
+>>>>>>> 052c1567935d953fcb6c373bdcdc9483966cd990
 
 shell:
-	# Initialize virtualenv and open a new shell using it
+	@echo Initialize virtualenv and open a new shell using it
 	pipenv shell
 
 clean:
-	# Clean project base
-	rm -rfv \
-		.venv \
-		.tox \
-		.egg \
-		*.egg-info \
-		build \
-		dist \
-		**/.pytest_cache \
-		.pytest_cache \
-		**/__pycache__
+	@echo Clean project base
+	rm -rfv .venv .tox .egg build dist src
+	find . -type d -name ".ropeproject" -exec rm -rf "{}" +;
+	find . -type d -name ".pytest_cache" -exec rm -rf "{}" +;
+	find . -type d -name "__pycache__" -exec rm -rf "{}" +;
 
 test:
-	# Run all tests in default virtualenv
+	@echo Run all tests in default virtualenv
 	pipenv run py.test tests
 
 testall:
-	# Run all tests against all virtualenvs defined in tox.ini
+	@echo Run all tests against all virtualenvs defined in tox.ini
 	pipenv run tox -c setup.cfg tests
 
 coverage:
-	# Run test coverage checks
+	@echo Run test coverage checks
 	pipenv run py.test --verbose tests
 
+isort:
+	@echo Check for incorrectly sorted imports
+	pipenv run isort --check-only
+
 lint:
+<<<<<<< HEAD
 	# Run code formatting checks against source code base
 	# pipenv run flake8 recipes tests
+=======
+	@echo Run code formatting checks against source code base
+	pipenv run flake8 my_module tests
+>>>>>>> 052c1567935d953fcb6c373bdcdc9483966cd990
 
-build: test coverage lint
-	# Run setup.py-based build process to package application
+build: test coverage isort lint
+	@echo Run setup.py-based build process to package application
 	pipenv run python setup.py bdist_wheel
 
+<<<<<<< HEAD
+=======
+publish: all
+	@echo Release to pypi.org and create git tag
+	pipenv run twine upload dist/*
+	git tag -a $(VERSION) -m "Version $(VERSION)"
+	git push --tags
+
+run:
+	@echo Execute my_module directly
+	pipenv run python -m my_module
+
+>>>>>>> 052c1567935d953fcb6c373bdcdc9483966cd990
 fetch-latest-boilerplate:
 	@echo Fetch latest python3-boilerplate version from github
 	git remote add py3template git@github.com:BastiTee/python3-boilerplate.git \
 	||true
+<<<<<<< HEAD
 	git pull py3template master --allow-unrelated-histories ||true
 	@echo ----------------------------------------------------
 	@echo Resolve all merge conflicts and commit your changes!
 	@echo ----------------------------------------------------
+=======
+	git pull py3template master --allow-unrelated-histories
+>>>>>>> 052c1567935d953fcb6c373bdcdc9483966cd990
