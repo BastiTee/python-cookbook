@@ -62,3 +62,9 @@ lint:
 build: test coverage lint
 	# Run setup.py-based build process to package application
 	pipenv run python setup.py bdist_wheel
+
+fetch-latest-boilerplate:
+	@echo Fetch latest python3-boilerplate version from github
+	git remote add py3template git@github.com:BastiTee/python3-boilerplate.git \
+	||true
+	git pull py3template master --allow-unrelated-histories
