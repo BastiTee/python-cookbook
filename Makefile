@@ -59,40 +59,18 @@ isort:
 	pipenv run isort --check-only
 
 lint:
-<<<<<<< HEAD
 	# Run code formatting checks against source code base
 	# pipenv run flake8 recipes tests
-=======
-	@echo Run code formatting checks against source code base
-	pipenv run flake8 my_module tests
->>>>>>> 052c1567935d953fcb6c373bdcdc9483966cd990
 
 build: test coverage isort lint
 	@echo Run setup.py-based build process to package application
 	pipenv run python setup.py bdist_wheel
 
-<<<<<<< HEAD
-=======
-publish: all
-	@echo Release to pypi.org and create git tag
-	pipenv run twine upload dist/*
-	git tag -a $(VERSION) -m "Version $(VERSION)"
-	git push --tags
-
-run:
-	@echo Execute my_module directly
-	pipenv run python -m my_module
-
->>>>>>> 052c1567935d953fcb6c373bdcdc9483966cd990
 fetch-latest-boilerplate:
 	@echo Fetch latest python3-boilerplate version from github
 	git remote add py3template git@github.com:BastiTee/python3-boilerplate.git \
 	||true
-<<<<<<< HEAD
 	git pull py3template master --allow-unrelated-histories ||true
 	@echo ----------------------------------------------------
 	@echo Resolve all merge conflicts and commit your changes!
 	@echo ----------------------------------------------------
-=======
-	git pull py3template master --allow-unrelated-histories
->>>>>>> 052c1567935d953fcb6c373bdcdc9483966cd990
