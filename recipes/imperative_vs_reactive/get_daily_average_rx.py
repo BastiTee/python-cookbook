@@ -3,6 +3,7 @@
 """ReactiveX-style Toggl API requests to obtain avg daily working hours."""
 
 import toggl_api_commons as com
+
 from rx import Observable, Observer, config
 from rx.concurrency import ThreadPoolScheduler
 

@@ -4,7 +4,7 @@
 
 from time import sleep
 
-import toggl_api_commons as com
+import recipes.imperative_vs_reactive.toggl_api_commons as com
 
 
 def get_avg_daily_working_hours(

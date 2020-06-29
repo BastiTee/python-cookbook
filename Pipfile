@@ -20,6 +20,7 @@ twine = "*" # Interoperability with pypi.org
 
 [packages]
 # Various modules
+click = "*"
 requests = "*"
 # Module: asyncio_test
 aiohttp = "*"

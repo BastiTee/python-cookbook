@@ -7,14 +7,16 @@ from tempfile import NamedTemporaryFile
 from time import sleep, time
 from unittest import TestCase
 
-from get_daily_average_imp import get_avg_daily_working_hours as imp
-from get_daily_average_rx import get_avg_daily_working_hours as rx
+from recipes.imperative_vs_reactive.get_daily_average_imp import \
+    get_avg_daily_working_hours as imp
+from recipes.imperative_vs_reactive.get_daily_average_rx import \
+    get_avg_daily_working_hours as rx
 
 
-class TestSuite(TestCase):
+class TestSuite(TestCase):  # noqa: D101
 
     def test_integration(self):
-
+        """Integration test for get_daily_average."""
         # Between 23th of April and 4th of May we spend an average
         # of 3.981 simulated hours at work for the given 4-hour contract.
         from_day = '2018-04-23'
@@ -45,11 +47,12 @@ class TestSuite(TestCase):
                           (expected_worktime_average, expected_workdays))
 
         # Print results
-        print('imp-result = {} h @{} days (took: {} sec)'.format(
-            round(result_imp[0], 2), result_rx[1], round(time_imp, 4)))
-        print('rx-result = {} h @{} days (took: {} sec)'.format(
-            round(result_rx[0], 2), result_rx[1], round(time_rx, 4)))
-        print('rx speed-up = {}'.format(time_imp / time_rx))
+        print(f'imp-result = {round(result_imp[0], 2)} h '
+              + f'@{result_rx[1]} days (took: {round(time_imp, 4)} sec)')
+        print(
+            f'rx-result = {round(result_rx[0], 2)} h '
+            + f'@{result_rx[1]} days (took: {round(time_rx, 4)} sec)')
+        print(f'rx speed-up = {time_imp / time_rx}')
 
 
 class MockedTogglApiClient():
@@ -60,7 +63,7 @@ class MockedTogglApiClient():
     Toggl API responses take between 0.0 and 0.5 seconds in our mocked version.
     """
 
-    def __init__(self, credentials=None):
+    def __init__(self, credentials=None):  # noqa: D107
         self.fake_values = {
             '2018-04-23T00:00:00>>2018-04-23T23:59:59': 14853641,  # 4.1260 h
             '2018-04-24T00:00:00>>2018-04-24T23:59:59': 13725371,
@@ -76,7 +79,7 @@ class MockedTogglApiClient():
             '2018-05-04T00:00:00>>2018-05-04T23:59:59': 13781087
         }
 
-    def get_working_hours_for_range(self, range_from, range_to):
+    def get_working_hours_for_range(self, range_from, range_to):  # noqa: D102
         #  A simulated API request takes between 0.0 and 0.5 seconds ...
         sleep(random() / 2)
         #  ... and returns a fake value.

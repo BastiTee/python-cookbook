@@ -61,6 +61,10 @@ build: test coverage isort lint
 	@echo Run setup.py-based build process to package application
 	pipenv run python setup.py bdist_wheel
 
+run:
+	@echo Execute my_module directly
+	pipenv run python $@
+
 fetch-latest-boilerplate:
 	@echo Fetch latest python3-boilerplate version from github
 	git remote add py3template git@github.com:BastiTee/python3-boilerplate.git \

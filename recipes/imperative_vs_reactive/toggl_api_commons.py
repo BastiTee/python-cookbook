@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 """Common functionality for accessing the Toggl API."""
 
-from bptbx import b_date, b_cmdprs
-from json import load, dump, loads
+from json import dump, load, loads
+
 from requests import Session
 
 
