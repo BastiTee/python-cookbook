@@ -23,13 +23,8 @@ VERSION = $(shell python3 setup.py --version)
 all: clean venv build
 
 venv: clean
-<<<<<<< HEAD
 	# Initialize virtualenv, i.e., install required packages etc.
 	pipenv --three install --dev --skip-lock
-=======
-	@echo Initialize virtualenv, i.e., install required packages etc.
-	pipenv --three install --dev
->>>>>>> 052c1567935d953fcb6c373bdcdc9483966cd990
 
 shell:
 	@echo Initialize virtualenv and open a new shell using it
