@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 """Imperative-style Toggl API requests to obtain avg daily working hours."""
 
-import toggl_api_commons as com
 from time import sleep
+
+import toggl_api_commons as com
 
 
 def get_avg_daily_working_hours(
@@ -14,7 +15,6 @@ def get_avg_daily_working_hours(
     api_credential_file='credentials.json'  # API credential file
 ):
     """Core process workflow."""
-
     # Create an API accessor
     api_access = com.initialize_api_client(api_client, api_credential_file)
     # Convert given time span to daily intervals

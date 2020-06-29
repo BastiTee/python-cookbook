@@ -2,12 +2,13 @@
 # -*- coding: utf-8 -*-
 """Test suite for the daily average Toggl API process."""
 
-from get_daily_average_rx import get_avg_daily_working_hours as rx
-from get_daily_average_imp import get_avg_daily_working_hours as imp
-from unittest import TestCase
-from tempfile import NamedTemporaryFile
 from random import random
+from tempfile import NamedTemporaryFile
 from time import sleep, time
+from unittest import TestCase
+
+from get_daily_average_imp import get_avg_daily_working_hours as imp
+from get_daily_average_rx import get_avg_daily_working_hours as rx
 
 
 class TestSuite(TestCase):

@@ -1,10 +1,13 @@
-# Imperative versus Reactive
+"""Imperative versus Reactive.
 
-> Get average daily working hours from Toggl API
+This gist contains an _imperative_ and a _reactive_ Python module fetching
+data from the Toggl API
+https://github.com/toggl/toggl_api_docs/blob/master/toggl_api.md)
+to obtain the average daily working hours. All code snippets are
+documented and should be self explanatory.
 
-This gist contains an _imperative_ and a _reactive_ Python module fetching data from the [Toggl](https://toggl.com/) [API](https://github.com/toggl/toggl_api_docs/blob/master/toggl_api.md) to obtain the average daily working hours. All code snippets are documented and should be self explanatory.
-
-The reactive implementation uses the [Rx Python Extensions (RxPY)](https://github.com/ReactiveX/RxPY), a Python-implementation of the [ReactiveX API](http://reactivex.io/).
+The reactive implementation uses the RxPy (https://github.com/ReactiveX/RxPY),
+a Python-implementation of the ReactiveX API (http://reactivex.io/).
 
 Best start with the [imperative version](#file-get_daily_average_imp-py) to see how the naive loop-based implementation behaves and follow up with the [reactive version](#file-get_daily_average_rx-py). Both implementations share [common functionality](#file-toggl_api_commons-py). The contained database "layer" was only introduced for sake of having a little more complexity. A corresponding [test-suite](#file-test_get_daily_average-py) compares both versions. For better readability the imperative version does not utilize parallel processing.
 
@@ -38,3 +41,4 @@ with
       -c INPUT    Credentials file
       -f VALUE    From day (YYYY-MM-DD)
       -t VALUE    To day (YYYY-MM-DD)
+"""

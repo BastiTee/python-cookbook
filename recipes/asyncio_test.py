@@ -13,7 +13,7 @@ import aiohttp  # An async-io enabled HTTP submodule
 
 # Something to fetch
 urls = [
-    'https://twitter.com/basti_tee'
+    'https://www.google.com/search?q=utc+time'
 ]
 
 # create a basic node.js-like event loop

@@ -20,5 +20,11 @@ rope = "*" # Refactoring library
 twine = "*" # Interoperability with pypi.org
 
 [packages]
+# Various modules
 requests = "*"
+# Module: asyncio_test
 aiohttp = "*"
+# Module: zipfs
+fs = "*"
+# Module: imperative_vs_reactive
+rx = "*"

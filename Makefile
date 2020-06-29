@@ -24,7 +24,7 @@ all: clean venv build
 
 venv: clean
 	# Initialize virtualenv, i.e., install required packages etc.
-	pipenv --three install --dev
+	pipenv --three install --dev --skip-lock
 
 shell:
 	# Initialize virtualenv and open a new shell using it
